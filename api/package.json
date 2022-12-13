@@ -1,8 +1,8 @@
 {
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -r dotenv/config user-api.js",
-    "start": "node -r dotenv/config user-api.js"
+    "dev": "nodemon -r dotenv/config express.js",
+    "start": "node -r dotenv/config express.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
