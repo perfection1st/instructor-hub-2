@@ -1,0 +1,44 @@
+html {
+  width:100%;
+  height:100%;
+  background-image: linear-gradient(to bottom, #ffe1e9, #fde9f3, #fbf1fa, #fbf8fd, #ffffff);
+}
+body {
+  display: grid;
+  width:100%;
+  height:100%;
+  margin:0;
+  justify-items:center;
+}
+div#home-container {
+  min-width:1000px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  background-color:red;
+}
+header {
+  width:100%;
+  height:100px;
+  background-color:yellow;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+header h1 {
+  padding:15px;
+}
+nav {
+  width:100%;
+  height:150px;
+  background-color:blue;
+}
+div#student-list {
+  width:100%;
+  min-height:500px;
+  margin-top:25px;
+}
