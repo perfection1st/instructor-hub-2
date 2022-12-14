@@ -1,7 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap');
 html {
   width:100%;
   height:100%;
-  background-image: linear-gradient(to bottom, #ffe1e9, #fde9f3, #fbf1fa, #fbf8fd, #ffffff);
+  background-image: linear-gradient(to bottom, #f9fbfa, #f1f6f4, #eaf2ef, #e2ede9, #dae9e4);
 }
 body {
   display:grid;
@@ -9,6 +10,10 @@ body {
   height:100%;
   margin:0;
   justify-items:center;
+  font-family:Noto Sans;
+}
+p {
+  font-size:18px;
 }
 header {
   display: grid;
@@ -18,7 +23,7 @@ header {
   grid-row-gap: 0px;
   width:100%;
   height:100px;
-  background-color:yellow;
+  
 }
 header h1 {
   width:235px;
@@ -28,6 +33,117 @@ header h1 {
 div#home-container {
   width:1000px;
   min-height:500px;
-  background-color:red;
   margin-top:20px;
+}
+/******************
+  NAVIGATION
+*******************/
+nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items:center;
+  justify-items:center;
+  width:100%;
+  height:150px;
+}
+nav button {
+  width:75%;
+  height:50%;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:20px;
+}
+button#btn-weekly-update {
+  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
+  border:1px solid #ffba8c;
+  outline:1px solid #CB6928;
+}
+button#btn-weekly-update:hover {
+  background-image: linear-gradient(to top, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
+}
+button#btn-weekly-update:active {
+  border:1px solid #6e2e03;
+}
+button#btn-project-update {
+  background-image: linear-gradient(to bottom, #dde17f, #dadf75, #d8dc6b, #d5da60, #d2d755);
+  border:1px solid #fcffa0;
+  outline:1px solid #8f9235;
+}
+button#btn-project-update:hover {
+  background-image: linear-gradient(to top, #dde17f, #dadf75, #d8dc6b, #d5da60, #d2d755);
+}
+button#btn-project-update:active {
+  outline:2px solid #52531e;
+}
+button#btn-assessment-update {
+  background-image: linear-gradient(to bottom, #84d0e1, #7bccde, #71c9dc, #66c5d9, #5bc1d7);
+  outline:1px solid #327180;
+  border:1px solid #8ce4f8;
+}
+button#btn-assessment-update:hover {
+  background-image: linear-gradient(to top, #84d0e1, #7bccde, #71c9dc, #66c5d9, #5bc1d7);
+}
+button#btn-assessment-update:active {
+  outline:2px solid #1f454e;
+}
+/******************
+  STUDENT-LIST
+*******************/
+div#student-list-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  margin-top:25px;
+}
+ul#students {
+  width:100%;
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+ul#students h3 {
+  font-size:22px;
+}
+ul#students li {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items:end;
+  padding-right:15px;
+  background-color:#eee;
+  padding-left:10px;
+  padding-top:10px;
+  padding-bottom:10px;
+  border-top:1px solid #fff;
+  transition:background-color 0.2s;
+}
+ul#students li:nth-child(odd) {
+  background-color:rgb(219, 219, 219);
+}
+ul#students li:hover {
+  cursor:pointer;
+  background-color:rgb(179, 179, 179);
+  transition:background-color 0.1s;
+}
+
+button.btn-student-performance {
+  border:1px solid red;
+  border-radius:10px;
+  padding:10px;
+}
+button.red {
+  background-color:red;
+}
+button.yellow {
+  background-color:orange;
+}
+button.green {
+  background-color:green;
 }
