@@ -3,7 +3,6 @@ html {
   width:100%;
   height:100%;
   background-image: linear-gradient(to bottom, #f9fbfa, #f1f6f4, #eaf2ef, #e2ede9, #dae9e4);
-  font-family:Noto Sans;
 }
 body {
   display:grid;
@@ -11,6 +10,7 @@ body {
   height:100%;
   margin:0;
   justify-items:center;
+  font-family:Noto Sans;
 }
 p {
   font-size:18px;
@@ -92,9 +92,47 @@ button#btn-assessment-update:active {
 /******************
   STUDENT-LIST
 *******************/
-table#student-list-table {
-  font-size:25px;
+div#student-list-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  margin-top:25px;
 }
+ul#students {
+  width:100%;
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+ul#students h3 {
+  font-size:22px;
+}
+ul#students li {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items:end;
+  padding-right:15px;
+  background-color:#eee;
+  padding-left:10px;
+  padding-top:10px;
+  padding-bottom:10px;
+  border-top:1px solid #fff;
+  transition:background-color 0.2s;
+}
+ul#students li:nth-child(odd) {
+  background-color:rgb(219, 219, 219);
+}
+ul#students li:hover {
+  cursor:pointer;
+  background-color:rgb(179, 179, 179);
+  transition:background-color 0.1s;
+}
+
 button.btn-student-performance {
   border:1px solid red;
   border-radius:10px;
@@ -103,7 +141,6 @@ button.btn-student-performance {
 button.red {
   background-color:red;
 }
-
 button.yellow {
   background-color:orange;
 }

@@ -1,54 +1,63 @@
 import {StudentStats} from './StudentStats';
-import Table from 'react-bootstrap/Table';
+import {StudentAverages} from './StudentAverages';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 
 export const StudentList = () => {
   return(
-    <div id="student-list">
-      <Table id="student-list-table" striped bordered hover>
-      <thead>
-        <tr>
-          <th>Student</th>
-          <th>Performance</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Dylan Clark</td>
-          <td>
-            <ButtonGroup size="lg" className="lg">
+    <div id="student-list-container">
+      <ul id="students">
+        <li>
+          <h3>Dylan Clark</h3>
+          <ButtonGroup size="md" className="lg">
               <Button className="red">10</Button>
               <Button className="yellow">50</Button>
               <Button className="green">100</Button>
-            </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Dylan Clark</td>
-          <td>
-            <ButtonGroup size="lg" className="lg">
+          </ButtonGroup>
+        </li>
+        <li>
+          <h3>Elijah Stamp</h3>
+          <ButtonGroup size="md" className="lg">
               <Button className="red">10</Button>
               <Button className="yellow">50</Button>
               <Button className="green">100</Button>
-            </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Dylan Clark</td>
-          <td>
-            <ButtonGroup size="lg" className="lg">
+          </ButtonGroup>
+        </li>
+        <li>
+          <h3>Katie "Chevy" Chevez</h3>
+          <ButtonGroup size="md" className="lg">
               <Button className="red">10</Button>
               <Button className="yellow">50</Button>
               <Button className="green">100</Button>
-            </ButtonGroup>
-          </td>
-        </tr>
-       
-      </tbody>
-    </Table>
+          </ButtonGroup>
+        </li>
+        <li>
+          <h3>Nathaniel "Nate" Morrison</h3>
+          <ButtonGroup size="md" className="lg">
+              <Button className="red">10</Button>
+              <Button className="yellow">50</Button>
+              <Button className="green">100</Button>
+          </ButtonGroup>
+        </li>
+        <li>
+          <h3>Timothy "Timotheus" Iott</h3>
+          <ButtonGroup size="md" className="lg">
+              <Button className="red">10</Button>
+              <Button className="yellow">50</Button>
+              <Button className="green">100</Button>
+          </ButtonGroup>
+        </li>
+        <li>
+          <h3>Adam "Jones" Jones</h3>
+          <ButtonGroup size="md" className="lg">
+              <Button className="red">10</Button>
+              <Button className="yellow">50</Button>
+              <Button className="green">100</Button>
+          </ButtonGroup>
+        </li>
+      </ul>
+      <StudentAverages />
     </div>
   );
 }
