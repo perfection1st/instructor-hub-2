@@ -1,4 +1,5 @@
 import {StudentStats} from './StudentStats';
+import Table from 'react-bootstrap/Table';
 
 export const StudentList = () => {
   return(
