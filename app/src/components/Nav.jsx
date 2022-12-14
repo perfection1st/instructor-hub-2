@@ -1,5 +1,9 @@
 export const Nav = () => {
   return(
-    <nav>This is the nav bar</nav>
+    <nav>
+      <button>Weekly Update</button>
+      <button>Project Update</button>
+      <button>Assessments</button>
+    </nav>
   );
 }
