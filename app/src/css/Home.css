@@ -35,6 +35,10 @@ div#home-container {
   min-height:500px;
   margin-top:20px;
 }
+div#admin-menu {
+  display:grid;
+  justify-content:end;
+}
 /******************
   NAVIGATION
 *******************/
@@ -88,6 +92,13 @@ button#btn-assessment-update:hover {
 }
 button#btn-assessment-update:active {
   outline:2px solid #1f454e;
+}
+div#select-cohort {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
 }
 /******************
   STUDENT-LIST
