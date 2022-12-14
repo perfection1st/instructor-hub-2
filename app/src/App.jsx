@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Home } from './routes/Home';
 import { Login } from './routes/Login';
 import { Register } from './routes/Register';
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+
 
 export const App = () => {
 
