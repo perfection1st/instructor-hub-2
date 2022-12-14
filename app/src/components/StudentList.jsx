@@ -1,11 +1,28 @@
 import {StudentStats} from './StudentStats';
 import {StudentAverages} from './StudentAverages';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 
 export const StudentList = () => {
   return(
+    <>
+    <div id="select-cohort">
+      <h2>Student List</h2>
+      <DropdownButton
+        align="end"
+        title="MCSP-15"
+        variant="secondary"
+        menuVariant="dark"
+        id="dropdown-menu-align-end"
+        size="md"
+      >
+      <Dropdown.Item eventKey="1">MCSP-14</Dropdown.Item>
+      <Dropdown.Item eventKey="4">MCSP-13</Dropdown.Item>
+    </DropdownButton>
+    </div>
     <div id="student-list-container">
       <ul id="students">
         <li>
@@ -59,5 +76,7 @@ export const StudentList = () => {
       </ul>
       <StudentAverages />
     </div>
+    </>
+    
   );
 }
