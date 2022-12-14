@@ -89,3 +89,24 @@ button#btn-assessment-update:hover {
 button#btn-assessment-update:active {
   outline:2px solid #1f454e;
 }
+/******************
+  STUDENT-LIST
+*******************/
+table#student-list-table {
+  font-size:25px;
+}
+button.btn-student-performance {
+  border:1px solid red;
+  border-radius:10px;
+  padding:10px;
+}
+button.red {
+  background-color:red;
+}
+
+button.yellow {
+  background-color:orange;
+}
+button.green {
+  background-color:green;
+}
