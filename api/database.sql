@@ -57,6 +57,8 @@ CREATE EXTENSION pgcrypto;
   password TEXT NOT NULL,
   default_cohort TEXT,
   asana_access_token TEXT,
+  token VARCHAR(255),
+  session_token VARCHAR(255),
   gid TEXT
 );
 
