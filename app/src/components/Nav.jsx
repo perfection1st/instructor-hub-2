@@ -1,9 +1,9 @@
 export const Nav = () => {
-  return(
+  return (
     <nav>
-      <button>Weekly Update</button>
-      <button>Project Update</button>
-      <button>Assessments</button>
+      <button id="btn-weekly-update">Weekly Update</button>
+      <button id="btn-project-update">Project Update</button>
+      <button id="btn-assessment-update">Assessments</button>
     </nav>
   );
 }
