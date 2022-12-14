@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { GoPlus } from "react-icons/go";
 
 export const Nav = () => {
 
@@ -50,9 +51,9 @@ export const Nav = () => {
   return (
     <>
       <nav>
-        <button id="btn-weekly-update" onClick={handleShowWeeklyModal}>Weekly Update</button>
-        <button id="btn-project-update" onClick={handleShowProjectModal}>Project Update</button>
-        <button id="btn-assessment-update" onClick={handleShowAssessmentModal}>Assessments</button>
+        <button id="btn-weekly-update" onClick={handleShowWeeklyModal}>Weekly Update <GoPlus /></button>
+        <button id="btn-project-update" onClick={handleShowProjectModal}>Project Update <GoPlus /></button>
+        <button id="btn-assessment-update" onClick={handleShowAssessmentModal}>Assessments <GoPlus /></button>
       </nav>
 
       {/* Weekly modal */}
