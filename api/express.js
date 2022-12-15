@@ -12,6 +12,7 @@ const saltRounds = 10;
 
 //Used to access jwt tools
 const jwt = require('jsonwebtoken');
+const { json } = require('express');
 
 //Creates random strings for tokens
 const Str = require('@supercharge/strings')
@@ -28,12 +29,40 @@ pool.connect();
 app.use(cors());
 app.use(express.json());
 
-//Route to get all users
-app.get('/api/users', (req, res) => {
-    pool.query('SELECT * FROM users')
+
+//Route to select students from cohort//
+app.get('/api/students/:id', (req, res) => {
+    cohortId = req.params.id
+    pool.query(`SELECT * FROM students WHERE cohort_id = $1`, [cohortId])
     .then(result => res.send(result.rows))
     .catch(error => res.send(error))
 })
+
+//Route selects students from list inside modal//
+app.get('/api/selectedstudents', (req, res) => {
+    studentIds = req.body.studentIds
+    queryString = ''
+    studentIds.forEach((studentId) => {
+        if (queryString === ''){
+            queryString = queryString + `${studentId}`
+        }
+        else {
+            queryString = queryString + ", " + `${studentId}`
+        }
+    })
+    console.log(queryString)
+    pool.query(`SELECT * FROM students WHERE student_id in (${queryString})`)
+    .then(result => res.send(result.rows))
+    .catch(error => res.send(error))
+})
+
+// app.update('/api/students/update', (req, res) => {
+//     studentIds = req.body.studentIds
+//     techApt = req.body.te
+//     pool.query(`SELECT * FROM students WHERE cohort_id = $1`, [cohortId])
+//     .then(result => res.send(result.rows))
+//     .catch(error => res.send(error))
+// })
 
 //Route to create a new user
 app.post('/api/create/user', (req, res) => {
