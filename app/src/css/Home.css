@@ -2,7 +2,6 @@
 html {
   width:100%;
   height:100%;
-  background-image: linear-gradient(to bottom, #f9fbfa, #f1f6f4, #eaf2ef, #e2ede9, #dae9e4);
 }
 body {
   display:grid;
@@ -11,6 +10,7 @@ body {
   margin:0;
   justify-items:center;
   font-family:Noto Sans;
+  background-image: linear-gradient(to left top, #8fd6e9, #9edcec, #ace2ef, #bae7f3, #c8edf6, #ceeff8, #d4f2f9, #daf4fb, #daf4fb, #daf4fb, #daf4fb, #daf4fb);
 }
 p {
   font-size:18px;
