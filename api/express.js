@@ -90,7 +90,7 @@ app.post('/api/create/user', (req, res) => {
 })
 
 //Route handler for user login
-app.get('/api/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const user = req.body.username
     const password = req.body.password
     pool.query('SELECT * FROM users WHERE username = $1', [user])
@@ -104,15 +104,15 @@ app.get('/api/login', (req, res) => {
             bcrypt.compare(password, data.rows[0].password, function(err, result){
                 //If passowrd is correct it sends the users information
                 result == true ?
-                res.send([{username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token}]) :
-                res.send([{result: 'false'}])
+                res.send([{username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token}]) :
+                res.send([{response: 'false'}])
             })
         }
     })
 })
 
 //Route to verify the user logging in
-app.get('/api/authent', (req, res) => {
+app.post('/api/authent', (req, res) => {
     //Access the request body that is sent with the fetch
     const user = req.body.username
     const userToken = req.body.userToken
