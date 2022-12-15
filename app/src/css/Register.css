@@ -1,0 +1,15 @@
+h1#register-logo {
+    width:235px;
+    background:url('../images/galvanize-logo.svg') no-repeat;
+    text-indent:-9999px;
+    margin-top:25px;
+}
+
+form#form-register label {
+    margin-top:20px;
+}
+
+form#form-register button[type="submit"] {
+    margin-top:20px;
+    margin-bottom:10px;
+}

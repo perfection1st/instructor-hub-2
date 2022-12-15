@@ -1,5 +1,9 @@
+import '../css/Register.css';
 import { Navigate, Link } from 'react-router-dom';
 import { useRef } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import '../images/galvanize-logo.svg';
 
 export const Register = (props) => {
 
@@ -32,21 +36,29 @@ export const Register = (props) => {
 
   return(
     <>
-      <h2>REGISTER</h2>
-      <form>
-        <label>Username</label>
-        <input ref={usernameRef} type="text" placeholder="type username here" required />
-        <label>Password</label>
-        <input ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
-        <label>Confirm Password</label>
-        <input ref={confirmPasswordRef} type="password" placeholder="confirm password here" minLength={8} required />
-        <label>Asana API Key</label>
-        <input ref={asanaApiKeyRef} type="text" placeholder="type API key here" required />
-        <input type="submit" value="Register" onClick={loginHandler} />
-      </form>
+    <div id="register-container">
+
+      <h1 id="register-logo">GALVANIZE</h1>
+      <Form id="form-register">
+        <Form.Group>
+        <Form.Label>Username</Form.Label>
+        <Form.Control ref={usernameRef} type="text" placeholder="type username here" required />
+        <Form.Label>Password</Form.Label>
+
+        <Form.Control ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
+        <Form.Label>Confirm Password</Form.Label>
+
+        <Form.Control ref={confirmPasswordRef} type="password" placeholder="confirm password here" minLength={8} required />
+        <Form.Label>Asana API Key</Form.Label>
+
+        <Form.Control ref={asanaApiKeyRef} type="text" placeholder="type API key here" required />
+        </Form.Group>
+        <Button type="submit" value="Register" onClick={loginHandler}>Register</Button>
+      </Form>
       <p>
         Already have an account? Click <Link to='/login'>Here</Link> to sign in.
       </p>
+      </div>
     </>
   );
 }
