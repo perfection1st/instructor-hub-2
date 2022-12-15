@@ -4,6 +4,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 
 export const StudentList = () => {
@@ -27,9 +29,38 @@ export const StudentList = () => {
         <li>
           <h3>Dylan Clark</h3>
           <ButtonGroup size="sm" className="lg">
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                <Tooltip id="tooltip-test">
+                  hello test
+                </Tooltip>
+              }
+              >
               <Button className="red">10</Button>
+              </OverlayTrigger>
+              
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                <Tooltip id="tooltip-test">
+                  hello test
+                </Tooltip>
+              }
+              >
               <Button className="yellow">50</Button>
+              </OverlayTrigger>
+
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                <Tooltip id="tooltip-test">
+                  hello test
+                </Tooltip>
+              }
+              >
               <Button className="green">100</Button>
+              </OverlayTrigger>
           </ButtonGroup>
         </li>
         <li>
