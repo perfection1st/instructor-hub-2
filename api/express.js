@@ -52,6 +52,14 @@ app.get('/api/selectedstudents', (req, res) => {
     .catch(error => res.send(error))
 })
 
+// app.update('/api/students/update', (req, res) => {
+//     studentIds = req.body.studentIds
+//     techApt = req.body.te
+//     pool.query(`SELECT * FROM students WHERE cohort_id = $1`, [cohortId])
+//     .then(result => res.send(result.rows))
+//     .catch(error => res.send(error))
+// })
+
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
 });
