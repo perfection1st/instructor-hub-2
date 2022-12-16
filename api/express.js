@@ -61,6 +61,10 @@ app.get('/api/selectedstudents', (req, res) => {
     .catch(error => res.send(error))
 })
 
+//Call to get users default cohort data
+//Pseudo code:
+//SELECT * FROM variable cohort name RIGHT OUTER JOIN students where cohorit_id = cohort_id
+
 // app.update('/api/students/update', (req, res) => {
 //     studentIds = req.body.studentIds
 //     techApt = req.body.te
