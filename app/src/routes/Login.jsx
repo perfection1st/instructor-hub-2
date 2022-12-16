@@ -29,7 +29,6 @@ export const Login = (props) => {
   const loginHandler = () => {
     let inputUsername = usernameRef.current.value
     let inputPassword = passwordRef.current.value
-    console.log(inputUsername, inputPassword)
     //Checks to ensure both a username and password were input
    if(!inputUsername || !inputPassword){
     swal('Both username and Paswword are required')
