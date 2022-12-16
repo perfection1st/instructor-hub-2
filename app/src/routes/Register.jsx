@@ -4,6 +4,9 @@ import { useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../images/galvanize-logo.svg';
+import swal from 'sweetalert';
+
+const URL = 'http://localhost:8000/api'
 
 export const Register = (props) => {
 
@@ -13,20 +16,42 @@ export const Register = (props) => {
   const confirmPasswordRef = useRef();
   const asanaApiKeyRef = useRef();
 
-  const loginHandler = () => {
-    let username = usernameRef.current.value
-    let password
+  //Creates user on form submission
+  function registerUser(e) {
+    e.preventDefault()
+    let inputUsername = usernameRef.current.value
+    let asanaKey = asanaApiKeyRef.current.value
+    //Verifies that the passwords match
+    let inputPassword
     if(passwordRef.current.value !== confirmPasswordRef.current.value){
-      alert('passwords don\'t match, please try again!');
+      swal('passwords don\'t match, please try again!');
     } else {
-      password = passwordRef.current.value;
+      inputPassword = passwordRef.current.value;
     }
-    /*
-      insert function to create new user with the username and password
 
-      the setIsLoggedIn function will have to be placed in a async function that waits on the account creation verification to come back successfully
-    */
-    setIsLoggedIn(true)
+    if(!inputUsername || !inputPassword || !asanaKey){
+      swal('Please fill out all boxes')
+    } else {
+      fetch(`${URL}/create/user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: `${inputUsername}`,
+          password: `${inputPassword}`,
+          asana_access_token: asanaKey
+        })
+      })
+      .then(result => result.json())
+      //Checks to see the result sent from api
+      //If result is false then username is already taken
+      //If result is true the account was created
+      .then(data => {
+        data[0].result == 'false' ? swal('Username Is Taken') :
+        swal('Account Created, you may now log in')
+      })
+    }
   }
 
   //if user is already logged in, they will be automatically navigated to the home page
@@ -53,7 +78,7 @@ export const Register = (props) => {
 
         <Form.Control ref={asanaApiKeyRef} type="text" placeholder="type API key here" required />
         </Form.Group>
-        <Button type="submit" value="Register" onClick={loginHandler}>Register</Button>
+        <Button type="submit" value="Register" onClick={(e) => registerUser(e)}>Register</Button>
       </Form>
       <p>
         Already have an account? Click <Link to='/login'>Here</Link> to sign in.

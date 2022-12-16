@@ -29,6 +29,11 @@ pool.connect();
 app.use(cors());
 app.use(express.json());
 
+app.get('/api/users', (req, res) => {
+    pool.query('SELECT * FROM users')
+    .then(result => res.send(result.rows))
+    .catch((error) => res.send(error))
+})
 
 //Route to select students from cohort//
 app.get('/api/students/:id', (req, res) => {
@@ -77,14 +82,15 @@ app.post('/api/create/user', (req, res) => {
     //hashes the input password to be stored securely
     bcrypt.hash(user.password, saltRounds, (err, hash) => {
         //The password is hashed now and can be stored with the hash parameter
-        pool.query('INSERT INTO users (username, password, default_cohort, asana_access_token, token, session_token) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (username) DO NOTHING RETURNING *',
-        [user.username, hash, user.default_cohort, user.asana_access_token, accountToken, sessionToken])
+        pool.query('INSERT INTO users (username, password, asana_access_token, token, session_token) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (username) DO NOTHING RETURNING *',
+        [user.username, hash, user.asana_access_token, accountToken, sessionToken])
         //Checks to see what was returned
         //If a account already exists it sends back result.rows with a length of zero
         //If account was created it sends back the account info
-        .then(result => result.rows.length === 0 ? 
-            res.status(400).send([{result: 'false'}]) : res.status(201).send([{result: 'true'}])
-            )
+        .then(result => {
+            result.rows.length === 0 ? 
+            res.status(409).send([{result: 'false'}]) : res.status(201).send([{result: 'true'}])
+        })
         .catch(error => res.status(400).send(error))
     })
 })
