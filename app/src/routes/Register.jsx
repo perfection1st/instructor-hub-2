@@ -5,10 +5,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../images/galvanize-logo.svg';
 import swal from 'sweetalert';
+import { useState } from 'react';
 
 const URL = 'http://localhost:8000/api'
 
 export const Register = (props) => {
+
+  //State to see if account was created, if it was it sends user back to login
+  const [accountCreated, setAccountCreated] = useState(false)
 
   const { isLoggedIn, setIsLoggedIn } = props
   const usernameRef = useRef();
@@ -51,12 +55,13 @@ export const Register = (props) => {
         data[0].result == 'false' ? swal('Username Is Taken') :
         swal('Account Created, you may now log in')
       })
+      .then(setAccountCreated(true))
     }
   }
 
   //if user is already logged in, they will be automatically navigated to the home page
-  if(isLoggedIn){
-    return <Navigate to="/" />
+  if(accountCreated){
+    return <Navigate to="/login" />
   };
 
   return(
