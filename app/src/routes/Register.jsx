@@ -70,6 +70,7 @@ export const Register = (props) => {
     <div id="register-container">
 
       <h1 id="register-logo">GALVANIZE</h1>
+      <h2 id="register"> Register </h2>
       <Form id="form-register">
         <Form.Group>
         <Form.Label>Username</Form.Label>
