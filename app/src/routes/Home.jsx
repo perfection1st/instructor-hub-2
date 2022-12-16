@@ -34,7 +34,7 @@ export const Home = (props) => {
       .then(data => {
         data[0].response == 'true' ? setIsLoggedIn(true) : kickUser()
       })
-    }, 10)
+    }, 1000)
   }, [])
 
   function kickUser() {

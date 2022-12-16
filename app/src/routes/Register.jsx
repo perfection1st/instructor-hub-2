@@ -53,10 +53,13 @@ export const Register = (props) => {
       //If result is false then username is already taken
       //If result is true the account was created
       .then(data => {
-        data[0].result == 'false' ? swal('Username Is Taken') :
-        swal('Account Created, you may now log in')
+        if (data[0].result == 'false'){
+          swal('Username Is Taken')
+        } else {
+          swal('Account Created, you may now log in')
+          setAccountCreated(true)
+        }
       })
-      .then(setAccountCreated(true))
     }
   }
 
