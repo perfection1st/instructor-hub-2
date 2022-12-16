@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { GoPlus } from "react-icons/go";
-
+import { StudentsList } from "../frontEndFunctions"
 export const Nav = () => {
 
   // state for weekly modal displaying/not displaying
@@ -64,9 +64,7 @@ export const Nav = () => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <li><input type="checkbox" />Conditional rendered student list</li>
-            <li><input type="checkbox" />Conditional rendered student list</li>
-            <li><input type="checkbox" />Conditional rendered student list</li>
+            <StudentsList />
           </ul>
         </Modal.Body>
         <Modal.Footer>
@@ -216,9 +214,7 @@ export const Nav = () => {
             <option value="react">React</option>
           </select>
           <ul id='assessment-student-list'>
-            <li><input type="checkbox" />Conditional rendered student list</li>
-            <li><input type="checkbox" />Conditional rendered student list</li>
-            <li><input type="checkbox" />Conditional rendered student list</li>
+            <StudentsList />
           </ul>
         </Modal.Body>
         <Modal.Footer>
