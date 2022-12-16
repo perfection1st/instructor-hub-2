@@ -21,6 +21,7 @@ export const Login = (props) => {
   function signIn(e) {
     e.preventDefault()
     setIsLoading(true)
+    //Gives the loading state time to load
     setTimeout(() => {
       loginHandler()
     }, 1000)
@@ -87,7 +88,10 @@ export const Login = (props) => {
     //Sets the loading state to false so button reappears
     .then(setIsLoading(false))
     //Sets loggin to true to redirect user to home page
-    .then(setIsLoggedIn(true))
+    //Uses in line function so session token has time to set
+    //Ran into a problem where this would run before token could place which caused a null token to be sent in home
+    //This fixes that bug
+    .then(() => setIsLoggedIn(true))
   }
   //if user is already logged in, they will be automatically navigated to the home page
   if(isLoggedIn){

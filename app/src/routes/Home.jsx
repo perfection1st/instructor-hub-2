@@ -18,7 +18,6 @@ export const Home = (props) => {
   useEffect(() => {
     //Runs after timeout to ensure token updates
     //Gets the tokens stored in session on login
-    setTimeout(() => {
       fetch(`${URL}/authent`, {
         method: 'POST',
         headers: {
@@ -34,7 +33,7 @@ export const Home = (props) => {
       .then(data => {
         data[0].response == 'true' ? setIsLoggedIn(true) : kickUser()
       })
-    }, 1000)
+    
   }, [])
 
   function kickUser() {
