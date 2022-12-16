@@ -10,7 +10,7 @@ body {
   margin:0;
   justify-items:center;
   font-family: 'Fira Sans', sans-serif;
-  background-image: linear-gradient(to left top, #a4e3f4, #b1e7f6, #bdebf7, #c9eff9, #d5f3fb, #d5f3fb, #d5f3fb, #d5f3fb, #c9eff9, #bdebf7, #b1e7f6, #a4e3f4);
+  background-image: linear-gradient(to right bottom, #c9eaff, #d7edff, #e4f0ff, #eff4ff, #f7f8ff, #f7f8ff, #f7f8ff, #f7f8ff, #eff4ff, #e4f0ff, #d7edff, #c9eaff);
 }
 p {
   font-size:18px;
@@ -39,6 +39,11 @@ div#admin-menu {
   display:grid;
   justify-content:end;
 }
+div#admin-menu button {
+  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
+  border:1px solid #ffba8c;
+  outline:1px solid #CB6928;
+}
 /******************
   NAVIGATION
 *******************/
@@ -58,39 +63,18 @@ nav button {
   border-radius:10px;
   cursor:pointer;
   font-size:20px;
-}
-button#btn-weekly-update {
   background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
   border:1px solid #ffba8c;
   outline:1px solid #CB6928;
+  text-shadow:0px 1px 0px #ffba8c;
 }
-button#btn-weekly-update:hover {
+nav button:hover {
+  outline:1px solid #6e3916;
+  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
+}
+nav button:active {
+  outline:1px solid #6e3916;
   background-image: linear-gradient(to top, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-}
-button#btn-weekly-update:active {
-  border:1px solid #6e2e03;
-}
-button#btn-project-update {
-  background-image: linear-gradient(to bottom, #dde17f, #dadf75, #d8dc6b, #d5da60, #d2d755);
-  border:1px solid #fcffa0;
-  outline:1px solid #8f9235;
-}
-button#btn-project-update:hover {
-  background-image: linear-gradient(to top, #dde17f, #dadf75, #d8dc6b, #d5da60, #d2d755);
-}
-button#btn-project-update:active {
-  outline:2px solid #52531e;
-}
-button#btn-assessment-update {
-  background-image: linear-gradient(to bottom, #84d0e1, #7bccde, #71c9dc, #66c5d9, #5bc1d7);
-  outline:1px solid #327180;
-  border:1px solid #8ce4f8;
-}
-button#btn-assessment-update:hover {
-  background-image: linear-gradient(to top, #84d0e1, #7bccde, #71c9dc, #66c5d9, #5bc1d7);
-}
-button#btn-assessment-update:active {
-  outline:2px solid #1f454e;
 }
 div#select-cohort {
   display: grid;
@@ -99,6 +83,13 @@ div#select-cohort {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   margin-top:25px;
+}
+div#select-cohort button {
+  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
+  border:1px solid #ffba8c;
+  outline:1px solid #CB6928;
+  color:#000;
+  text-shadow:0px 1px 0px #ffba8c;
 }
 /******************
   STUDENT-LIST
