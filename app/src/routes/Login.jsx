@@ -16,6 +16,7 @@ export const Login = (props) => {
   const passwordRef = useRef();
 
   const [isLoading, setIsLoading] = useState(false);
+  //Does not take user to home page yet
   //Does a fetch call on log in click that sends the users password and username to authent
   function signIn(e) {
     e.preventDefault()
@@ -27,11 +28,12 @@ export const Login = (props) => {
   const loginHandler = () => {
     let inputUsername = usernameRef.current.value
     let inputPassword = passwordRef.current.value
-    console.log(inputPassword, inputUsername)
+    console.log(inputUsername, inputPassword)
     //Checks to ensure both a username and password were input
-   if(inputUsername == '' || inputPassword == ''){
+   if(!inputUsername || !inputPassword){
     swal('Both username and Paswword are required')
-   }
+    setIsLoading(false)
+   } else {
    //Sends a request to the login to verify username and password
     fetch(`${URL}/login`, {
       method: 'POST',
@@ -39,20 +41,19 @@ export const Login = (props) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-          username: `${inputUsername}`,
-          password: `${inputPassword}`
+        username: `${inputUsername}`,
+        password: `${inputPassword}`
       })
     })
     .then(result => result.json())
     .then(data => verifyLogin(data))
-    // setIsLoggedIn(false)
+   }
   }
   //Verifies that the user was logged in
   //If the response is not the users information it gives an alert
   //If login was successful it sets session storage to users info
   function verifyLogin(data){
     let info = data[0]
-    console.log(info)
     if(info.response == 'Incorrect Username'){
       swal('Incorrect Username')
       setIsLoading(false)
@@ -80,13 +81,18 @@ export const Login = (props) => {
       })
     })
     .then(result => result.json())
-    .then(data => sessionStorage.setItem('sessionToken', data[0].session_token))
+    .then(data => {
+      sessionStorage.setItem('sessionToken', data[0].session_token)
+    })
+    //Sets the loading state to false so button reappears
     .then(setIsLoading(false))
+    //Sets loggin to true to redirect user to home page
+    .then(setIsLoggedIn(true))
   }
   //if user is already logged in, they will be automatically navigated to the home page
-  // if(isLoggedIn){
-  //   return <Navigate to="/" />
-  // };
+  if(isLoggedIn){
+    return <Navigate to="/" />
+  };
 
   return(
     <>
@@ -100,19 +106,19 @@ export const Login = (props) => {
           <input ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
           {/* Checks to see if button was pressed, if it was it shows a spinner */}
           { isLoading === true ?
-                       <Button className="button" id="new-post-submit" variant="primary" disabled>
-                       <Spinner
-                         as="span"
-                         animation="border"
-                         size="sm"
-                         role="status"
-                         aria-hidden="true"
-                       />
-                       <span className="visually-hidden">Loading...</span>
-                     </Button>
-                       :
-                    <Button type='submit' value="Sign In" onClick={(e) => signIn(e)} >Login</Button>
-                }
+              <Button className="button" id="new-post-submit" variant="primary" disabled>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Loading...</span>
+              </Button>
+              :
+              <Button type='submit' value="Sign In" onClick={(e) => signIn(e)} >Login</Button>
+          }
         </form>
         <p>
           Don't have an account? Click <Link to='/register'>Here</Link>
