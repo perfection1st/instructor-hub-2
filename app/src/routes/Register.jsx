@@ -27,13 +27,17 @@ export const Register = (props) => {
     let asanaKey = asanaApiKeyRef.current.value
     //Verifies that the passwords match
     let inputPassword
+    //Checks to make sure the passwords match
+    //If they don't it exits the function
     if(passwordRef.current.value !== confirmPasswordRef.current.value){
-      swal('passwords don\'t match, please try again!');
+      return swal('Passwords don\'t match, please try again!');
     } else {
       inputPassword = passwordRef.current.value;
     }
     //Ensures all fields are filled out
-    if(!inputUsername || !inputPassword || !asanaKey){
+    if (inputPassword.length < 8 || inputPassword.length > 12){
+      swal('Password must be between 8 - 12 characters')
+    } else if(!inputUsername || !inputPassword || !asanaKey){
       swal('Please fill out all boxes')
     } else {
       //Sends users information to create account
