@@ -32,10 +32,11 @@ export const Register = (props) => {
     } else {
       inputPassword = passwordRef.current.value;
     }
-
+    //Ensures all fields are filled out
     if(!inputUsername || !inputPassword || !asanaKey){
       swal('Please fill out all boxes')
     } else {
+      //Sends users information to create account
       fetch(`${URL}/create/user`, {
         method: 'POST',
         headers: {
