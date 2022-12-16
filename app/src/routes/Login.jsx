@@ -1,10 +1,13 @@
-import { Navigate, Link } from 'react-router-dom';
+import '../css/Login.css';
+import { Navigate, Link} from 'react-router-dom';
 import { useRef } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import swal from 'sweetalert';
 import { Suspense } from 'react';
 import Spinner from 'react-bootstrap/Spinner'
-import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
+import '../images/galvanize-logo.svg';
 
 
 export const Login = (props) => {
@@ -96,16 +99,17 @@ export const Login = (props) => {
 
   return(
     <>
-    <div id="signInBody">
-      <h2>SIGN IN</h2>
-      <div id="signInForm">
-        <form>
-          <label>Username:</label>
-          <input ref={usernameRef} type="text" placeholder="type username here" required />
-          <label>Password:</label>
-          <input ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
-          {/* Checks to see if button was pressed, if it was it shows a spinner */}
-          { isLoading === true ?
+    <div id="login-container">
+    <h1 id="login-logo">GALVANIZE</h1>
+      <h2 id="login">SIGN IN</h2>
+      <Form id="login">
+          <Form.Group>
+            <Form.Label>Username:</Form.Label>
+            <Form.Control ref={usernameRef} type="text" placeholder="type username here" required />
+            <Form.Label>Password:</Form.Label>
+            <Form.Control ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
+            {/* Checks to see if button was pressed, if it was it shows a spinner */}
+            { isLoading === true ?
               <Button className="button" id="new-post-submit" variant="primary" disabled>
                 <Spinner
                   as="span"
@@ -119,12 +123,13 @@ export const Login = (props) => {
               :
               <Button type='submit' value="Sign In" onClick={(e) => signIn(e)} >Login</Button>
           }
-        </form>
+          </Form.Group>
+        </Form>
         <p>
           Don't have an account? Click <Link to='/register'>Here</Link>
         </p>
       </div>
-    </div>
+    
     </>
   );
 }

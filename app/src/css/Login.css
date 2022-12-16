@@ -1,25 +1,19 @@
-h1#register-logo {
-    width:235px;
+h1#login-logo {
+    width:300px;
     background:url('../images/galvanize-logo.svg') no-repeat;
     text-indent:-9999px;
     margin-top:100px;
     margin-bottom:25px;
-    margin-left: 55px;
+    margin-left: 70px;
     background-size:215px;
-
 }
-h2#register {
+h2#login {
     font-size:2.1em;
     color: rgb(89, 92, 105);
     text-align: center;
 }
 
-form#form-register label {
-    margin-top:20px;
-
-}
-
-form#form-register button[type="submit"] {
+form#login button[type="submit"] {
     margin-top:30px;
     margin-bottom:10px;
     background-color: #00808C;
@@ -27,4 +21,3 @@ form#form-register button[type="submit"] {
     border-radius: 40px;
     width:100%;  
 }
-
