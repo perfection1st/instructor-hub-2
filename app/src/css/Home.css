@@ -10,7 +10,7 @@ body {
   margin:0;
   justify-items:center;
   font-family: 'Fira Sans', sans-serif;
-  background-image: linear-gradient(to left top, #a4e3f4, #b1e7f6, #bdebf7, #c9eff9, #d5f3fb, #d5f3fb, #d5f3fb, #d5f3fb, #c9eff9, #bdebf7, #b1e7f6, #a4e3f4);
+  background-image:white);
 }
 p {
   font-size:18px;
