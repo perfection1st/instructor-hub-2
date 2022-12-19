@@ -2,10 +2,12 @@ import { WeeklyModal } from './WeeklyModal';
 import { ProjectModal } from './ProjectModal';
 import { AssessmentModal } from './AssessmentModal';
 
-export const Nav = () => {
+
+export const Nav = (props) => {
+  const { courses, setCourses } = props
   return (
     <nav>
-      <WeeklyModal />
+      <WeeklyModal courses={courses}/>
       <ProjectModal />
       <AssessmentModal />
     </nav>
