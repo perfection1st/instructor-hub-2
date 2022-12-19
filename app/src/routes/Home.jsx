@@ -6,7 +6,6 @@ import { Nav } from '../components/Nav';
 import { StudentList } from '../components/StudentList';
 import { useEffect, useState } from 'react';
 import swal from 'sweetalert';
-import { GIDFetch } from '../frontEndFunctions';
 
 export const Home = (props) => {
 

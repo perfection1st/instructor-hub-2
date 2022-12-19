@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsCalendarPlusFill } from "react-icons/bs";
+import { ModalList } from './ModalList';
 
 export const WeeklyModal = (props) => {
   //State of all users courses
