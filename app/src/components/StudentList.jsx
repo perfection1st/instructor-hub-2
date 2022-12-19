@@ -12,19 +12,22 @@ import { useState } from 'react';
 export const StudentList = (props) => {
 
   const { courses, setCourses } = props
-  const [selectedClass, setSelectedClass] = useState('')
-
+  const [selectedClass, setSelectedClass] = useState('Courses')
+//"Courses"
   return(
     <>
     <div id="select-cohort">
       <h2>Student List</h2>
       <DropdownButton
         align="end"
-        title="Courses"
+        title={selectedClass}
         menuVariant="dark"
         id="dropdown-menu-align-end"
         size="md"
-        onSelect={function(evt){sessionStorage.setItem('currentClass', evt)}}
+        onSelect={function(evt){
+          setSelectedClass(evt)
+          sessionStorage.setItem('currentClass', evt)
+        }}
       >
       {courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
 

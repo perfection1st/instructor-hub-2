@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsBarChartLineFill } from "react-icons/bs";
-import { StudentsList } from "../frontEndFunctions";
+import { ModalList } from './ModalList';
 
 export const AssessmentModal = () => {
 
@@ -43,7 +43,7 @@ export const AssessmentModal = () => {
             <option value="react">React</option>
           </select>
           <ul id='assessment-student-list'>
-            <StudentsList />
+            <ModalList />
           </ul>
         </Modal.Body>
         <Modal.Footer>
