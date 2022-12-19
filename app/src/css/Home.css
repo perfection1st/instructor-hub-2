@@ -96,14 +96,14 @@ div#select-cohort button {
 *******************/
 div#student-list-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr 2fr;
   grid-template-rows: 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   margin-top:25px;
 }
 ul#students {
-  width:100%;
+  width:85%;
   list-style-type:none;
   margin:0;
   padding:0;
@@ -150,3 +150,19 @@ button.yellow {
 button.green {
   background-image: linear-gradient(to top, #268e01, #2c9d03, #31ac05, #37bb07, #3dcb0a);
 }
+
+/******************
+  STUDENT-AVG-GRAPH
+*******************/
+
+div#student-avg-graph {
+ position:relative;
+ top:50%;
+ left:50%;
+ transform:translate(-50%, -50%);
+}
+
+/*div#Bar {
+  background-color: #aa0000;
+  }
+  */
