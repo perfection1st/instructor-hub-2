@@ -7,7 +7,6 @@ export const ModalList = (props) => {
     let currentClass = sessionStorage.getItem('currentClass')
     let gid = sessionStorage.getItem(currentClass)
     let asanaToken = sessionStorage.getItem('asanaToken')
-    console.log(gid)
     useEffect(() => {
         fetch(`https://app.asana.com/api/1.0/projects/${gid}/tasks`, {
             headers: {
@@ -16,7 +15,6 @@ export const ModalList = (props) => {
         })
         .then(result => result.json())
         .then(data => {
-            console.log(data)
             setStudentsState(data.data)})
     }, [])
     return (
