@@ -10,7 +10,7 @@ import { GIDFetch } from '../frontEndFunctions';
 
 export const Home = (props) => {
 
-  const URL = 'http://localhost:8000/api'  
+  const URL = 'http://localhost:8000/api'
   const { isLoggedIn, setIsLoggedIn } = props
 
   const [courses, setCourses] = useState([])
@@ -21,22 +21,22 @@ export const Home = (props) => {
   useEffect(() => {
     //Runs after timeout to ensure token updates
     //Gets the tokens stored in session on login
-      fetch(`${URL}/authent`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: sessionStorage.getItem('username'),
-            userToken: sessionStorage.getItem('userToken'),
-            sessionToken: sessionStorage.getItem('sessionToken')
-        })
+    fetch(`${URL}/authent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: sessionStorage.getItem('username'),
+        userToken: sessionStorage.getItem('userToken'),
+        sessionToken: sessionStorage.getItem('sessionToken')
       })
+    })
       .then(result => result.json())
       .then(data => {
         data[0].response == 'true' ? setIsLoggedIn(true) : kickUser()
       })
-    
+
   }, [])
 
   function kickUser() {
@@ -69,10 +69,10 @@ export const Home = (props) => {
     return <Navigate to="/login" />
   }
 
-  return(
+  return (
     <>
       <div id="home-container">
-        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Nav />
         <StudentList courses={courses}/>
       </div>

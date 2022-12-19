@@ -1,10 +1,8 @@
 import { useEffect, useState, useMemo } from "react"
 
-
-
-
 export const StudentsList = (props) => {
     const { courses, setCourses } = props
+
     const [studentsState, setStudentsState] = useState([])
     let currentClass = sessionStorage.getItem('currentClass')
     let gid = sessionStorage.getItem(currentClass)
