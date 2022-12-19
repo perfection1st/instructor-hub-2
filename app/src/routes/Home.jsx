@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 
 export const Home = (props) => {
 
-  const URL = 'http://localhost:8000/api'  
+  const URL = 'http://localhost:8000/api'
   const { isLoggedIn, setIsLoggedIn } = props
 
   //Sends a fetch to verify users tokens
@@ -18,22 +18,22 @@ export const Home = (props) => {
   useEffect(() => {
     //Runs after timeout to ensure token updates
     //Gets the tokens stored in session on login
-      fetch(`${URL}/authent`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: sessionStorage.getItem('username'),
-            userToken: sessionStorage.getItem('userToken'),
-            sessionToken: sessionStorage.getItem('sessionToken')
-        })
+    fetch(`${URL}/authent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: sessionStorage.getItem('username'),
+        userToken: sessionStorage.getItem('userToken'),
+        sessionToken: sessionStorage.getItem('sessionToken')
       })
+    })
       .then(result => result.json())
       .then(data => {
         data[0].response == 'true' ? setIsLoggedIn(true) : kickUser()
       })
-    
+
   }, [])
 
   function kickUser() {
@@ -42,15 +42,15 @@ export const Home = (props) => {
     setIsLoggedIn(false)
   }
 
-  //if user is not already logged in, they will be automatically navigated to the login page
-  // if( !isLoggedIn ){
-  //   return <Navigate to="/login" />
-  // }
+  // if user is not already logged in, they will be automatically navigated to the login page
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />
+  }
 
-  return(
+  return (
     <>
       <div id="home-container">
-        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Nav />
         <StudentList />
       </div>
