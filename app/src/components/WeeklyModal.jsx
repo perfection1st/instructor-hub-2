@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsCalendarPlusFill } from "react-icons/bs";
-import { StudentsList } from "../frontEndFunctions"
 
-export const WeeklyModal = () => {
+export const WeeklyModal = (props) => {
+  //State of all users courses
+  const { courses, setCourses } = props
 
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
@@ -32,7 +33,7 @@ export const WeeklyModal = () => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <StudentsList />
+            <ModalList courses={courses}/>
           </ul>
         </Modal.Body>
         <Modal.Footer>
