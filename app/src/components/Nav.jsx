@@ -3,7 +3,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { GoPlus } from "react-icons/go";
 import { StudentsList } from "../frontEndFunctions"
-export const Nav = () => {
+
+export const Nav = (props) => {
+  const { courses, setCourses } = props
 
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
@@ -64,7 +66,7 @@ export const Nav = () => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <StudentsList />
+            <StudentsList courses={courses}/>
           </ul>
         </Modal.Body>
         <Modal.Footer>

@@ -6,22 +6,28 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { useState } from 'react';
 
 
-export const StudentList = () => {
+export const StudentList = (props) => {
+
+  const { courses, setCourses } = props
+  const [selectedClass, setSelectedClass] = useState('')
+
   return(
     <>
     <div id="select-cohort">
       <h2>Student List</h2>
       <DropdownButton
         align="end"
-        title="MCSP-15"
+        title="Courses"
         menuVariant="dark"
         id="dropdown-menu-align-end"
         size="md"
+        onSelect={function(evt){sessionStorage.setItem('currentClass', evt)}}
       >
-      <Dropdown.Item eventKey="1">MCSP-14</Dropdown.Item>
-      <Dropdown.Item eventKey="4">MCSP-13</Dropdown.Item>
+      {courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
+
     </DropdownButton>
     </div>
     <div id="student-list-container">

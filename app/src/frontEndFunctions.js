@@ -1,15 +1,24 @@
 import { useEffect, useState, useMemo } from "react"
 
-export const StudentsList = () => {
+
+
+
+export const StudentsList = (props) => {
+    const { courses, setCourses } = props
     const [studentsState, setStudentsState] = useState([])
+    let currentClass = sessionStorage.getItem('currentClass')
+    let gid = sessionStorage.getItem(currentClass)
+    let asanaToken = sessionStorage.getItem('asanaToken')
+    console.log(gid)
     useEffect(() => {
-        fetch(`https://app.asana.com/api/1.0/projects/1203169000891327/tasks`, {
+        fetch(`https://app.asana.com/api/1.0/projects/${gid}/tasks`, {
             headers: {
-                Authorization: `Bearer 1/1202887090235848:e50a6b5c7c5a8d420afa41cb62b558d0`
+                Authorization: `Bearer ${asanaToken}`
             }
         })
         .then(result => result.json())
         .then(data => {
+            console.log(data)
             setStudentsState(data.data)})
     }, [])
     return (
