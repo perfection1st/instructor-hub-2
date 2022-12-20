@@ -65,7 +65,7 @@ CREATE EXTENSION pgcrypto;
 
 CREATE TABLE cohorts (
   cohort_id SERIAL PRIMARY KEY,
-  name TEXT,
+  cohort_name TEXT UNIQUE,
   begin_date DATE,
   end_date DATE,
   instructor TEXT,
@@ -83,12 +83,11 @@ CREATE TABLE students (
   teamwork_avg INT,
   server_side_test TEXT,
   client_side_test TEXT,
-  cohort TEXT,
-  cohort_id INT,
+  cohort_name TEXT,
   ETS_date DATE,
   github TEXT,
   gid TEXT,
-  FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
+  FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
   );
 
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS

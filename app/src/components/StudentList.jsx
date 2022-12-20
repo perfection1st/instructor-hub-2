@@ -1,21 +1,25 @@
+import { LoadingDropdown } from './Loading';
 import {StudentStats} from './StudentStats';
 import {StudentAverages} from './StudentAverages';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 
 
 export const StudentList = (props) => {
 
+
   //State courses is set in home
-  const { courses, setCourses } = props
+  const { courses, setCourses, isLoadingCourses, setIsLoadingCourses } = props
+
   const [selectedClass, setSelectedClass] = useState('Courses')
+
+  console.log(isLoadingCourses);
+
 //"Courses"
   return(
     <>
@@ -32,7 +36,7 @@ export const StudentList = (props) => {
           sessionStorage.setItem('currentClass', evt)
         }}
       >
-      {courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
+        {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
 
     </DropdownButton>
     </div>
@@ -253,6 +257,5 @@ export const StudentList = (props) => {
       <StudentAverages />
     </div>
     </>
-    
   );
 }
