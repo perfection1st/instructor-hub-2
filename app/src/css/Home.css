@@ -120,6 +120,20 @@ table#student-list {
   display:block;
   height:330px !important;
   overflow-y:scroll;
+  box-shadow:inset 0 0px -15px #ccc;
+}
+table#student-list h3 {
+  font-size:20px;
+}
+table#student-list thead {
+  position:sticky;
+  top:0;
+  height:20px;
+  background-color:#eee;
+  z-index:9999;
+  vertical-align:middle;
+  padding:0;
+  box-shadow:0 0px 15px #ccc;
 }
 /* width */
 ::-webkit-scrollbar {
