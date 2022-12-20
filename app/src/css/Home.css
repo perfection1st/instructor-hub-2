@@ -130,10 +130,13 @@ table#student-list thead {
   top:0;
   height:20px;
   background-color:#eee;
-  z-index:9999;
   vertical-align:middle;
   padding:0;
+  z-index:2;
   box-shadow:0 0px 15px #ccc;
+}
+table#student-list tbody {
+  z-index:1;
 }
 /* width */
 ::-webkit-scrollbar {
