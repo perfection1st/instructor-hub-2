@@ -101,73 +101,21 @@ div#select-cohort button {
 *******************/
 div#student-list-container {
   display: grid;
-  grid-template-columns: 2fr 2fr;
+  grid-template-columns: 4fr 2fr;
   grid-template-rows: 1fr;
-  grid-column-gap: 0px;
+  grid-column-gap: 25px;
   grid-row-gap: 0px;
   margin-top:10px;
 }
-ul#students {
-  width:85%;
-  list-style-type:none;
-  margin:0;
-  padding:0;
+td.student-average button {
+  background-color:#f3f3f3;
+  border:1px solid #e9e7e7;
 }
-ul#students h3 {
-  font-size:20px;
-}
-ul#students li {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  padding-right:15px;
-  background-color:#eee;
-  padding-left:10px;
-  padding-top:15px;
-  padding-bottom:10px;
-  border-bottom:1px solid #fff;
-  transition:background-color 0.2s;
-}
-ul#students li:nth-child(odd) {
-  background-color:rgba(219, 219, 219, 0.60);
-}
-ul#students li:hover {
-  cursor:pointer;
-  background-color:rgba(179, 179, 179, 0.60);
-  transition:background-color 0.1s;
-}
-ul#students li button {
-  border:0;
-}
-button.btn-student-performance {
-  border:1px solid red;
-  border-radius:10px;
-  padding:10px;
-}
-button.red {
-  background-image: linear-gradient(to top, #aa0000, #b50b09, #c01513, #cb1d1c, #d62525);
-}
-button.yellow {
-  background-image: linear-gradient(to top, #b58e03, #c19702, #cea102, #daaa01, #e7b400);
-}
-button.green {
-  background-image: linear-gradient(to top, #268e01, #2c9d03, #31ac05, #37bb07, #3dcb0a);
+td.student-average button:hover {
+  background-color:#dadada;
+  border:1px solid #d4d4d4;
 }
 
 /******************
   STUDENT-AVG-GRAPH
 *******************/
-
-div#student-avg-graph {
- position:relative;
- top:50%;
- left:50%;
- transform:translate(-50%, -50%);
-}
-
-/*div#Bar {
-  background-color: #aa0000;
-  }
-  */
