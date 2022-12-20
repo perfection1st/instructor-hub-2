@@ -6,8 +6,8 @@ import { ModalList } from './ModalList';
 
 export const WeeklyModal = (props) => {
   //State of all users courses
-  const { courses, setCourses } = props
-
+  const { courses, setCourses, selectedStudents, setSelectedStudents } = props
+  const [checked, setChecked] = useState(false)
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   // close weekly modal function
@@ -34,7 +34,7 @@ export const WeeklyModal = (props) => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <ModalList courses={courses}/>
+            <ModalList courses={courses} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
           </ul>
         </Modal.Body>
         <Modal.Footer>
@@ -53,8 +53,9 @@ export const WeeklyModal = (props) => {
           <div id='weekly-grade-input'>
             <ul id='weekly-selected-students'>
               {/* students displayed will be conditional based off students selected from previous modal */}
-              <li>
-                Selected student 1
+              {selectedStudents.map(students => <li key={students.gid} value={students.gid}>
+                {students.name}
+                <>  </>
                 <select className='tech-aptitude'>
                   <option value="1">Tech 1</option>
                   <option value="2">Tech 2</option>
@@ -67,37 +68,7 @@ export const WeeklyModal = (props) => {
                   <option value="3">Team 3</option>
                   <option value="4">Team 4</option>
                 </select>
-              </li>
-              <li>
-                Selected student 2
-                <select className='tech-aptitude'>
-                  <option value="1">Tech 1</option>
-                  <option value="2">Tech 2</option>
-                  <option value="3">Tech 3</option>
-                  <option value="4">Tech 4</option>
-                </select>
-                <select className='team-aptitude'>
-                  <option value="1">Team 1</option>
-                  <option value="2">Team 2</option>
-                  <option value="3">Team 3</option>
-                  <option value="4">Team 4</option>
-                </select>
-              </li>
-              <li>
-                Selected student 3
-                <select className='tech-aptitude'>
-                  <option value="1">Tech 1</option>
-                  <option value="2">Tech 2</option>
-                  <option value="3">Tech 3</option>
-                  <option value="4">Tech 4</option>
-                </select>
-                <select className='team-aptitude'>
-                  <option value="1">Team 1</option>
-                  <option value="2">Team 2</option>
-                  <option value="3">Team 3</option>
-                  <option value="4">Team 4</option>
-                </select>
-              </li>
+              </li>)}
             </ul>
           </div>
         </Modal.Body>

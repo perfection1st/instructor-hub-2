@@ -13,6 +13,7 @@ import { useState } from 'react';
 
 export const StudentList = (props) => {
 
+  //State courses is set in home
   const { courses, setCourses } = props
   const [selectedClass, setSelectedClass] = useState('Courses')
 //"Courses"
@@ -46,7 +47,7 @@ export const StudentList = (props) => {
         </tr>
       </thead>
       <tbody>
-        <tr>
+        {/* <tr>
           <td><h3>Dylan Clark</h3></td>
           <td>@testuser</td>
           <td className="student-average" width={'15%'}>
@@ -245,7 +246,7 @@ export const StudentList = (props) => {
             </Button>
           </ButtonGroup>
           </td>
-        </tr>
+        </tr> */}
       </tbody>
     </Table>
       </div>

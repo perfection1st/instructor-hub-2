@@ -151,6 +151,15 @@ app.patch('/api/token', (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
+
+//Route to get all students from a specific cohort
+app.get('/api/students/:cohort', (req, res) => {
+    const cohort = req.params.cohort
+    pool.query('SELECT * FROM students WHERE cohort_name = $1', [cohort])
+    .then(result => res.status(200).send(result.rows))
+    .catch(error => res.status(404).send(error))
+})
+
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
 });
