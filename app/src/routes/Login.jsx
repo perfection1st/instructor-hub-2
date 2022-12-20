@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import swal from 'sweetalert';
-import { Suspense } from 'react';
 import Spinner from 'react-bootstrap/Spinner'
 import { useState } from 'react';
 import '../images/galvanize-logo.svg';
@@ -113,16 +112,16 @@ export const Login = (props) => {
             <Form.Control ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
             {/* Checks to see if button was pressed, if it was it shows a spinner */}
             { isLoading === true ?
-              <Button className="button" id="new-post-submit" variant="primary" disabled>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                  />
-                  <span className="visually-hidden">Loading...</span>
-              </Button>
+              <Button type='submit' disabled value="Sign In">
+              <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              />
+              <span className="visually-hidden">Loading...</span></Button>
+
               :
               <Button type='submit' value="Sign In" onClick={(e) => signIn(e)} >Login</Button>
           }

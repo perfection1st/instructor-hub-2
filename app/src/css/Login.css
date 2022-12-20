@@ -12,7 +12,10 @@ h2#login {
     color: rgb(89, 92, 105);
     text-align: center;
 }
+form#login label {
+    margin-top:20px;
 
+}
 form#login button[type="submit"] {
     margin-top:30px;
     margin-bottom:10px;

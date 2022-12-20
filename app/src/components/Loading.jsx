@@ -16,5 +16,4 @@ export const LoadingDropdown = () => {
     </Placeholder>
   </div>
   );
-  
 }
