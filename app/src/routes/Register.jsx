@@ -1,4 +1,5 @@
 import '../css/Register.css';
+import Spinner from 'react-bootstrap/Spinner'
 import { Navigate, Link } from 'react-router-dom';
 import { useRef } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -20,9 +21,13 @@ export const Register = (props) => {
   const confirmPasswordRef = useRef();
   const asanaApiKeyRef = useRef();
 
+  // Loading spinner
+  const [isLoading, setIsLoading] = useState(false);
+
   //Creates user on form submission
   function registerUser(e) {
     e.preventDefault()
+    setIsLoading(true)
     let inputUsername = usernameRef.current.value
     let asanaKey = asanaApiKeyRef.current.value
     //Verifies that the passwords match
@@ -62,6 +67,7 @@ export const Register = (props) => {
         } else {
           swal('Account Created, you may now log in')
           setAccountCreated(true)
+          setIsLoading(false)
         }
       })
     }
@@ -92,7 +98,20 @@ export const Register = (props) => {
 
         <Form.Control ref={asanaApiKeyRef} type="text" placeholder="type API key here" required />
         </Form.Group>
-        <Button type="submit" value="Register" onClick={(e) => registerUser(e)}>Register</Button>
+        { isLoading === true ?
+              <Button type="submit" value="Register">
+                <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+                />
+              <span className="visually-hidden">Loading...</span>
+              </Button>
+              :
+              <Button type="submit" value="Register" onClick={(e) => registerUser(e)}>Register</Button>
+          }
       </Form>
       <p>
         Already have an account? Click <Link to='/login'>Here</Link> to sign in.
