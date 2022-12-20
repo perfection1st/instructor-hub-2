@@ -36,7 +36,8 @@ export const StudentList = (props) => {
     </DropdownButton>
     </div>
     <div id="student-list-container">
-    <Table id="student-list" striped>
+      <div id="student-table-container">
+      <Table id="student-list" striped>
       <thead>
         <tr>
           <th>Name</th>
@@ -46,7 +47,7 @@ export const StudentList = (props) => {
       </thead>
       <tbody>
         <tr>
-          <td>Dylan Clark</td>
+          <td><h3>Dylan Clark</h3></td>
           <td>@testuser</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -66,7 +67,7 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td>Nate Morrison</td>
+          <td><h3>Dylan Clark</h3></td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -86,7 +87,7 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td>Katie Chevez</td>
+          <td><h3>Dylan Clark</h3></td>
           <td>@someotherusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -106,7 +107,7 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td>Timothy Iott</td>
+          <td><h3>Dylan Clark</h3></td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -247,6 +248,7 @@ export const StudentList = (props) => {
         </tr>
       </tbody>
     </Table>
+      </div>
       <StudentAverages />
     </div>
     </>
