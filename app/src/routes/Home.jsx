@@ -13,6 +13,7 @@ export const Home = (props) => {
   const { isLoggedIn, setIsLoggedIn } = props
 
   const [courses, setCourses] = useState([])
+  const [isLoadingCourses, setIsLoadingCourses] = useState(true);
 
   //Sends a fetch to verify users tokens
   //If tokens don't match tokens stored under the logged in user they are logged out
@@ -59,6 +60,7 @@ export const Home = (props) => {
         data.data.map(courses => sessionStorage.setItem(courses.name, courses.gid))
         //Sets the state to pass the data down for further use
         setCourses(data.data)
+        setIsLoadingCourses(false);
     })
   }, [])
 
@@ -73,7 +75,7 @@ export const Home = (props) => {
       <div id="home-container">
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Nav />
-        <StudentList courses={courses}/>
+        <StudentList courses={courses} isLoadingCourses={isLoadingCourses} setIsLoadingCourses={setIsLoadingCourses} />
       </div>
     </>
   );

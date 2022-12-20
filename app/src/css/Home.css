@@ -43,6 +43,7 @@ div#admin-menu button {
   background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
   border:1px solid #ffba8c;
   outline:1px solid #CB6928;
+  color:#000;
 }
 /******************
   NAVIGATION
@@ -161,3 +162,4 @@ table#student-list tbody {
 /******************
   STUDENT-AVG-GRAPH
 *******************/
+
