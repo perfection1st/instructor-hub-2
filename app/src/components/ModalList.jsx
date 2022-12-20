@@ -24,7 +24,6 @@ export const ModalList = (props) => {
         }
     }, [])
     function clickStudent(e){
-        console.log(e.target.value)
         //Checks to see if box was unclicked
         //Removes student from state used to add changes if so
         if(!e.target.checked){
