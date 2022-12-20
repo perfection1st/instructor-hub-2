@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import Table from 'react-bootstrap/Table';
+import Badge from 'react-bootstrap/Badge';
 import { useState } from 'react';
 
 
@@ -34,86 +36,117 @@ export const StudentList = (props) => {
     </DropdownButton>
     </div>
     <div id="student-list-container">
-      <ul id="students">
-        <li>
-          <h3>Dylan Clark</h3>
-          <ButtonGroup size="sm" className="lg">
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                <Tooltip id="tooltip-test">
-                  hello test
-                </Tooltip>
-              }
-              >
-              <Button className="red">10</Button>
-              </OverlayTrigger>
-              
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                <Tooltip id="tooltip-test">
-                  hello test
-                </Tooltip>
-              }
-              >
-              <Button className="yellow">50</Button>
-              </OverlayTrigger>
-
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                <Tooltip id="tooltip-test">
-                  hello test
-                </Tooltip>
-              }
-              >
-              <Button className="green">100</Button>
-              </OverlayTrigger>
+    <Table striped>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>GitHub</th>
+          <th>Performance Averages (Learn/Team/Tech)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dylan Clark</td>
+          <td>@testuser</td>
+          <td className="student-average" width={'15%'}>
+          <ButtonGroup aria-label="Basic example">
+            <Button variant="secondary" size="sm">
+              <Badge bg="danger">30%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+            <Badge bg="warning">70%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+              <Badge bg="success">100%</Badge>
+                <span className="visually-hidden">unread messages</span>
+            </Button>
           </ButtonGroup>
-          
-        </li>
-        <li>
-          <h3>Elijah Stamp</h3>
-          <ButtonGroup size="sm" className="lg">
-              <Button className="red">10</Button>
-              <Button className="yellow">50</Button>
-              <Button className="green">100</Button>
+          </td>
+        </tr>
+        <tr>
+          <td>Nate Morrison</td>
+          <td>@someusername</td>
+          <td className="student-average" width={'15%'}>
+          <ButtonGroup aria-label="Basic example">
+            <Button variant="secondary" size="sm">
+              <Badge bg="danger">30%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+            <Badge bg="warning">70%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+              <Badge bg="success">100%</Badge>
+                <span className="visually-hidden">unread messages</span>
+            </Button>
           </ButtonGroup>
-        </li>
-        <li>
-          <h3>Katie "Chevy" Chevez</h3>
-          <ButtonGroup size="sm" className="lg">
-              <Button className="red">10</Button>
-              <Button className="yellow">50</Button>
-              <Button className="green">100</Button>
+          </td>
+        </tr>
+        <tr>
+          <td>Katie Chevez</td>
+          <td>@someotherusername</td>
+          <td className="student-average" width={'15%'}>
+          <ButtonGroup aria-label="Basic example">
+            <Button variant="secondary" size="sm">
+              <Badge bg="danger">30%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+            <Badge bg="warning">70%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+              <Badge bg="success">100%</Badge>
+                <span className="visually-hidden">unread messages</span>
+            </Button>
           </ButtonGroup>
-        </li>
-        <li>
-          <h3>Nathaniel "Nate" Morrison</h3>
-          <ButtonGroup size="sm" className="lg">
-              <Button className="red">10</Button>
-              <Button className="yellow">50</Button>
-              <Button className="green">100</Button>
+          </td>
+        </tr>
+        <tr>
+          <td>Timothy Iott</td>
+          <td>@someusername</td>
+          <td className="student-average" width={'15%'}>
+          <ButtonGroup aria-label="Basic example">
+            <Button variant="secondary" size="sm">
+              <Badge bg="danger">30%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+            <Badge bg="warning">70%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+              <Badge bg="success">100%</Badge>
+                <span className="visually-hidden">unread messages</span>
+            </Button>
           </ButtonGroup>
-        </li>
-        <li>
-          <h3>Timothy "Timotheus" Iott</h3>
-          <ButtonGroup size="sm" className="lg">
-              <Button className="red">10</Button>
-              <Button className="yellow">50</Button>
-              <Button className="green">100</Button>
+          </td>
+        </tr>
+        <tr>
+          <td>Adam Jones</td>
+          <td>@someusername</td>
+          <td className="student-average" width={'15%'}>
+          <ButtonGroup aria-label="Basic example">
+            <Button variant="secondary" size="sm">
+              <Badge bg="success">95%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+            <Badge bg="success">100%</Badge>
+              <span className="visually-hidden">unread messages</span>
+            </Button>
+            <Button variant="secondary" size="sm">
+              <Badge bg="success">100%</Badge>
+                <span className="visually-hidden">unread messages</span>
+            </Button>
           </ButtonGroup>
-        </li>
-        <li>
-          <h3>Adam "Jones" Jones</h3>
-          <ButtonGroup size="sm" className="lg">
-              <Button className="red">10</Button>
-              <Button className="yellow">50</Button>
-              <Button className="green">100</Button>
-          </ButtonGroup>
-        </li>
-      </ul>
+          </td>
+        </tr>
+      </tbody>
+    </Table>
       <StudentAverages />
     </div>
     </>

@@ -64,9 +64,9 @@ export const Home = (props) => {
 
 
   //if user is not already logged in, they will be automatically navigated to the login page
-  if( !isLoggedIn ){
-    return <Navigate to="/login" />
-  }
+  // if( !isLoggedIn ){
+  //   return <Navigate to="/login" />
+  // }
 
   return (
     <>
