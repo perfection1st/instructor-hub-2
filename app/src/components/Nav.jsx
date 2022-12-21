@@ -8,10 +8,12 @@ export const Nav = (props) => {
   const { courses, setCourses } = props
 
   const [selectedStudents, setSelectedStudents] = useState([])
+  const [checked, setChecked] = useState(false)
+
 
   return (
     <nav>
-      <WeeklyModal courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
+      <WeeklyModal checked={checked} setChecked={setChecked} courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
       <ProjectModal />
       <AssessmentModal courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
     </nav>

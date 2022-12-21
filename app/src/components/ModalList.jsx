@@ -2,7 +2,9 @@ import { useEffect, useState, useMemo } from "react"
 import swal from 'sweetalert';
 
 export const ModalList = (props) => {
-    const { courses, setCourses, checked, setChecked, selectedStudents, setSelectedStudents } = props
+    /********* This component is only used for weekly update and assessment update **********/
+
+    const { courses, setCourses, setShowAssessmentModal, setShowWeeklyModal, checked, setChecked, selectedStudents, setSelectedStudents } = props
 
     //Makes a fetch to the users Asana to get student info based on selected course
     const [studentsState, setStudentsState] = useState([])
@@ -11,7 +13,16 @@ export const ModalList = (props) => {
     let asanaToken = sessionStorage.getItem('asanaToken')
     useEffect(() => {
         if(!currentClass){
-            swal('No course selected')
+            //Checks to see if weekly button was clicked
+            //If it wasn't then it runs the assessment code
+            //Should only be used with weekly update and assessment update
+            if(checked == "btn-weekly-update") {
+                swal('No course selected')
+                setShowWeeklyModal(false)
+            } else {
+                setShowAssessmentModal(false)
+                swal('No course selected')
+            }
         } else {
             fetch(`https://app.asana.com/api/1.0/projects/${gid}/tasks`, {
                 headers: {

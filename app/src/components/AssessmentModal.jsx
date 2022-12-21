@@ -45,7 +45,7 @@ export const AssessmentModal = (props) => {
             <option value="react">React</option>
           </select>
           <ul id='assessment-student-list'>
-            <ModalList courses={courses} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
+            <ModalList courses={courses} setShowAssessmentModal={setShowAssessmentModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
           </ul>
         </Modal.Body>
         <Modal.Footer>
