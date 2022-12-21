@@ -6,8 +6,7 @@ import { ModalList } from './ModalList';
 
 export const WeeklyModal = (props) => {
   //State of all users courses
-  const { courses, setCourses, selectedStudents, setSelectedStudents } = props
-  const [checked, setChecked] = useState(false)
+  const { checked, setChecked, courses, setCourses, selectedStudents, setSelectedStudents } = props
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   // close weekly modal function
@@ -19,7 +18,10 @@ export const WeeklyModal = (props) => {
   const handleNextModal = () => setShowWeeklyModal(false);
   
   // open weekly modal function
-  const handleShowWeeklyModal = () => setShowWeeklyModal(true);
+  const handleShowWeeklyModal = (e) => {
+    setChecked(e.target.id)
+    setShowWeeklyModal(true)
+  };
 
   // state for Weekly grading modal displaying/not displaying
   const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
@@ -30,7 +32,7 @@ export const WeeklyModal = (props) => {
 
   return (
     <>
-      <button id="btn-weekly-update" onClick={handleShowWeeklyModal}><BsCalendarPlusFill /> Add Weekly Update </button>
+      <button id="btn-weekly-update" onClick={(e) => handleShowWeeklyModal(e)}><BsCalendarPlusFill /> Add Weekly Update </button>
 
       {/* Weekly modal */}
       <Modal id="weekly-update-modal" size="md" centered show={showWeeklyModal} onHide={handleCloseWeeklyModal}>
@@ -40,7 +42,7 @@ export const WeeklyModal = (props) => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <ModalList courses={courses} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
+            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
           </ul>
         </Modal.Body>
         <Modal.Footer>
