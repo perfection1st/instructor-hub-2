@@ -13,7 +13,7 @@ export const Nav = (props) => {
     <nav>
       <WeeklyModal courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
       <ProjectModal />
-      <AssessmentModal />
+      <AssessmentModal courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
     </nav>
   );
 }
