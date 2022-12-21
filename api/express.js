@@ -46,7 +46,7 @@ app.get('/api/students/:cohort', (req, res) => {
 })
 
 //Route selects students from list inside modal//
-app.get('/api/selectedstudents', (req, res) => {
+app.post('/api/selectedstudents', (req, res) => {
     studentIds = req.body.studentIds
     queryString = ''
     studentIds.forEach((studentId) => {
@@ -164,6 +164,7 @@ app.post(`/api/create/cohort`, (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
+
 //Creates a route to insert multiple students into a course
 //Uses pg-format to do a mass insert with multiple values
 //The values are taken from the request body and pushed into an array as their own array
@@ -175,7 +176,6 @@ app.post('/api/create/students', (req, res) => {
     .then(result => res.send(result.rows))
 
 })
-
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
