@@ -17,6 +17,8 @@ const { json } = require('express');
 //Creates random strings for tokens
 const Str = require('@supercharge/strings')
 
+const format = require('pg-format')
+
 //Sets up env and port
 const PORT = 8000;
 
@@ -160,6 +162,19 @@ app.post(`/api/create/cohort`, (req, res) => {
     pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor, gid) VALUES ($1, $2, $3, $4, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
     .then(result => res.status(200).send(result.rows))
     .catch(error => res.status(404).send(error))
+})
+
+
+//Creates a route to insert multiple students into a course
+//Uses pg-format to do a mass insert with multiple values
+//The values are taken from the request body and pushed into an array as their own array
+app.post('/api/create/students', (req, res) => {
+    const students = req.body.students
+    let values = []
+    students.forEach((student) => values.push([student.name, student.cohort_name, student.gid]))
+    pool.query(format('INSERT INTO students (name, cohort_name, gid) VALUES %L RETURNING *', values),[])
+    .then(result => res.send(result.rows))
+
 })
 
 app.listen(PORT, () => {
