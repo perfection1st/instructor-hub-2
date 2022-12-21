@@ -64,8 +64,8 @@ CREATE EXTENSION pgcrypto;
 );
 
 CREATE TABLE cohorts (
-  cohort_id SERIAL PRIMARY KEY,
-  cohort_name TEXT UNIQUE,
+  cohort_id SERIAL,
+  cohort_name TEXT UNIQUE PRIMARY KEY,
   begin_date DATE,
   end_date DATE,
   instructor TEXT,
@@ -93,8 +93,8 @@ CREATE TABLE students (
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
   group_id SERIAL PRIMARY KEY,
-  cohort_id INT,
-  FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
+  cohort_name INT,
+  FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
 );
 
 CREATE TABLE assigned_student_groupings (
@@ -251,12 +251,12 @@ UPDATE OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_l
 CREATE OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT MIN(students.learn_avg) as min
     FROM students
-    WHERE cohort_id = NEW.cohort_id
+    WHERE cohort_name = NEW.cohort_name
   )
 UPDATE cohorts
 SET cohort_min = grades.min
 FROM grades
-WHERE cohort_id = new.cohort_id;
+WHERE cohort_name = new.cohort_name;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -273,12 +273,12 @@ UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
 CREATE OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT MAX(students.learn_avg) as max
     FROM students
-    WHERE cohort_id = new.cohort_id
+    WHERE cohort_name = new.cohort_name
   )
 UPDATE cohorts
 SET cohort_max = grades.max
 FROM grades
-WHERE cohort_id = new.cohort_id;
+WHERE cohort_name = new.cohort_name;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -294,12 +294,12 @@ UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
 CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT AVG(students.learn_avg) as avg
     FROM students
-    WHERE cohort_id = new.cohort_id
+    WHERE cohort_name = new.cohort_name
   )
 UPDATE cohorts
 SET cohort_avg = grades.avg
 FROM grades
-WHERE cohort_id = new.cohort_id;
+WHERE cohort_name = new.cohort_name;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
