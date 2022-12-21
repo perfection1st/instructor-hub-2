@@ -4,7 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 import { BsBarChartLineFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
 
-export const AssessmentModal = () => {
+export const AssessmentModal = (props) => {
+
+  const { courses, setCourses, checked, setChecked, selectedStudents, setSelectedStudents } = props
 
   // state for assessment modal displaying/not displaying
   const [showAssessmentModal, setShowAssessmentModal] = useState(false);
@@ -43,7 +45,7 @@ export const AssessmentModal = () => {
             <option value="react">React</option>
           </select>
           <ul id='assessment-student-list'>
-            <ModalList />
+            <ModalList courses={courses} setShowAssessmentModal={setShowAssessmentModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
           </ul>
         </Modal.Body>
         <Modal.Footer>

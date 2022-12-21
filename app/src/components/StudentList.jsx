@@ -1,20 +1,26 @@
+import { LoadingDropdown } from './Loading';
 import {StudentStats} from './StudentStats';
 import {StudentAverages} from './StudentAverages';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import Form from 'react-bootstrap/Form';
 
 
 export const StudentList = (props) => {
 
-  const { courses, setCourses } = props
+
+  //State courses is set in home
+  const { courses, setCourses, isLoadingCourses, setIsLoadingCourses } = props
+
   const [selectedClass, setSelectedClass] = useState('Courses')
+
+  console.log('courses loading', isLoadingCourses);
+
 //"Courses"
   return(
     <>
@@ -31,7 +37,7 @@ export const StudentList = (props) => {
           sessionStorage.setItem('currentClass', evt)
         }}
       >
-      {courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
+        {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
 
     </DropdownButton>
     </div>
@@ -40,14 +46,21 @@ export const StudentList = (props) => {
       <Table id="student-list" striped>
       <thead>
         <tr>
-          <th>Name</th>
+          
+          <th><Form.Check
+            type="checkbox"
+            className='select-all'/>Name</th>
           <th>GitHub</th>
           <th>Performance Averages (Learn/Team/Tech)</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><h3>Dylan Clark</h3></td>
+         <tr>
+          <td>
+          <Form.Check
+          className='select-one'
+            type="checkbox" />
+            Dylan Clark</td>
           <td>@testuser</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -66,8 +79,13 @@ export const StudentList = (props) => {
           </ButtonGroup>
           </td>
         </tr>
+
         <tr>
-          <td><h3>Dylan Clark</h3></td>
+          <td>
+          <Form.Check
+          className='select-one'
+            type="checkbox" />
+            Dylan Clark </td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -87,7 +105,11 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td><h3>Dylan Clark</h3></td>
+          <td>
+          <Form.Check
+           className='select-one'
+            type="checkbox" />
+            Dylan Clark </td>
           <td>@someotherusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -107,7 +129,11 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td><h3>Dylan Clark</h3></td>
+          <td>
+            <Form.Check
+               className='select-one'
+               type="checkbox" />
+              Dylan Clark </td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -245,13 +271,12 @@ export const StudentList = (props) => {
             </Button>
           </ButtonGroup>
           </td>
-        </tr>
+        </tr> 
       </tbody>
     </Table>
       </div>
       <StudentAverages />
     </div>
     </>
-    
   );
 }

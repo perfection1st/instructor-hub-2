@@ -36,9 +36,9 @@ app.get('/api/users', (req, res) => {
 })
 
 //Route to select students from cohort//
-app.get('/api/students/:id', (req, res) => {
-    cohortId = req.params.id
-    pool.query(`SELECT * FROM students WHERE cohort_id = $1`, [cohortId])
+app.get('/api/students/:cohort', (req, res) => {
+    cohortName = req.params.cohort
+    pool.query(`SELECT * FROM students WHERE cohort_name = $1`, [cohortName])
     .then(result => res.send(result.rows))
     .catch(error => res.send(error))
 })
@@ -151,23 +151,16 @@ app.patch('/api/token', (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
+
 // route for creating new cohort
 app.post(`/api/create/cohort`, (req, res) => {
     // gets cohort object from body
     const newCohort = req.body.cohort
     // updates cohort table inside database
-    pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor,gid) VALUES ($1, $2, $3, $4, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
+    pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor, gid) VALUES ($1, $2, $3, $4, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
     .then(result => res.status(200).send(result.rows))
     .catch(error => res.status(404).send(error))
 })
-
-// const students = req.body.students
-// students.forEach((student) => {
-//     queryString = queryString + ` INSERT INTO students (name, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort_name, ets_date, github, gid) VALUES ($1, null, null, null, null, null, null, null, $2, null);`, [student.name, student.github]
-// })
-// pool.query(`${queryString}`)
-// .then(result => res.status(200).send(result.rows))
-// .catch(error => res.status(404).send(error))
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
