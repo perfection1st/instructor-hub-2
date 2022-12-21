@@ -11,14 +11,20 @@ export const WeeklyModal = (props) => {
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   // close weekly modal function
-  const handleCloseWeeklyModal = () => setShowWeeklyModal(false);
+  const handleCloseWeeklyModal = () => {
+    setSelectedStudents([])
+    setShowWeeklyModal(false)
+  };
+
+  const handleNextModal = () => setShowWeeklyModal(false);
+  
   // open weekly modal function
   const handleShowWeeklyModal = () => setShowWeeklyModal(true);
 
   // state for Weekly grading modal displaying/not displaying
   const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
   // close Weekly grading modal function
-  const handleCloseWeeklyGradingModal = () => setShowWeeklyGradingModal(false);
+  const handleCloseWeeklyGradingModal = () => setShowWeeklyGradingModal(false)
   // open Weekly grading modal function
   const handleShowWeeklyGradingModal = () => setShowWeeklyGradingModal(true);
 
@@ -38,7 +44,7 @@ export const WeeklyModal = (props) => {
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => { handleCloseWeeklyModal(); handleShowWeeklyGradingModal() }}>
+          <Button variant="primary" onClick={() => { handleNextModal(); handleShowWeeklyGradingModal() }}>
             Next
           </Button>
         </Modal.Footer>
@@ -55,6 +61,7 @@ export const WeeklyModal = (props) => {
               {/* students displayed will be conditional based off students selected from previous modal */}
               {selectedStudents.map(students => <li key={students.gid} value={students.gid}>
                 {students.name}
+                {/* adds a space between the name and dropdown */}
                 <>  </>
                 <select className='tech-aptitude'>
                   <option value="1">Tech 1</option>
