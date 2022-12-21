@@ -44,7 +44,7 @@ app.get('/api/students/:id', (req, res) => {
 })
 
 //Route selects students from list inside modal//
-app.get('/api/selectedstudents', (req, res) => {
+app.post('/api/selectedstudents', (req, res) => {
     studentIds = req.body.studentIds
     queryString = ''
     studentIds.forEach((studentId) => {
@@ -156,7 +156,7 @@ app.post(`/api/create/cohort`, (req, res) => {
     // gets cohort object from body
     const newCohort = req.body.cohort
     // updates cohort table inside database
-    pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor, cohort_avg, cohort_min, cohort_max, gid) VALUES ($1, $2, $3, $4, null, null, null, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
+    pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor,gid) VALUES ($1, $2, $3, $4, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
     .then(result => res.status(200).send(result.rows))
     .catch(error => res.status(404).send(error))
 })
