@@ -8,6 +8,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
 import { useState, Suspense } from 'react';
+import Form from 'react-bootstrap/Form';
 
 
 export const StudentList = (props) => {
@@ -45,14 +46,21 @@ export const StudentList = (props) => {
       <Table id="student-list" striped>
       <thead>
         <tr>
-          <th>Name</th>
+          
+          <th><Form.Check
+            type="checkbox"
+            className='select-all'/>Name</th>
           <th>GitHub</th>
           <th>Performance Averages (Learn/Team/Tech)</th>
         </tr>
       </thead>
       <tbody>
-        {/* <tr>
-          <td><h3>Dylan Clark</h3></td>
+         <tr>
+          <td>
+          <Form.Check
+          className='select-one'
+            type="checkbox" />
+            Dylan Clark</td>
           <td>@testuser</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -71,8 +79,13 @@ export const StudentList = (props) => {
           </ButtonGroup>
           </td>
         </tr>
+
         <tr>
-          <td><h3>Dylan Clark</h3></td>
+          <td>
+          <Form.Check
+          className='select-one'
+            type="checkbox" />
+            Dylan Clark </td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -92,7 +105,11 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td><h3>Dylan Clark</h3></td>
+          <td>
+          <Form.Check
+           className='select-one'
+            type="checkbox" />
+            Dylan Clark </td>
           <td>@someotherusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -112,7 +129,11 @@ export const StudentList = (props) => {
           </td>
         </tr>
         <tr>
-          <td><h3>Dylan Clark</h3></td>
+          <td>
+            <Form.Check
+               className='select-one'
+               type="checkbox" />
+              Dylan Clark </td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -250,7 +271,7 @@ export const StudentList = (props) => {
             </Button>
           </ButtonGroup>
           </td>
-        </tr> */}
+        </tr> 
       </tbody>
     </Table>
       </div>
