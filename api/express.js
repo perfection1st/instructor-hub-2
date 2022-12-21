@@ -44,7 +44,7 @@ app.get('/api/students/:cohort', (req, res) => {
 })
 
 //Route selects students from list inside modal//
-app.get('/api/selectedstudents', (req, res) => {
+app.post('/api/selectedstudents', (req, res) => {
     studentIds = req.body.studentIds
     queryString = ''
     studentIds.forEach((studentId) => {
@@ -161,15 +161,6 @@ app.post(`/api/create/cohort`, (req, res) => {
     .then(result => res.status(200).send(result.rows))
     .catch(error => res.status(404).send(error))
 })
-
-
-// const students = req.body.students
-// students.forEach((student) => {
-//     queryString = queryString + ` INSERT INTO students (name, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort_name, ets_date, github, gid) VALUES ($1, null, null, null, null, null, null, null, $2, null);`, [student.name, student.github]
-// })
-// pool.query(`${queryString}`)
-// .then(result => res.status(200).send(result.rows))
-// .catch(error => res.status(404).send(error))
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
