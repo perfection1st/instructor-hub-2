@@ -164,6 +164,34 @@ app.post(`/api/create/cohort`, (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
+// route for getting all learn assessment names
+app.get(`/api/learn/assessment-names`, (req, res) => {
+    pool.query(` SELECT * FROM learn;`)
+    .then(result => res.status(200).send(result.rows))
+    .catch(error => res.status(404).send(error))
+})
+
+// route to post the learn grates for selected users
+app.post(`/api/learn/grades-update`, (req, res) => {
+    //gets information from the body
+    console.log(req.body)
+    let student_gid = req.body.student_gid
+    let assessment_id = req.body.assessment_id
+    let assessment_grade = req.body.assessment_grade
+    //updates the learn_grades table in the database
+    pool.query(`INSERT INTO learn_grades (student_gid, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_gid, assessment_id, assessment_grade])
+    .then(result => res.status(200).send(result.rows))
+    .catch(error => res.status(404).send(error))
+})
+
+// const students = req.body.students
+// students.forEach((student) => {
+//     queryString = queryString + ` INSERT INTO students (name, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort_name, ets_date, github, gid) VALUES ($1, null, null, null, null, null, null, null, $2, null);`, [student.name, student.github]
+// })
+// pool.query(`${queryString}`)
+// .then(result => res.status(200).send(result.rows))
+// .catch(error => res.status(404).send(error))
+
 
 //Creates a route to insert multiple students into a course
 //Uses pg-format to do a mass insert with multiple values
