@@ -2,15 +2,36 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
+import { ModalList } from './ModalList';
 
-export const ProjectModal = () => {
+export const ProjectModal = (props) => {
+
+  const { courses, setCourses, checked, setChecked, selectedStudents, setSelectedStudents } = props
+  const URL = 'http://localhost:8000'
+
+  // state for storing the current project that is selected
+  const [currentSelectedProject, setCurrentSelectedProject] = useState("")
+
+  // state for storing all of the project names that are fetched from the database
+  const [allProjectNames, setAllProjectNames] = useState([]);
 
   // state for project modal displaying/not displaying
   const [showProjectModal, setShowProjectModal] = useState(false);
   // close project modal function
-  const handleCloseProjectModal = () => setShowProjectModal(false);
+  const handleCloseProjectModal = () => {
+    setCurrentSelectedProject("")
+    // setSelectedStudents([]);
+    setShowProjectModal(false);
+  }
   // open project modal function
-  const handleShowProjectModal = () => setShowProjectModal(true);
+  const handleShowProjectModal = () => {
+    fetch(`${URL}/api/projects/project-names`)
+      .then(res => res.json())
+      .then(data => {
+        setAllProjectNames(data)
+      });
+    setShowProjectModal(true);
+  }
 
   // state for Project grading modal displaying/not displaying
   const [showProjectGradingModal, setShowProjectGradingModal] = useState(false);
@@ -29,24 +50,22 @@ export const ProjectModal = () => {
           <Modal.Title>Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <select id="project-selector" name="projects">
-            {/* selecting a project will send fetch call to get list of groups that worked on said project */}
-            <option value="placeholder">-- Select Project --</option>
-            <option value="FEC">FEC</option>
-            <option value="SDC">SDC</option>
-            <option value="BO">Blue Ocean</option>
-            <option value="Twiddler">Twiddler</option>
-            <option value="Stoplight">Stoplight</option>
-            <option value="Checkerboard">Checkerboard</option>
-            <option value="ReactMVP">React MVP</option>
+          <select id="project-selector" name="projects" onChange={(e) => setCurrentSelectedProject(e.target.value)}>
+            <option value="placeholder">{currentSelectedProject === "" ? "-- Select Project --" : currentSelectedProject}</option>
+            {allProjectNames.map(names => {
+              if (currentSelectedProject === names.project_name) {
+                return
+              }
+              return <option key={names.project_id} value={names.project_name}>{names.project_name}</option>
+            })}
           </select>
-          <select id="group-selector" name="groups">
-            {/* these will be conditonally rendered based on project selection */}
-            <option value="placeholder">-- Select Group --</option>
-            <option value="groupName1">DREAM TEAM + TIM</option>
-            <option value="groupName2">OPTIMA</option>
-            <option value="groupName3">WIZARDS OF THE CODE</option>
-          </select>
+
+          {/* *** THIS NEED TO BE TROUBLESHOT - BREAKS CODE WHEN TRYING TO RENDER STUDENT LIST FROM SELECTED CLASS *** */}
+          {/* <ul id='project-student-list'>
+            <ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
+          </ul> */}
+
+
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => { handleCloseProjectModal(); handleShowProjectGradingModal() }}>

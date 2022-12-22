@@ -11,13 +11,13 @@ export const AssessmentModal = (props) => {
   const URL = 'http://localhost:8000'
 
   // state for storing the current assessment that is selected
-  const [ currentSelectedAssessment, setCurrentSelectedAssessment ] = useState("")
+  const [currentSelectedAssessment, setCurrentSelectedAssessment] = useState("")
   // state for storing all of the assessment names that are fetched from the database
-  const [ allAssessmentNames, setAllAssessmentNames ] = useState([]);
+  const [allAssessmentNames, setAllAssessmentNames] = useState([]);
   // state for assessment modal displaying/not displaying
-  const [ showAssessmentModal, setShowAssessmentModal ] = useState(false);
+  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
   // state for assessment grading modal displaying/not displaying
-  const [ showAssessmentGradingModal, setShowAssessmentGradingModal ] = useState(false);
+  const [showAssessmentGradingModal, setShowAssessmentGradingModal] = useState(false);
 
   /////////////////// ASSESSMENT MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close assessment modal function
@@ -30,13 +30,13 @@ export const AssessmentModal = (props) => {
   // open assessment modal function
   const handleShowAssessmentModal = () => {
     fetch(`${URL}/api/learn/assessment-names`)
-    .then(res => res.json())
-    .then(data => {
-      setAllAssessmentNames(data)
-    });
+      .then(res => res.json())
+      .then(data => {
+        setAllAssessmentNames(data)
+      });
     setShowAssessmentModal(true);
   }
-  
+
   /////////////////// ASSESSMENT GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close assessment grading modal function
   const handleCloseAssessmentGradingModal = () => {
@@ -54,7 +54,7 @@ export const AssessmentModal = (props) => {
     setShowAssessmentModal(false);
     handleShowAssessmentGradingModal()
   }
-  
+
   // go back from the assessment grading modal to the assessment modal
   const handleBackButton = () => {
     setShowAssessmentGradingModal(false);
@@ -76,17 +76,14 @@ export const AssessmentModal = (props) => {
           <Modal.Title>Assessment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <select id="assessment-selector" name="assessments" onChange={(e) => setCurrentSelectedAssessment(e.target.value) }>
-            <option value="placeholder">{currentSelectedAssessment === "" ? "-- Select Assessment --" : currentSelectedAssessment}</option>
+          <select id="assessment-selector" name="assessments" onChange={(e) => setCurrentSelectedAssessment(e.target.value)}>
+            <option value="placeholder">-- Select Assessment --</option>
             {allAssessmentNames.map(names => {
-              if(currentSelectedAssessment === names.assessment_name){
-                return
-              }
               return <option key={names.assessment_id} value={names.assessment_name}>{names.assessment_name}</option>
             })}
           </select>
           <ul id='assessment-student-list'>
-            <ModalList courses={courses} setShowAssessmentModal={setShowAssessmentModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
+            <ModalList courses={courses} setShowAssessmentModal={setShowAssessmentModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
           </ul>
         </Modal.Body>
         <Modal.Footer>
