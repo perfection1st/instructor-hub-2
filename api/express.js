@@ -17,6 +17,8 @@ const { json } = require('express');
 //Creates random strings for tokens
 const Str = require('@supercharge/strings')
 
+const format = require('pg-format')
+
 //Sets up env and port
 const PORT = 8000;
 
@@ -44,7 +46,7 @@ app.get('/api/students/:cohort', (req, res) => {
 })
 
 //Route selects students from list inside modal//
-app.get('/api/selectedstudents', (req, res) => {
+app.post('/api/selectedstudents', (req, res) => {
     studentIds = req.body.studentIds
     queryString = ''
     studentIds.forEach((studentId) => {
@@ -162,7 +164,6 @@ app.post(`/api/create/cohort`, (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
-
 // route for getting all learn assessment names
 app.get(`/api/learn/assessment-names`, (req, res) => {
     pool.query(` SELECT * FROM learn;`)
@@ -178,6 +179,19 @@ app.get(`/api/learn/assessment-names`, (req, res) => {
 // pool.query(`${queryString}`)
 // .then(result => res.status(200).send(result.rows))
 // .catch(error => res.status(404).send(error))
+
+
+//Creates a route to insert multiple students into a course
+//Uses pg-format to do a mass insert with multiple values
+//The values are taken from the request body and pushed into an array as their own array
+app.post('/api/create/students', (req, res) => {
+    const students = req.body.students
+    let values = []
+    students.forEach((student) => values.push([student.name, student.cohort_name, student.gid]))
+    pool.query(format('INSERT INTO students (name, cohort_name, gid) VALUES %L RETURNING *', values),[])
+    .then(result => res.send(result.rows))
+
+})
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
