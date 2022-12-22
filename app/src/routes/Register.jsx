@@ -10,12 +10,11 @@ import { useState } from 'react';
 
 const URL = 'http://localhost:8000/api'
 
-export const Register = (props) => {
+export const Register = () => {
 
   //State to see if account was created, if it was it sends user back to login
   const [accountCreated, setAccountCreated] = useState(false)
 
-  const { isLoggedIn, setIsLoggedIn } = props
   const usernameRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
