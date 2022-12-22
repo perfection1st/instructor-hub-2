@@ -18,8 +18,6 @@ export const StudentList = (props) => {
 
   const [selectedClass, setSelectedClass] = useState('Courses')
 
-  console.log('courses loading', isLoadingCourses);
-
 //"Courses"
   return(
     <>

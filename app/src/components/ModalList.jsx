@@ -65,7 +65,6 @@ export const ModalList = (props) => {
             }
         }
     }
-    console.log(selectedStudents)
     return (
         <>
             {/* Checks to see if the students are present in selectedStudent state 

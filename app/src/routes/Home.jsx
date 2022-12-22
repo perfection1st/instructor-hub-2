@@ -47,7 +47,6 @@ export const Home = (props) => {
 
   //Sends a fetch to get all of a users projects/classes from asana
    useEffect(() => {
-    console.log('Fetching Asana')
     //Sends a fetch to get all users info
     fetch('https://app.asana.com/api/1.0/projects', {
         headers: {

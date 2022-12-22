@@ -76,7 +76,7 @@ CREATE TABLE cohorts (
 );
 
 CREATE TABLE students (
-  student_id SERIAL PRIMARY KEY,
+  student_id SERIAL,
   name TEXT,
   learn_avg INT,
   tech_avg INT,
@@ -86,7 +86,7 @@ CREATE TABLE students (
   cohort_name TEXT,
   ETS_date DATE,
   github TEXT,
-  gid TEXT,
+  gid TEXT PRIMARY KEY,
   FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
   );
 
@@ -161,12 +161,22 @@ CREATE TABLE learn (
   assessment_name TEXT
 );
 
+INSERT INTO learn (assessment_name) VALUES ('Data Types, Variables, and Expressions Assessment');
+INSERT INTO learn (assessment_name) VALUES ('Loops and Control Flow Assessment');
+INSERT INTO learn (assessment_name) VALUES ('Functions Assessment');
+INSERT INTO learn (assessment_name) VALUES ('Arrays Assessment');
+INSERT INTO learn (assessment_name) VALUES ('Objects Assessment');
+INSERT INTO learn (assessment_name) VALUES ('DOM API Assessment');
+INSERT INTO learn (assessment_name) VALUES ('Server Side Assessment');
+INSERT INTO learn (assessment_name) VALUES ('Server and DB Assessment');
+INSERT INTO learn (assessment_name) VALUES ('React Assessment');
+
 CREATE TABLE learn_grades (
   learn_grade_id SERIAL PRIMARY KEY,
-  student_id INT,
+  student_gid INT,
   assessment_id INT,
   assessment_grade INT,
-  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE,
   FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT
   --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
 
