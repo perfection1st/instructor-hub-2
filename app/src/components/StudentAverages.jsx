@@ -1,10 +1,10 @@
 import React from 'react'
-import{ Chart as ChartJS, BarElement } from 'chart.js/auto'
+import{ Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js/auto'
 import { Bar } from 'react-chartjs-2'
 
 ChartJS.register(
-  // CategoryScale,
-  // LinearScale,
+  CategoryScale,
+  LinearScale,
   BarElement
   )
 
@@ -15,7 +15,7 @@ export const StudentAverages = () => {
       labels: ['MCSP-13', 'MCSP-14', 'MCSP-15'],
       datasets: [{
           label: 'Cohort Avg',
-          data: [12, 19, 15],
+          data: [70, 85, 50],
           backgroundColor: [
               'rgb(237, 119, 28, 0.4)',
               'rgba(54, 162, 235, 0.4)',
@@ -37,19 +37,17 @@ export const StudentAverages = () => {
   }
 
   var options = {
-    maintainAspectRatio: false,
-    scales: {
+      scales: {
         y: {
-            beginAtZero: true
+          ticks: {
+          min: 10,
+          max: 100,
+          stepSize: 20,
+        },
         }
     },
-    legend:{
-      labels:{ 
-        display: false,
-      }
-    }
-}
-
+  };
+  //render
   return(
     <div id="student-avg-graph">
      <Bar id='bar'
