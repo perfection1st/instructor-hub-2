@@ -69,12 +69,34 @@ export const ModalList = (props) => {
         <>
             {/* Checks to see if the students are present in selectedStudent state 
             if they are it keeps the check in the box even if modal is closed */}
-            {studentsState.map((student) => {
-                return (selectedStudents.find(selected => selected.gid === student.gid) ?                   
-                <li key={student.gid}><input type="checkbox" value={student.name} onChange={(e) => clickStudent(e)} id={student.gid} checked={true}/> {student.name}</li>
-                :
-                <li key={student.gid}><input type="checkbox" value={student.name} onChange={(e) => clickStudent(e)} id={student.gid} checked={false} /> {student.name}</li>)
-            })}
+{studentsState
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((student) => {
+    return (
+      selectedStudents.find((selected) => selected.gid === student.gid) ?
+        <li key={student.gid}>
+          <input
+            type="checkbox"
+            value={student.name}
+            onChange={(e) => clickStudent(e)}
+            id={student.gid}
+            checked
+          />
+          {student.name}
+        </li>
+        :
+        <li key={student.gid}>
+          <input
+            type="checkbox"
+            value={student.name}
+            onChange={(e) => clickStudent(e)}
+            id={student.gid}
+            checked={false}
+          />
+          {student.name}
+        </li>
+    );
+  })}
 
         </>
     )
