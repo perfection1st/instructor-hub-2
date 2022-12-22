@@ -53,7 +53,7 @@ export const CreateCohortModal = () => {
 
   return (
     <>
-      <button id="btn-create-cohort" onClick={handleShowCreateCohortModal}><BsFileEarmarkCodeFill /> Create Cohort </button>
+      <div id="btn-create-cohort" onClick={handleShowCreateCohortModal}><BsFileEarmarkCodeFill /> Create Cohort </div>
 
       {/* CreateCohort Modal */}
       <Modal id="cohort-create-modal" size="lg" centered show={showCreateCohortModal} onHide={handleCloseCreateCohortModal}>

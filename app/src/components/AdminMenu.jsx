@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { GoGear, GoSignOut } from "react-icons/go";
+import { CreateCohortModal } from './CreateCohortModal';
 
 export const AdminMenu = (props) => {
   const { isLoggedIn, setIsLoggedIn } = props
@@ -56,6 +57,7 @@ export const AdminMenu = (props) => {
       
       <Dropdown.Item eventKey="1" onClick={handleShowSettingsModal}><GoGear /> Settings</Dropdown.Item>
       <Dropdown.Divider />
+      <Dropdown.Item > <CreateCohortModal /></Dropdown.Item>
       <Dropdown.Item eventKey="4" onClick={() => logout()}><GoSignOut /> Logout</Dropdown.Item>
     </DropdownButton>
     </div>

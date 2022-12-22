@@ -105,7 +105,7 @@ export const StudentList = (props) => {
         <tr>
           <td>
           <Form.Check
-           className='select-one'
+          className='select-one'
             type="checkbox" />
             Dylan Clark </td>
           <td>@someotherusername</td>
