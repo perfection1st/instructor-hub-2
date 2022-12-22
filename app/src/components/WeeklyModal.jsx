@@ -82,7 +82,7 @@ export const WeeklyModal = (props) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => { handleCloseWeeklyGradingModal(); handleShowWeeklyModal() }}>Back</Button>
+          <Button variant="secondary" onClick={(e) => { handleCloseWeeklyGradingModal(); handleShowWeeklyModal(e) }}>Back</Button>
           <Button variant="primary" onClick={handleCloseWeeklyGradingModal}>
             Submit ✓
           </Button>
