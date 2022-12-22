@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 
-const {Pool} = require('pg');
+const { Pool } = require('pg');
 
 //Sets up encryption hashing tools:
 const bcrypt = require('bcrypt');
@@ -33,16 +33,16 @@ app.use(express.json());
 
 app.get('/api/users', (req, res) => {
     pool.query('SELECT * FROM users')
-    .then(result => res.send(result.rows))
-    .catch((error) => res.send(error))
+        .then(result => res.send(result.rows))
+        .catch((error) => res.send(error))
 })
 
 //Route to select students from cohort//
 app.get('/api/students/:cohort', (req, res) => {
     cohortName = req.params.cohort
     pool.query(`SELECT * FROM students WHERE cohort_name = $1`, [cohortName])
-    .then(result => res.send(result.rows))
-    .catch(error => res.send(error))
+        .then(result => res.send(result.rows))
+        .catch(error => res.send(error))
 })
 
 //Route selects students from list inside modal//
@@ -50,7 +50,7 @@ app.post('/api/selectedstudents', (req, res) => {
     studentIds = req.body.studentIds
     queryString = ''
     studentIds.forEach((studentId) => {
-        if (queryString === ''){
+        if (queryString === '') {
             queryString = queryString + `${studentId}`
         }
         else {
@@ -59,8 +59,8 @@ app.post('/api/selectedstudents', (req, res) => {
     })
     console.log(queryString)
     pool.query(`SELECT * FROM students WHERE student_id in (${queryString})`)
-    .then(result => res.send(result.rows))
-    .catch(error => res.send(error))
+        .then(result => res.send(result.rows))
+        .catch(error => res.send(error))
 })
 
 //Call to get users default cohort data
@@ -81,7 +81,7 @@ app.post('/api/create/user', (req, res) => {
     const random = Str.random(25)
     const user = req.body
     //Creates an account specific json web token using username and a random string
-    const accountToken = jwt.sign({id: user.username}, random)
+    const accountToken = jwt.sign({ id: user.username }, random)
     //Creates a random string to be updated each time user signs in
     //First created token is a place holder
     const sessionToken = Str.random(30)
@@ -89,15 +89,15 @@ app.post('/api/create/user', (req, res) => {
     bcrypt.hash(user.password, saltRounds, (err, hash) => {
         //The password is hashed now and can be stored with the hash parameter
         pool.query('INSERT INTO users (username, password, asana_access_token, token, session_token) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (username) DO NOTHING RETURNING *',
-        [user.username, hash, user.asana_access_token, accountToken, sessionToken])
-        //Checks to see what was returned
-        //If a account already exists it sends back result.rows with a length of zero
-        //If account was created it sends back the account info
-        .then(result => {
-            result.rows.length === 0 ? 
-            res.status(409).send([{result: 'false'}]) : res.status(201).send([{result: 'true'}])
-        })
-        .catch(error => res.status(400).send(error))
+            [user.username, hash, user.asana_access_token, accountToken, sessionToken])
+            //Checks to see what was returned
+            //If a account already exists it sends back result.rows with a length of zero
+            //If account was created it sends back the account info
+            .then(result => {
+                result.rows.length === 0 ?
+                    res.status(409).send([{ result: 'false' }]) : res.status(201).send([{ result: 'true' }])
+            })
+            .catch(error => res.status(400).send(error))
     })
 })
 
@@ -106,21 +106,21 @@ app.post('/api/login', (req, res) => {
     const user = req.body.username
     const password = req.body.password
     pool.query('SELECT * FROM users WHERE username = $1', [user])
-    //Checks to see if the username matches stored username
-    .then(data => {
-        //If username doesn't match a stored username it sends back Incorrect Username
-        if(data.rows.length === 0){
-            res.send([{response: 'Incorrect Username'}])
-        } else {
-            //If username matches it does a bcrypt compare to check if the password is correct
-            bcrypt.compare(password, data.rows[0].password, function(err, result){
-                //If passowrd is correct it sends the users information
-                result == true ?
-                res.send([{username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token}]) :
-                res.send([{response: 'false'}])
-            })
-        }
-    })
+        //Checks to see if the username matches stored username
+        .then(data => {
+            //If username doesn't match a stored username it sends back Incorrect Username
+            if (data.rows.length === 0) {
+                res.send([{ response: 'Incorrect Username' }])
+            } else {
+                //If username matches it does a bcrypt compare to check if the password is correct
+                bcrypt.compare(password, data.rows[0].password, function (err, result) {
+                    //If passowrd is correct it sends the users information
+                    result == true ?
+                        res.send([{ username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token }]) :
+                        res.send([{ response: 'false' }])
+                })
+            }
+        })
 })
 
 //Route to verify the user logging in
@@ -131,14 +131,14 @@ app.post('/api/authent', (req, res) => {
     const sessionToken = req.body.sessionToken
     //Accesses the tokens from the user sent with username
     pool.query('SELECT token, session_token FROM users WHERE username = $1', [user])
-    .then(result => {
-        //Compares the stored tokens with sent token and sends a response based on result
-        userToken == result.rows[0].token && sessionToken == result.rows[0].session_token ?
-            res.status(200).send([{response: 'true'}])
-            :
-            res.status(401).send([{response: 'false'}])
-    })
-    .catch(error => res.status(404).send(error))
+        .then(result => {
+            //Compares the stored tokens with sent token and sends a response based on result
+            userToken == result.rows[0].token && sessionToken == result.rows[0].session_token ?
+                res.status(200).send([{ response: 'true' }])
+                :
+                res.status(401).send([{ response: 'false' }])
+        })
+        .catch(error => res.status(404).send(error))
 })
 
 //Route to update users session token on login
@@ -149,8 +149,8 @@ app.patch('/api/token', (req, res) => {
     const sessionToken = Str.random(30)
     //Updates the current session token with the new one and returns new token
     pool.query('UPDATE users SET session_token = $1 WHERE username = $2 RETURNING session_token', [sessionToken, user])
-    .then(result => res.status(200).send(result.rows))
-    .catch(error => res.status(404).send(error))
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
 })
 
 
@@ -160,15 +160,22 @@ app.post(`/api/create/cohort`, (req, res) => {
     const newCohort = req.body.cohort
     // updates cohort table inside database
     pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor, gid) VALUES ($1, $2, $3, $4, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
-    .then(result => res.status(200).send(result.rows))
-    .catch(error => res.status(404).send(error))
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
 })
 
 // route for getting all learn assessment names
 app.get(`/api/learn/assessment-names`, (req, res) => {
     pool.query(` SELECT * FROM learn;`)
-    .then(result => res.status(200).send(result.rows))
-    .catch(error => res.status(404).send(error))
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
+})
+
+// route for getting all project names
+app.get(`/api/projects/project-names`, (req, res) => {
+    pool.query(` SELECT * FROM projects;`)
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
 })
 
 // route to post the learn grates for selected users
@@ -180,8 +187,8 @@ app.post(`/api/learn/grades-update`, (req, res) => {
     let assessment_grade = req.body.assessment_grade
     //updates the learn_grades table in the database
     pool.query(`INSERT INTO learn_grades (student_gid, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_gid, assessment_id, assessment_grade])
-    .then(result => res.status(200).send(result.rows))
-    .catch(error => res.status(404).send(error))
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
 })
 
 // const students = req.body.students
@@ -200,8 +207,8 @@ app.post('/api/create/students', (req, res) => {
     const students = req.body.students
     let values = []
     students.forEach((student) => values.push([student.name, student.cohort_name, student.gid]))
-    pool.query(format('INSERT INTO students (name, cohort_name, gid) VALUES %L RETURNING *', values),[])
-    .then(result => res.send(result.rows))
+    pool.query(format('INSERT INTO students (name, cohort_name, gid) VALUES %L RETURNING *', values), [])
+        .then(result => res.send(result.rows))
 
 })
 

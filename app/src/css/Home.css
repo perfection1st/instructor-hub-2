@@ -206,3 +206,8 @@ ul#assessment-student-list {
   list-style: none;
   padding: 0;
 }
+
+ul#project-student-list {
+  list-style: none;
+  padding: 0;
+}

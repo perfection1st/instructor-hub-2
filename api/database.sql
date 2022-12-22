@@ -135,12 +135,22 @@ CREATE TABLE student_tech_skills (
     FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
   );
 
---THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
+--THIS ALLOWS TRACKING STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (
   project_id SERIAL PRIMARY KEY,
-  project_name TEXT,
-  gid TEXT
+  project_name TEXT
 );
+
+INSERT INTO projects (project_name) VALUES ('Checkerboard');
+INSERT INTO projects (project_name) VALUES ('Stoplight');
+INSERT INTO projects (project_name) VALUES ('Twiddler');
+INSERT INTO projects (project_name) VALUES ('TV Show Finder');
+INSERT INTO projects (project_name) VALUES ('Hack-a-thon');
+INSERT INTO projects (project_name) VALUES ('Front End Project');
+INSERT INTO projects (project_name) VALUES ('React MVP');
+INSERT INTO projects (project_name) VALUES ('Front End Capstone');
+INSERT INTO projects (project_name) VALUES ('System Design Captosone');
+INSERT INTO projects (project_name) VALUES ('Blue Ocean');
 
 CREATE TABLE project_grades (
   project_grades_id SERIAL PRIMARY KEY,
