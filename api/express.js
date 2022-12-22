@@ -171,6 +171,18 @@ app.get(`/api/learn/assessment-names`, (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
+// route to post the learn grates for selected users
+app.post(`/api/learn/grades-update`, (req, res) => {
+    //gets information from the body
+    console.log(req.body)
+    let student_gid = req.body.student_gid
+    let assessment_id = req.body.assessment_id
+    let assessment_grade = req.body.assessment_grade
+    //updates the learn_grades table in the database
+    pool.query(`INSERT INTO learn_grades (student_gid, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_gid, assessment_id, assessment_grade])
+    .then(result => res.status(200).send(result.rows))
+    .catch(error => res.status(404).send(error))
+})
 
 // const students = req.body.students
 // students.forEach((student) => {

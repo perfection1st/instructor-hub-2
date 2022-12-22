@@ -1,5 +1,4 @@
-import React, { useState, useRef } from 'react';
-import { useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsBarChartLineFill } from "react-icons/bs";
@@ -15,9 +14,9 @@ export const AssessmentModal = (props) => {
   // state for storing all of the assessment names that are fetched from the database
   const [ allAssessmentNames, setAllAssessmentNames ] = useState([]);
   // state for assessment modal displaying/not displaying
-  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
+  const [ showAssessmentModal, setShowAssessmentModal ] = useState(false);
   // state for assessment grading modal displaying/not displaying
-  const [showAssessmentGradingModal, setShowAssessmentGradingModal] = useState(false);
+  const [ showAssessmentGradingModal, setShowAssessmentGradingModal ] = useState(false);
 
   /////////////////// ASSESSMENT MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close assessment modal function
@@ -77,8 +76,11 @@ export const AssessmentModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <select id="assessment-selector" name="assessments" onChange={(e) => setCurrentSelectedAssessment(e.target.value) }>
-            <option value="placeholder">-- Select Assessment --</option>
+            <option value="placeholder">{currentSelectedAssessment === "" ? "-- Select Assessment --" : currentSelectedAssessment}</option>
             {allAssessmentNames.map(names => {
+              if(currentSelectedAssessment === names.assessment_name){
+                return
+              }
               return <option key={names.assessment_id} value={names.assessment_name}>{names.assessment_name}</option>
             })}
           </select>
