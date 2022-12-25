@@ -4,7 +4,7 @@ This project uses the Asana API and requires an auth token.
 ## Installation:
 
 
-To run Instructor Hub in a development environment run `npm install` in both the root and `/api` directory of the project.
+To start Instructor Hub in a development environment first run `npm install` in both the root and `/api` directory of the project.
 
 Next create your postgres database, copy `database.sql` and `seed.sql` from the /api directory to your docker container using the `docker cp database.sql [container]:database.sql`
 
