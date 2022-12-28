@@ -6,9 +6,8 @@ import { Register } from './routes/Register';
 import { PageNotFound } from './routes/PageNotFound';
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 
-export const App = () => {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+export const App = ({ auth }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(auth ? auth.isLoggedIn : false);
 
   return (
     <BrowserRouter>

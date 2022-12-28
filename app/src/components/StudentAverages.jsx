@@ -1,5 +1,5 @@
 import React from 'react'
-import{ Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js/auto'
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js/auto'
 import { Bar } from 'react-chartjs-2'
 
 ChartJS.register(
@@ -54,7 +54,7 @@ export const StudentAverages = () => {
       data={data}
       height={330}
       options={options}
-    />
+    /> 
     </div>
   )
   }
