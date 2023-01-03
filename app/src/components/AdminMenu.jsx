@@ -55,10 +55,8 @@ export const AdminMenu = (props) => {
       menuVariant="dark"
       id="dropdown-menu-align-end"
     >
-      
+      <CreateCohortModal />
       <Dropdown.Item eventKey="1" onClick={handleShowSettingsModal}><GoGear /> Settings</Dropdown.Item>
-      <Dropdown.Divider />
-      <Dropdown.Item > <CreateCohortModal /></Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item eventKey="4" onClick={() => logout()}><GoSignOut /> Logout</Dropdown.Item>
     </DropdownButton>
