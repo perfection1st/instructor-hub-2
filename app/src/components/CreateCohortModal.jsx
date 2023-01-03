@@ -49,8 +49,6 @@ export const CreateCohortModal = () => {
   
   let createCohort = () => {
     let asanaToken = sessionStorage.getItem('asanaToken')
-    console.log(instructorNameRef.current.value)
-    props.setInstructor(instructorNameRef.current.value)
         // Make the API call using fetch
     fetch('https://app.asana.com/api/1.0/projects', {
         method: 'POST',
@@ -85,13 +83,12 @@ export const CreateCohortModal = () => {
         <Modal.Body>
             Asana Team GID:  <input ref={teamGIDRef} type="text" name="teamGID" />
             Cohort Name: <input ref={cohortNameRef} type="text" name="cohortName" />
-            Instructor Name: <input ref={instructorNameRef} type="text" name="instructorName" />
             Start Date (YYYY-MM-DD): <input ref={startDateRef} type="text" name="startDate" />
             Graduation Date (YYYY-MM-DD): <input ref={graduationDateRef} type="text" name="graduationDate" />
             
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary" onClick={() =>  { createCohort(); handleCloseCreateCohortModal(); handleShowAddCohortStudentsModal() }}>
+            <Button variant="primary" onClick={() =>  { createCohort(); handleCloseCreateCohortModal()}}>
             Next
             </Button>
         </Modal.Footer>
