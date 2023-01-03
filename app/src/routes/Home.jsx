@@ -34,7 +34,7 @@ export const Home = (props) => {
     })
       .then(result => result.json())
       .then(data => {
-        data[0].response == 'true' ? setIsLoggedIn(true) : kickUser()
+        data[0]?.response == 'true' ? setIsLoggedIn(true) : kickUser()
       })
 
   }, [])
@@ -74,7 +74,7 @@ export const Home = (props) => {
       <div id="home-container">
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Nav />
-        <StudentList courses={courses} isLoadingCourses={isLoadingCourses} setIsLoadingCourses={setIsLoadingCourses} />
+        <StudentList courses={courses} isLoadingCourses={isLoadingCourses} setIsLoadingCourses={setIsLoadingCourses} data-testid="student-list" />
       </div>
     </>
   );

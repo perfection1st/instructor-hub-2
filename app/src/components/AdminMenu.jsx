@@ -10,7 +10,8 @@ import { CreateCohortModal } from './CreateCohortModal';
 export const AdminMenu = (props) => {
   const { isLoggedIn, setIsLoggedIn } = props
 
-  let user = sessionStorage.getItem('username')
+  let user = sessionStorage.getItem('username');
+
   function logout(){
     sessionStorage.clear()
     setIsLoggedIn(false)
@@ -50,7 +51,7 @@ export const AdminMenu = (props) => {
       </Modal>
     <DropdownButton
       align="end"
-      title={user}
+      title={user || 'User'}
       menuVariant="dark"
       id="dropdown-menu-align-end"
     >
