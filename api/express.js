@@ -156,9 +156,9 @@ app.patch('/api/token', (req, res) => {
 app.post(`/api/create/cohort`, (req, res) => {
     // gets cohort object from body
     console.log(req.body)
-    const newCohort = req.body.cohort
+    const newCohort = req.body.newCohort
     // updates cohort table inside database
-    pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor, gid) VALUES ($1, $2, $3, $4, $5`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
+    pool.query(`INSERT INTO cohorts (cohort_name, begin_date, end_date, instructor, gid) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [newCohort.name, newCohort.begin_date, newCohort.end_date, newCohort.instructor, newCohort.gid])
     .then(result => res.status(200).send(result.rows))
     .catch(error => res.status(404).send(error))
 })
