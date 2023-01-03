@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useRef } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/esm/DropdownButton';
 import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
 
@@ -73,7 +75,7 @@ export const CreateCohortModal = () => {
 
   return (
     <>
-      <button id="btn-create-cohort" onClick={handleShowCreateCohortModal}><BsFileEarmarkCodeFill /> Create Cohort </button>
+      <Dropdown.Item id="btn-create-cohort" onClick={handleShowCreateCohortModal}><BsFileEarmarkCodeFill /> Create Cohort </Dropdown.Item>
 
       {/* CreateCohort Modal */}
       <Modal id="cohort-create-modal" size="lg" centered show={showCreateCohortModal} onHide={handleCloseCreateCohortModal}>
