@@ -56,11 +56,8 @@ CREATE EXTENSION pgcrypto;
   username VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
   default_cohort TEXT,
-  default_cohort_gid TEXT,
-  asana_access_token TEXT,
   token VARCHAR(255),
-  session_token VARCHAR(255),
-  gid TEXT
+  session_token VARCHAR(255)
 );
 
 CREATE TABLE cohorts (
