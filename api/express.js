@@ -31,10 +31,12 @@ pool.connect();
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/users', (req, res) => {
-    pool.query('SELECT * FROM users')
-        .then(result => res.send(result.rows))
-        .catch((error) => res.send(error))
+
+//Gets all the cohorts
+app.get('/api/cohorts', (req, res) => {
+    pool.query('SELECT * FROM cohorts')
+    .then(result => res.send(result.rows))
+    .catch(error => res.send(error))
 })
 
 //Route to select students from cohort//
@@ -61,6 +63,14 @@ app.post('/api/selectedstudents', (req, res) => {
     pool.query(`SELECT * FROM students WHERE student_id in (${queryString})`)
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
+})
+
+//Adds a route to update users default cohort
+app.patch('/api/default-cohort', (req, res) => {
+    let info = req.body
+    pool.query('UPDATE users SET default_cohort = $1 WHERE username = $2 RETURNING default_cohort', [req.body.default_cohort, req.body.username])
+    .then(result => res.send(result.rows))
+    .catch(error => res.send(error))
 })
 
 //Call to get users default cohort data
@@ -190,14 +200,6 @@ app.post(`/api/learn/grades-update`, (req, res) => {
         .then(result => res.status(200).send(result.rows))
         .catch(error => res.status(404).send(error))
 })
-
-// const students = req.body.students
-// students.forEach((student) => {
-//     queryString = queryString + ` INSERT INTO students (name, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort_name, ets_date, github, gid) VALUES ($1, null, null, null, null, null, null, null, $2, null);`, [student.name, student.github]
-// })
-// pool.query(`${queryString}`)
-// .then(result => res.status(200).send(result.rows))
-// .catch(error => res.status(404).send(error))
 
 
 //Creates a route to insert multiple students into a course

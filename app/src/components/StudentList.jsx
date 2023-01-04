@@ -7,17 +7,30 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Form from 'react-bootstrap/Form';
 
 
 export const StudentList = (props) => {
+
+  const URL = 'http://localhost:8000/api'
 
 
   //State courses is set in home
   const { courses, setCourses, isLoadingCourses, setIsLoadingCourses } = props
 
   const [selectedClass, setSelectedClass] = useState('Courses')
+  const [students, setStudents] = useState([])
+
+  // useEffect(() => {
+  //   fetch(`${URL}/students/${sessionStorage.getItem('defaultCohort')}`)
+  //   .then(result => result.json())
+  //   .then(data => setStudents(data))
+  // }, [])
+
+  function loadStudents(){
+    console.log(students)
+  }
 
 //"Courses"
   return(
@@ -35,7 +48,7 @@ export const StudentList = (props) => {
           sessionStorage.setItem('currentClass', evt)
         }}
       >
-        {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.gid} eventKey={course.name}>{course.name}</Dropdown.Item>)}
+        {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
 
     </DropdownButton>
     </div>
@@ -45,20 +58,36 @@ export const StudentList = (props) => {
       <thead>
         <tr>
           
-          <th><Form.Check
-            type="checkbox"
-            className='select-all'/>Name</th>
+          <th>Name</th>
           <th>GitHub</th>
           <th>Performance Averages (Learn/Team/Tech)</th>
         </tr>
       </thead>
       <tbody>
+        {students.map(student => {
+                   <tr>
+                   <td>{student.name}</td>
+                   {/* <td>@testuser</td> */}
+                   <td className="student-average" width={'15%'}>
+                   <ButtonGroup aria-label="Basic example">
+                     <Button variant="secondary" size="sm">
+                       <Badge bg="danger">30%</Badge>
+                       <span className="visually-hidden">unread messages</span>
+                     </Button>
+                     <Button variant="secondary" size="sm">
+                     <Badge bg="warning">70%</Badge>
+                       <span className="visually-hidden">unread messages</span>
+                     </Button>
+                     <Button variant="secondary" size="sm">
+                       <Badge bg="success">100%</Badge>
+                         <span className="visually-hidden">unread messages</span>
+                     </Button>
+                   </ButtonGroup>
+                   </td>
+                 </tr>
+        })}
          <tr>
-          <td>
-          <Form.Check
-          className='select-one'
-            type="checkbox" />
-            Dylan Clark</td>
+          <td>Dylan Clark</td>
           <td>@testuser</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -79,11 +108,7 @@ export const StudentList = (props) => {
         </tr>
 
         <tr>
-          <td>
-          <Form.Check
-          className='select-one'
-            type="checkbox" />
-            Dylan Clark </td>
+          <td>Dylan Clark</td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
           <ButtonGroup aria-label="Basic example">
@@ -102,55 +127,7 @@ export const StudentList = (props) => {
           </ButtonGroup>
           </td>
         </tr>
-        <tr>
-          <td>
-          <Form.Check
-          className='select-one'
-            type="checkbox" />
-            Dylan Clark </td>
-          <td>@someotherusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="danger">30%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="warning">70%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Form.Check
-               className='select-one'
-               type="checkbox" />
-              Dylan Clark </td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="danger">30%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="warning">70%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
+        {/* <tr>
           <td>Adam Jones</td>
           <td>@someusername</td>
           <td className="student-average" width={'15%'}>
@@ -269,7 +246,7 @@ export const StudentList = (props) => {
             </Button>
           </ButtonGroup>
           </td>
-        </tr> 
+      </tr> */}
       </tbody>
     </Table>
       </div>

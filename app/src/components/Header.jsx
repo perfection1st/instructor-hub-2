@@ -3,12 +3,12 @@ import {AdminMenu} from './AdminMenu';
 
 export const Header = (props) => {
 
-  const { isLoggedIn, setIsLoggedIn } = props
+  const { courses, isLoadingCourses, isLoggedIn, setIsLoggedIn } = props
 
   return(
     <header>
       <h1>GALVANIZE</h1>
-      <AdminMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+      <AdminMenu courses={courses} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
     </header>
   );
 }
