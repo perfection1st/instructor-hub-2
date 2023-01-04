@@ -72,7 +72,7 @@ export const StudentList = (props) => {
         {students.map(student => 
                   <tr key={student.student_id}>
                    <td >{student.name}</td>
-                   <td>@testuser</td>
+                   <td>{student.github}</td>
                    <td className="student-average" width={'15%'}>
                    <ButtonGroup aria-label="Basic example">
                      <Button variant="secondary" size="sm">
