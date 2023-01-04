@@ -10,7 +10,6 @@ export const ModalList = (props) => {
     const [studentsState, setStudentsState] = useState([])
     let currentClass = sessionStorage.getItem('currentClass')
     let gid = sessionStorage.getItem(currentClass)
-    let asanaToken = sessionStorage.getItem('asanaToken')
     useEffect(() => {
         if (!currentClass) {
             //Checks to see if weekly button was clicked
@@ -26,14 +25,10 @@ export const ModalList = (props) => {
                 swal('No course selected')
             }
         } else {
-            fetch(`https://app.asana.com/api/1.0/projects/${gid}/tasks`, {
-                headers: {
-                    Authorization: `Bearer ${asanaToken}`
-                }
-            })
+            fetch(`http://localhost:8000/api/students/${currentClass}`)
                 .then(result => result.json())
                 .then(data => {
-                    setStudentsState(data.data)
+                    setStudentsState(data)
                 })
         }
     }, [])
@@ -44,7 +39,7 @@ export const ModalList = (props) => {
             let findKey = e.target.id
             //Filters the selected students to remove the unchecked student
             let deleteObj = selectedStudents.filter(obj => {
-                return obj.gid !== findKey
+                return obj.student_id !== findKey
             })
             setSelectedStudents(deleteObj)
             // console.log('index', index)
@@ -55,16 +50,18 @@ export const ModalList = (props) => {
             //If not it only puts the obj in without spread operator
             if (selectedStudents === []) {
                 let obj = {
-                    gid: e.target.id,
+                    student_id: e.target.id,
                     name: e.target.value
                 }
                 setSelectedStudents(obj)
+                console.log(selectedStudents)
             } else {
                 let obj = {
-                    gid: e.target.id,
+                    student_id: e.target.id,
                     name: e.target.value
                 }
                 setSelectedStudents([...selectedStudents, obj])
+                console.log(selectedStudents)
             }
         }
     }
@@ -76,31 +73,28 @@ export const ModalList = (props) => {
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((student) => {
                     return (
-                        selectedStudents.find((selected) => selected.gid === student.gid) ?
-                            <li key={student.gid}>
+                        selectedStudents.find((selected) => selected.student_id === student.student_id) ?
+                            <li key={student.student_id}>
                                 <input
                                     type="checkbox"
                                     value={student.name}
                                     onChange={(e) => clickStudent(e)}
-                                    id={student.gid}
-                                    checked
+                                    id={student.student_id}
                                 />
                                 {student.name}
                             </li>
                             :
-                            <li key={student.gid}>
+                            <li key={student.student_id}>
                                 <input
                                     type="checkbox"
                                     value={student.name}
                                     onChange={(e) => clickStudent(e)}
-                                    id={student.gid}
-                                    checked={false}
+                                    id={student.student_id}
                                 />
                                 {student.name}
                             </li>
                     );
                 })}
-
         </>
     )
 }

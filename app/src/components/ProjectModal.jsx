@@ -59,13 +59,7 @@ export const ProjectModal = (props) => {
               return <option key={names.project_id} value={names.project_name}>{names.project_name}</option>
             })}
           </select>
-
-          {/* *** THIS NEED TO BE TROUBLESHOT - BREAKS CODE WHEN TRYING TO RENDER STUDENT LIST FROM SELECTED CLASS *** */}
-          {/* <ul id='project-student-list'>
-            <ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
-          </ul> */}
-
-
+          <ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => { handleCloseProjectModal(); handleShowProjectGradingModal() }}>

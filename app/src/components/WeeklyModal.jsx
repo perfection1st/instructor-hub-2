@@ -16,7 +16,7 @@ export const WeeklyModal = (props) => {
   };
 
   const handleNextModal = () => setShowWeeklyModal(false);
-  
+
   // open weekly modal function
   const handleShowWeeklyModal = (e) => {
     setChecked(e.target.id)
@@ -42,7 +42,7 @@ export const WeeklyModal = (props) => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents}/>
+            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
           </ul>
         </Modal.Body>
         <Modal.Footer>
@@ -61,7 +61,7 @@ export const WeeklyModal = (props) => {
           <div id='weekly-grade-input'>
             <ul id='weekly-selected-students'>
               {/* students displayed will be conditional based off students selected from previous modal */}
-              {selectedStudents.map(students => <li key={students.gid} value={students.gid}>
+              {selectedStudents.map(students => <li key={students.student_id} value={students.student_id}>
                 {students.name}
                 {/* adds a space between the name and dropdown */}
                 <>  </>
