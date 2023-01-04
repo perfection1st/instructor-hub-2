@@ -71,7 +71,7 @@ CREATE TABLE cohorts (
   instructor TEXT,
   cohort_avg INT,
   cohort_min INT,
-  cohort_max INT,
+  cohort_max INT
 );
 
 CREATE TABLE students (
