@@ -1,4 +1,5 @@
 import Modal from 'react-bootstrap/Modal';
+import swal from 'sweetalert';
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -8,7 +9,8 @@ import { GoGear, GoSignOut } from "react-icons/go";
 import { CreateCohortModal } from './CreateCohortModal';
 
 export const AdminMenu = (props) => {
-  const { isLoggedIn, setIsLoggedIn } = props
+  const URL = 'http://localhost:8000/api'
+  const { courses, isLoadingCourses, isLoggedIn, setIsLoggedIn } = props
 
   let user = sessionStorage.getItem('username');
 
@@ -23,6 +25,35 @@ export const AdminMenu = (props) => {
   const handleCloseSettingsModal = () => setShowSettingsModal(false);
   const handleShowSettingsModal = () => setShowSettingsModal(true);
 
+  const [defaultCohort, setDefaultCohort] = useState('')
+  function handleCohortChange(e){
+    setDefaultCohort(e.target.value)
+  }
+
+  function changeDefaultCohort(){
+    if(defaultCohort == 0 || defaultCohort == ''){
+      swal('No Cohort Selected')
+    } else {
+      fetch(`${URL}/default-cohort`, {
+        method: 'PATCH',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          default_cohort: defaultCohort,
+          username: sessionStorage.getItem('username')
+        })
+        })
+        .then(result => result.json())
+        .then(data => {
+          console.log('data', data)
+          handleCloseSettingsModal()
+        })
+      }
+    }
+
+
   return(
     <div id="admin-menu">
       <Modal id="modal-settings" show={showSettingsModal} onHide={handleCloseSettingsModal}>
@@ -32,11 +63,9 @@ export const AdminMenu = (props) => {
 
         <Modal.Body>
           
-        <Form.Select aria-label="Select Default Cohort">
-          <option>Select Default Cohort</option>
-          <option value="1">MCSP-15</option>
-          <option value="2">MCSP-14</option>
-          <option value="3">MCSP-13</option>
+        <Form.Select aria-label="Select Default Cohort" onChange={(e) => handleCohortChange(e)}>
+          <option value={0}>Select Default Cohort</option>
+          {courses.map(course => <option key={course.cohort_name} value={course.cohort_name}>{course.cohort_name}</option>)}
         </Form.Select>
           
           </Modal.Body>
@@ -44,7 +73,7 @@ export const AdminMenu = (props) => {
           <Button variant="secondary" onClick={handleCloseSettingsModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleCloseSettingsModal}>
+          <Button variant="primary" onClick={(e) => changeDefaultCohort(e)}>
             Save Changes
           </Button>
         </Modal.Footer>

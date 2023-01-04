@@ -5,7 +5,7 @@ export const LoadingDropdown = () => {
   return(
   <div className="loading-dropdown">
     <Placeholder as={Dropdown.Item} animation="wave">
-      Loading from Asana... <br />
+      Loading from Storage... <br />
       <Placeholder xs={12} />
     </Placeholder>
     <Placeholder as={Dropdown.Item} animation="wave">

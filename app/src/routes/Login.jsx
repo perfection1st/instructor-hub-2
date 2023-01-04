@@ -56,6 +56,7 @@ export const Login = (props) => {
   //If login was successful it sets session storage to users info
   function verifyLogin(data){
     let info = data[0]
+    console.log(info)
     if(info.response == 'Incorrect Username'){
       swal('Incorrect Username')
       setIsLoading(false)
@@ -66,6 +67,7 @@ export const Login = (props) => {
       sessionStorage.setItem('username', info.username)
       sessionStorage.setItem('userToken', info.userToken)
       sessionStorage.setItem('asanaToken', info.asanaToken)
+      info.cohort ? sessionStorage.setItem('defaultCohort', info.cohort) : console.log('no default')
       setSessionToken()
     }
   }
