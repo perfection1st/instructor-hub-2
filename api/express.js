@@ -208,7 +208,7 @@ app.post('/api/create/students', (req, res) => {
     const students = req.body.students
     let values = []
     students.forEach((student) => values.push([student.name, student.cohort_name, student.github]))
-    pool.query(format('INSERT INTO students (name, cohort_name,) VALUES %L RETURNING *', values), [])
+    pool.query(format('INSERT INTO students (name, cohort_name, github) VALUES %L RETURNING *', values), [])
         .then(result => res.send(result.rows))
 
 })
