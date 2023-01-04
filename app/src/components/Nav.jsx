@@ -16,7 +16,7 @@ export const Nav = (props) => {
   return (
     <nav>
       <WeeklyModal checked={checked} setChecked={setChecked} courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
-      <ProjectModal />
+      <ProjectModal courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
       <AssessmentModal courses={courses} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
     </nav>
   );

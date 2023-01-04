@@ -72,12 +72,10 @@ CREATE TABLE cohorts (
   cohort_avg INT,
   cohort_min INT,
   cohort_max INT,
-  gid TEXT
 );
 
 CREATE TABLE students (
-  student_id SERIAL,
-  gid INT UNIQUE PRIMARY KEY,
+  student_id SERIAL PRIMARY KEY,
   name TEXT,
   learn_avg INT,
   tech_avg INT,
@@ -99,19 +97,19 @@ CREATE TABLE coding_groups (
 
 CREATE TABLE assigned_student_groupings (
   group_assignment_id SERIAL PRIMARY KEY,
-  student_gid INT,
+  student_id INT,
   group_id INT,
-  FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE
 );
 
 CREATE TABLE notes (
-  student_gid INT,
+  student_id INT,
   note_id SERIAL PRIMARY KEY,
   notes TEXT,
   name TEXT,
   note_date TIMESTAMPTZ,
-  FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 
 CREATE TABLE proficiency_rates (
@@ -120,18 +118,18 @@ CREATE TABLE proficiency_rates (
 );
 
 CREATE TABLE student_tech_skills (
-  student_gid INT,
+  student_id INT,
   score INT,
   record_date TIMESTAMPTZ,
-  FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
 );
 
   CREATE TABLE student_teamwork_skills (
-    student_gid INT,
+    student_id INT,
     score INT,
     record_date TIMESTAMPTZ,
-    FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
     FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
   );
 
@@ -154,17 +152,17 @@ INSERT INTO projects (project_name) VALUES ('Blue Ocean');
 
 CREATE TABLE project_grades (
   project_grades_id SERIAL PRIMARY KEY,
-  student_gid INT,
+  student_id INT,
   project_id INT,
   project_passed BOOLEAN,
   notes TEXT,
-  FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT
   --removes learn grades if student is deleted. Cannot delete projects without deleting grades first
 );
 ----this index ensures students don't have duplicate grades
 CREATE UNIQUE INDEX project_grades_only_one_per_student
-    ON project_grades (student_gid, project_id);
+    ON project_grades (student_id, project_id);
 
 CREATE TABLE learn (
   assessment_id SERIAL PRIMARY KEY,
@@ -183,17 +181,17 @@ INSERT INTO learn (assessment_name) VALUES ('React Assessment');
 
 CREATE TABLE learn_grades (
   learn_grade_id SERIAL PRIMARY KEY,
-  student_gid INT,
+  student_id INT,
   assessment_id INT,
   assessment_grade INT,
-  FOREIGN KEY (student_gid) REFERENCES students(gid) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT
   --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
 
 );
 ----this index ensures students don't have duplicate grades
 CREATE UNIQUE INDEX learn_grades_only_one_per_student
-    ON learn_grades (student_gid, assessment_id);
+    ON learn_grades (student_id, assessment_id);
 
 
 
@@ -205,12 +203,12 @@ CREATE UNIQUE INDEX learn_grades_only_one_per_student
 CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
     SELECT AVG(student_tech_skills.score) as avg
     FROM student_tech_skills
-    WHERE student_gid = NEW.student_gid
+    WHERE student_id = NEW.student_id
   )
 UPDATE students
 SET tech_avg = scores.avg
 FROM scores
-WHERE student_gid = NEW.student_gid;
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -227,12 +225,12 @@ UPDATE ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
 CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
     SELECT AVG(student_teamwork_skills.score) as avg
     FROM student_teamwork_skills
-    WHERE student_gid = NEW.student_gid
+    WHERE student_id = NEW.student_id
   )
 UPDATE students
 SET teamwork_avg = scores.avg
 FROM scores
-WHERE student_gid = NEW.student_gid;
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -249,12 +247,12 @@ UPDATE ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg
 CREATE OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT AVG(learn_grades.assessment_grade) as avg
     FROM learn_grades
-    WHERE student_gid = NEW.student_gid
+    WHERE student_id = NEW.student_id
   )
 UPDATE students
 SET learn_avg = grades.avg
 FROM grades
-WHERE student_gid = NEW.student_gid;
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
