@@ -191,11 +191,11 @@ app.get(`/api/projects/project-names`, (req, res) => {
 app.post(`/api/learn/grades-update`, (req, res) => {
     //gets information from the body
     console.log(req.body)
-    let student_gid = req.body.student_gid
+    let student_id = req.body.student_id
     let assessment_id = req.body.assessment_id
     let assessment_grade = req.body.assessment_grade
     //updates the learn_grades table in the database
-    pool.query(`INSERT INTO learn_grades (student_gid, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_gid, assessment_id, assessment_grade])
+    pool.query(`INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_id, assessment_id, assessment_grade])
         .then(result => res.status(200).send(result.rows))
         .catch(error => res.status(404).send(error))
 })
@@ -208,7 +208,7 @@ app.post('/api/create/students', (req, res) => {
     const students = req.body.students
     let values = []
     students.forEach((student) => values.push([student.name, student.cohort_name, student.github]))
-    pool.query(format('INSERT INTO students (name, cohort_name, github) VALUES %L RETURNING *', values), [])
+    pool.query(format('INSERT INTO students (name, cohort_name,) VALUES %L RETURNING *', values), [])
         .then(result => res.send(result.rows))
 
 })
