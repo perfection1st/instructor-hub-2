@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useRef } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/esm/DropdownButton';
 import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const CreateCohortModal = () => {
   // backend url 
@@ -12,24 +13,26 @@ export const CreateCohortModal = () => {
 
   // state for CreateCohort Modal displaying/not displaying
   const [showCreateCohortModal, setShowCreateCohortModal] = useState(false);
+  // state for cohort begin date
+  const [beginDate, setBeginDate] = useState(null);
+  // state for cohort end date
+  const [endDate, setEndDate] = useState(null);
   // close CreateCohort Modal function
   const handleCloseCreateCohortModal = () => setShowCreateCohortModal(false);
   // open CreateCohort Modal function
   const handleShowCreateCohortModal = () => setShowCreateCohortModal(true);
-
   // state for CohortDetails modal displaying/not displaying
   const [AddCohortStudentsModal, setAddCohortStudentsModal] = useState(false);
   // close CohortDetails modal function
   const handleCloseCohortDetailsModal = () => setAddCohortStudentsModal(false);
   // open CohortDetails modal function
   const handleAddCohortStudentsModal = () => setAddCohortStudentsModal(true);
-  // references for asana fetch body content
-  const teamGIDRef = useRef()
-  const cohortNameRef = useRef()
-  const startDateRef = useRef()
-  const graduationDateRef = useRef()
 
-  function insertCohortDB(data){
+  // references for fetch
+  const instructorNameRef = useRef()
+  const cohortNameRef = useRef()
+  
+  let createCohort = () => {
     fetch(`${url}/api/create/cohort`, {
       method: 'POST',
       headers: {
@@ -37,41 +40,17 @@ export const CreateCohortModal = () => {
       },
       body: JSON.stringify({
         newCohort: {
-          name: data.name,
-          begin_date: data.start_on,
-          end_date: data.due_on,
-          instructor: sessionStorage.getItem('username'),
-          gid: data.gid
+          name: cohortNameRef.current.value,
+          begin_date: beginDate,
+          end_date: endDate,
+          instructor: instructorNameRef.current.value,
         }
       })
     })
     .then(result => result.json())
     .then(data => console.log(data))
+    .then(alert('success'))
   }
-  
-  let createCohort = () => {
-    let asanaToken = sessionStorage.getItem('asanaToken')
-        // Make the API call using fetch
-    fetch('https://app.asana.com/api/1.0/projects', {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${asanaToken}`
-        },
-        body: JSON.stringify({
-            data: {
-                name: cohortNameRef.current.value,
-                team: teamGIDRef.current.value,
-                due_on: graduationDateRef.current.value,
-                start_on: startDateRef.current.value,
-                public: false
-            }
-        })
-        })
-        .then(result => result.json())
-        .then((data) => {
-            insertCohortDB(data.data)
-        })
-}
 
   return (
     <>
@@ -83,10 +62,16 @@ export const CreateCohortModal = () => {
           <Modal.Title>Create Cohort</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            Asana Team GID:  <input ref={teamGIDRef} type="text" name="teamGID" />
             Cohort Name: <input ref={cohortNameRef} type="text" name="cohortName" />
-            Start Date (YYYY-MM-DD): <input ref={startDateRef} type="text" name="startDate" />
-            Graduation Date (YYYY-MM-DD): <input ref={graduationDateRef} type="text" name="graduationDate" />
+            Instructor Name:  <input ref={instructorNameRef} type="text" name="teamGID" />
+            Start Date: <DatePicker
+              selected={beginDate}
+              onChange={date => setBeginDate(date)}
+            />
+            Graduation Date: <DatePicker
+              selected={endDate}
+              onChange={date => setEndDate(date)}
+            />
             
         </Modal.Body>
         <Modal.Footer>
