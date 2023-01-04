@@ -18,7 +18,7 @@ export const Register = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-  const asanaApiKeyRef = useRef();
+  
 
   // Loading spinner
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,6 @@ export const Register = () => {
     e.preventDefault()
     setIsLoading(true)
     let inputUsername = usernameRef.current.value
-    let asanaKey = asanaApiKeyRef.current.value
     //Verifies that the passwords match
     let inputPassword
     //Checks to make sure the passwords match
@@ -41,7 +40,7 @@ export const Register = () => {
     //Ensures all fields are filled out
     if (inputPassword.length < 8 || inputPassword.length > 12){
       swal('Password must be between 8 - 12 characters')
-    } else if(!inputUsername || !inputPassword || !asanaKey){
+    } else if(!inputUsername || !inputPassword){
       swal('Please fill out all boxes')
     } else {
       //Sends users information to create account
@@ -52,9 +51,8 @@ export const Register = () => {
         },
         body: JSON.stringify({
           username: `${inputUsername}`,
-          password: `${inputPassword}`,
-          asana_access_token: asanaKey
-        })
+          password: `${inputPassword}`
+         })
       })
       .then(result => result.json())
       //Checks to see the result sent from api
@@ -93,9 +91,9 @@ export const Register = () => {
         <Form.Label>Confirm Password</Form.Label>
 
         <Form.Control ref={confirmPasswordRef} type="password" placeholder="confirm password here" minLength={8} required />
-        <Form.Label>Asana API Key</Form.Label>
+        
 
-        <Form.Control ref={asanaApiKeyRef} type="text" placeholder="type API key here" required />
+        
         </Form.Group>
         { isLoading === true ?
               <Button type="submit" value="Register">
