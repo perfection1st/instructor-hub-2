@@ -11,26 +11,11 @@ export const ModalList = (props) => {
     let currentClass = sessionStorage.getItem('currentClass')
     let gid = sessionStorage.getItem(currentClass)
     useEffect(() => {
-        if (!currentClass) {
-            //Checks to see if weekly button was clicked
-            //If it wasn't then it runs the assessment code
-            //Should only be used with weekly update and assessment update
-
-            // NEED A WAY TO CHECK IF CLASS IS SELECTED FOR PROJECT MODAL AND THROW ERROR ACCORDINGLY
-            if (checked == "btn-weekly-update") {
-                swal('No course selected')
-                setShowWeeklyModal(false)
-            } else {
-                setShowAssessmentModal(false)
-                swal('No course selected')
-            }
-        } else {
-            fetch(`http://localhost:8000/api/students/${currentClass}`)
-                .then(result => result.json())
-                .then(data => {
-                    setStudentsState(data)
-                })
-        }
+        fetch(`http://localhost:8000/api/students/${currentClass}`)
+            .then(result => result.json())
+            .then(data => {
+                setStudentsState(data)
+            })
     }, [])
     function clickStudent(e) {
         //Checks to see if box was unclicked

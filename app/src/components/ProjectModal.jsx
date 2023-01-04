@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
+import swal from 'sweetalert';
 
 export const ProjectModal = (props) => {
 
@@ -40,9 +41,18 @@ export const ProjectModal = (props) => {
   // open Project grading modal function
   const handleShowProjectGradingModal = () => setShowProjectGradingModal(true);
 
+
   return (
     <>
-      <button id="btn-project-update" onClick={handleShowProjectModal}><BsFileEarmarkCodeFill /> Project Update </button>
+      <button id="btn-project-update" onClick={() => {
+        let currentClass = sessionStorage.getItem('currentClass')
+        if (!currentClass) {
+          setShowProjectModal(false)
+          swal('No cohort selected')
+        } else {
+          handleShowProjectModal()
+        }
+      }}><BsFileEarmarkCodeFill /> Project Update </button>
 
       {/* Project modal */}
       <Modal id="project-update-modal" size="md" centered show={showProjectModal} onHide={handleCloseProjectModal}>

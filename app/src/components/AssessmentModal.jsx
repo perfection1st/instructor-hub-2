@@ -4,9 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsBarChartLineFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
+import swal from 'sweetalert';
 
 export const AssessmentModal = (props) => {
-
   const { courses, setCourses, checked, setChecked, selectedStudents, setSelectedStudents } = props
   const URL = 'http://localhost:8000'
 
@@ -68,7 +68,15 @@ export const AssessmentModal = (props) => {
 
   return (
     <>
-      <button id="btn-assessment-update" onClick={handleShowAssessmentModal}><BsBarChartLineFill /> Assessments</button>
+      <button id="btn-assessment-update" onClick={() => {
+        let currentClass = sessionStorage.getItem('currentClass')
+        if (!currentClass) {
+          setShowAssessmentModal(false)
+          swal('No cohort selected')
+        } else {
+          handleShowAssessmentModal()
+        }
+      }}><BsBarChartLineFill /> Assessments</button>
 
       {/* Assessment modal */}
       <Modal id="assessment-update-modal" size="md" centered show={showAssessmentModal} onHide={handleCloseAssessmentModal}>
