@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsCalendarPlusFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
+import swal from 'sweetalert';
 
 export const WeeklyModal = (props) => {
   //State of all users courses
@@ -32,7 +33,15 @@ export const WeeklyModal = (props) => {
 
   return (
     <>
-      <button id="btn-weekly-update" onClick={(e) => handleShowWeeklyModal(e)}><BsCalendarPlusFill /> Add Weekly Update </button>
+      <button id="btn-weekly-update" onClick={(e) => {
+        let currentClass = sessionStorage.getItem('currentClass')
+        if (!currentClass) {
+          setShowWeeklyModal(false)
+          swal('No cohort selected')
+        } else {
+          handleShowWeeklyModal(e)
+        }
+      }}><BsCalendarPlusFill /> Add Weekly Update </button>
 
       {/* Weekly modal */}
       <Modal id="weekly-update-modal" size="md" centered show={showWeeklyModal} onHide={handleCloseWeeklyModal}>
