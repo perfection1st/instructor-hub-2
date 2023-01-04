@@ -41,7 +41,7 @@ app.get('/api/cohorts', (req, res) => {
 
 //Route to select students from cohort//
 app.get('/api/students/:cohort', (req, res) => {
-    cohortName = req.params.cohort
+    let cohortName = req.params.cohort
     pool.query(`SELECT * FROM students WHERE cohort_name = $1`, [cohortName])
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
@@ -49,8 +49,8 @@ app.get('/api/students/:cohort', (req, res) => {
 
 //Route selects students from list inside modal//
 app.post('/api/selectedstudents', (req, res) => {
-    studentIds = req.body.studentIds
-    queryString = ''
+    let studentIds = req.body.studentIds
+    let queryString = ''
     studentIds.forEach((studentId) => {
         if (queryString === '') {
             queryString = queryString + `${studentId}`
@@ -67,7 +67,6 @@ app.post('/api/selectedstudents', (req, res) => {
 
 //Adds a route to update users default cohort
 app.patch('/api/default-cohort', (req, res) => {
-    let info = req.body
     pool.query('UPDATE users SET default_cohort = $1 WHERE username = $2 RETURNING default_cohort', [req.body.default_cohort, req.body.username])
     .then(result => res.send(result.rows))
     .catch(error => res.send(error))

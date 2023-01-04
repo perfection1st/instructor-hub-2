@@ -28,7 +28,11 @@ export const StudentList = (props) => {
   //   .then(data => setStudents(data))
   // }, [])
 
-  function loadStudents(){
+  function loadStudents(evt){
+    console.log(evt)
+    fetch(`${URL}/students/${evt}`)
+    .then(result => result.json())
+    .then(data => setStudents(data))
     console.log(students)
   }
 
@@ -46,6 +50,7 @@ export const StudentList = (props) => {
         onSelect={function(evt){
           setSelectedClass(evt)
           sessionStorage.setItem('currentClass', evt)
+          loadStudents(evt)
         }}
       >
         {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
@@ -64,10 +69,10 @@ export const StudentList = (props) => {
         </tr>
       </thead>
       <tbody>
-        {students.map(student => {
-                   <tr>
-                   <td>{student.name}</td>
-                   {/* <td>@testuser</td> */}
+        {students.map(student => 
+                  <tr key={student.student_id}>
+                   <td >{student.name}</td>
+                   <td>@testuser</td>
                    <td className="student-average" width={'15%'}>
                    <ButtonGroup aria-label="Basic example">
                      <Button variant="secondary" size="sm">
@@ -84,169 +89,7 @@ export const StudentList = (props) => {
                      </Button>
                    </ButtonGroup>
                    </td>
-                 </tr>
-        })}
-         <tr>
-          <td>Dylan Clark</td>
-          <td>@testuser</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="danger">30%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="warning">70%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-
-        <tr>
-          <td>Dylan Clark</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="danger">30%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="warning">70%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        {/* <tr>
-          <td>Adam Jones</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">95%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="success">100%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Adam Jones</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">95%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="success">100%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Adam Jones</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">95%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="success">100%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Adam Jones</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">95%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="success">100%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Adam Jones</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">95%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="success">100%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-        </tr>
-        <tr>
-          <td>Adam Jones</td>
-          <td>@someusername</td>
-          <td className="student-average" width={'15%'}>
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">95%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-            <Badge bg="success">100%</Badge>
-              <span className="visually-hidden">unread messages</span>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Badge bg="success">100%</Badge>
-                <span className="visually-hidden">unread messages</span>
-            </Button>
-          </ButtonGroup>
-          </td>
-      </tr> */}
+                 </tr>)}
       </tbody>
     </Table>
       </div>
