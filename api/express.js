@@ -97,8 +97,8 @@ app.post('/api/create/user', (req, res) => {
     //hashes the input password to be stored securely
     bcrypt.hash(user.password, saltRounds, (err, hash) => {
         //The password is hashed now and can be stored with the hash parameter
-        pool.query('INSERT INTO users (username, password, asana_access_token, token, session_token) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (username) DO NOTHING RETURNING *',
-            [user.username, hash, user.asana_access_token, accountToken, sessionToken])
+        pool.query('INSERT INTO users (username, password, token, session_token) VALUES ($1, $2, $3, $4) ON CONFLICT (username) DO NOTHING RETURNING *',
+            [user.username, hash, accountToken, sessionToken])
             //Checks to see what was returned
             //If a account already exists it sends back result.rows with a length of zero
             //If account was created it sends back the account info
