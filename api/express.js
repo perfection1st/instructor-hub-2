@@ -221,6 +221,7 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
     .then(result => res.status(200).send(result.rows)) 
     .catch(error => res.status(404).send(error))
 })
+
 //Creates a route to insert multiple students into a course
 //Uses pg-format to do a mass insert with multiple values
 //The values are taken from the request body and pushed into an array as their own array
