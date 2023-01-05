@@ -10,19 +10,46 @@ export const AssessmentModal = (props) => {
   const { courses, setCourses, checked, setChecked, selectedStudents, setSelectedStudents } = props
   const URL = 'http://localhost:8000'
 
-  // state for storing the current assessment that is selected
-  const [currentSelectedAssessment, setCurrentSelectedAssessment] = useState("")
-  // state for storing all of the assessment names that are fetched from the database
-  const [allAssessmentNames, setAllAssessmentNames] = useState([]);
   // state for assessment modal displaying/not displaying
   const [showAssessmentModal, setShowAssessmentModal] = useState(false);
   // state for assessment grading modal displaying/not displaying
   const [showAssessmentGradingModal, setShowAssessmentGradingModal] = useState(false);
+  // state for storing all of the assessment names that are fetched from the database
+  const [allAssessmentNames, setAllAssessmentNames] = useState([]);
+  // state for storing the current assessment name that is selected
+  const [currentSelectedAssessmentName, setCurrentSelectedAssessmentName] = useState("")
+  // state for storing the current assessment ID that is selected
+  const [currentSelectedAssessmentID, setCurrentSelectedAssessmentID] = useState(0)
+  // state for storing the current grades from the learn grades table
+  const [currentLearnGrades, setCurrentLearnGrades] = useState([])
+
+
+  // this function sets the selected name and ID states for the selected assessment
+  const handleSelectAssessment = (e) => {
+    setCurrentSelectedAssessmentName(e.target.value);
+    const selectedAssessment = allAssessmentNames.find(assessment => assessment.assessment_name === e.target.value);
+    setCurrentSelectedAssessmentID(selectedAssessment.assessment_id);
+  }
+
+  //this function sets the selected grade for the respective student and assigns it to the selected students state
+  const handleSelectAssessmentGrade = (e, student_id) => {
+    setSelectedStudents(
+      prevStudents => prevStudents.map(student => {
+        if (student.student_id === student_id) {
+          return {
+            ...student,
+            learnGrade: parseInt(e.target.value),
+          };
+        }
+        return student;
+      }));
+  }
 
   /////////////////// ASSESSMENT MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close assessment modal function
   const handleCloseAssessmentModal = () => {
-    setCurrentSelectedAssessment("")
+    setCurrentSelectedAssessmentName("")
+    setCurrentSelectedAssessmentID(0)
     setSelectedStudents([]);
     setShowAssessmentModal(false);
   }
@@ -40,13 +67,19 @@ export const AssessmentModal = (props) => {
   /////////////////// ASSESSMENT GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close assessment grading modal function
   const handleCloseAssessmentGradingModal = () => {
-    setCurrentSelectedAssessment("")
+    setCurrentSelectedAssessmentName("")
+    setCurrentSelectedAssessmentID(0)
     setSelectedStudents([]);
     setShowAssessmentGradingModal(false);
   }
 
   // open assessment grading modal function
   const handleShowAssessmentGradingModal = () => {
+    fetch(`${URL}/api/learn-grades`)
+      .then(res => res.json())
+      .then(data => {
+        setCurrentLearnGrades(data)
+      });
     setShowAssessmentGradingModal(true);
   }
 
@@ -66,7 +99,75 @@ export const AssessmentModal = (props) => {
 
   // submit the data to the database
   const handleSubmitButton = () => {
-    //need to put fetch to the database here
+
+    //filters all of the values that are already in the database
+    let filteredStudentsWhoAlreadyHaveGrades = selectedStudents.filter(student => {
+      for(let i = 0; i < currentLearnGrades.length; i++){
+        if(currentLearnGrades[i].student_id == student.student_id && currentLearnGrades[i].assessment_id == currentSelectedAssessmentID){
+          return true;
+        }
+      }
+      return false;
+    })
+
+    //filters all of the values that are not already in the database
+    let filteredStudentsWhoDoNotAlreadyHaveGrades = selectedStudents.filter(student => {
+      for(let i = 0; i < currentLearnGrades.length; i++){
+        if(currentLearnGrades[i].student_id == student.student_id && currentLearnGrades[i].assessment_id == currentSelectedAssessmentID){
+          return false;
+        }
+      }
+      return true;
+    })
+
+    // sends a fetch call to post learn grades for all selected students who do not already have grades in the database
+    if(filteredStudentsWhoDoNotAlreadyHaveGrades.length > 0){
+      fetch(`${URL}/api/application-update/learn-grades-post`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          students: filteredStudentsWhoDoNotAlreadyHaveGrades.map(student => ({
+            student_id: student.student_id,
+            assessment_id: currentSelectedAssessmentID,
+            assessment_grade: student.learnGrade
+          }))
+        })
+      })
+      .then(result => result.json())
+      .then(data => {
+        console.log("learn grades posted successfully")        
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
+
+    // sends a fetch call to update learn grades for all selected students who already have grades in the database
+    if(filteredStudentsWhoAlreadyHaveGrades.length > 0){
+      fetch(`${URL}/api/application-update/learn-grades-update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          students: filteredStudentsWhoAlreadyHaveGrades.map(student => ({
+            student_id: student.student_id,
+            assessment_id: currentSelectedAssessmentID,
+            assessment_grade: student.learnGrade
+          }))
+        }),
+      })
+      .then(result => result.json())
+      .then(data => {
+        console.log("learn grades posted successfully")        
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
+    
     handleCloseAssessmentGradingModal()
   }
 
@@ -88,10 +189,10 @@ export const AssessmentModal = (props) => {
           <Modal.Title>Assessment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <select id="assessment-selector" name="assessments" onChange={(e) => setCurrentSelectedAssessment(e.target.value)}>
+          <select id="assessment-selector" name="assessments" onChange={(e) => handleSelectAssessment(e)}>
             <option value="placeholder">-- Select Assessment --</option>
             {allAssessmentNames.map(names => {
-              return <option key={names.assessment_id} value={names.assessment_id}>{names.assessment_name}</option>
+              return <option key={names.assessment_id} value={names.assessment_name}>{names.assessment_name}</option>
             })}
           </select>
           <ul id='assessment-student-list'>
@@ -112,18 +213,18 @@ export const AssessmentModal = (props) => {
           <Modal.Title>
             Selected Assessment Grades For:
             <br />
-            {currentSelectedAssessment}
+            {currentSelectedAssessmentName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div id='assessment-grade-input'>
             <ul id='assessment-selected-students'>
               {/* student names displayed based off students selected from previous modal */}
-              {selectedStudents.map(students => <li key={students.gid} value={students.gid}>
-                {students.name}
+              {selectedStudents.map(student => <li key={student.student_id} value={student.student_id}>
+                {student.name}
                 {/* adds a space between the name and dropdown */}
                 <> </>
-                <input type="number" max="100" min="0" defaultValue="100" />
+                <input type="number" max="100" min="0" defaultValue={student.learnGrade} onChange={(e) => handleSelectAssessmentGrade(e, student.student_id)} />
               </li>)}
             </ul>
           </div>
