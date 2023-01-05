@@ -6,7 +6,6 @@ import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import swal from 'sweetalert';
 
 export const CreateCohortModal = () => {
   // backend url 
@@ -62,13 +61,14 @@ export const CreateCohortModal = () => {
       <Dropdown.Item id="btn-create-cohort" onClick={handleShowCreateCohortModal}><BsFileEarmarkCodeFill /> Create Cohort </Dropdown.Item>
 
       {/* CreateCohort Modal */}
-      <Modal id="cohort-create-modal" size="lg" centered show={showCreateCohortModal} onHide={handleCloseCreateCohortModal}>
+      <Modal id="cohort-create-modal" size="md" centered show={showCreateCohortModal} onHide={handleCloseCreateCohortModal}>
         <Modal.Header closeButton>
           <Modal.Title>Create Cohort</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div id="input-container">
             Cohort Name: <input ref={cohortNameRef} type="text" name="cohortName" />
-            Instructor Name:  <input ref={instructorNameRef} type="text" name="teamGID" />
+            Instructor Name:  <input ref={instructorNameRef} type="text" name="instructorName" />
             Start Date: <DatePicker
               selected={beginDate}
               onChange={date => setBeginDate(date)}
@@ -77,6 +77,7 @@ export const CreateCohortModal = () => {
               selected={endDate}
               onChange={date => setEndDate(date)}
             />
+          </div>
             
         </Modal.Body>
         <Modal.Footer>
@@ -85,22 +86,6 @@ export const CreateCohortModal = () => {
             </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Add cohorts students modal
-      <Modal id="add-cohort-students-modal" size="lg" centered show={AddCohortStudentsModal} onHide={c}>
-        <Modal.Header closeButton>
-        <Modal.Title>Cohort Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => { handleCloseCohortDetailsModal(); handleShowCreateCohortModal() }}>Back</Button>
-          <Button variant="primary" onClick={handleCloseCohortDetailsModal}>
-            Submit ✓
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </>
   )
 }

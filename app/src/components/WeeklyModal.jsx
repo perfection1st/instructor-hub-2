@@ -3,36 +3,72 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsCalendarPlusFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
+import swal from 'sweetalert';
 
 export const WeeklyModal = (props) => {
   //State of all users courses
-  const { checked, setChecked, courses, setCourses, selectedStudents, setSelectedStudents } = props
+  const { courses, setCourses, selectedStudents, setSelectedStudents } = props
+  
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+  // state for Weekly grading modal displaying/not displaying
+  const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
+  
+  /////////////////// WEEKLY MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close weekly modal function
   const handleCloseWeeklyModal = () => {
     setSelectedStudents([])
     setShowWeeklyModal(false)
   };
 
-  const handleNextModal = () => setShowWeeklyModal(false);
-
   // open weekly modal function
   const handleShowWeeklyModal = (e) => {
-    setChecked(e.target.id)
     setShowWeeklyModal(true)
   };
 
-  // state for Weekly grading modal displaying/not displaying
-  const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
+  /////////////////// WEEKLY GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close Weekly grading modal function
-  const handleCloseWeeklyGradingModal = () => setShowWeeklyGradingModal(false)
+  const handleCloseWeeklyGradingModal = () => {
+    setSelectedStudents([]);
+    setShowWeeklyGradingModal(false)
+  }
+
   // open Weekly grading modal function
-  const handleShowWeeklyGradingModal = () => setShowWeeklyGradingModal(true);
+  const handleShowWeeklyGradingModal = () => {
+    setShowWeeklyGradingModal(true);
+  }
+
+  /////////////////// NEXT, BACK, and SUBMIT BUTTON FUNCTIONS ///////////////////
+  // switch between weekly modal and the weekly grading modal
+  const handleNextModal = () => {
+    setShowWeeklyModal(false);
+    handleShowWeeklyGradingModal()
+  }
+
+  // go back from the assessment grading modal to the assessment modal
+  const handleBackButton = () => {
+    setSelectedStudents([]);
+    setShowWeeklyGradingModal(false);
+    setShowWeeklyModal(true)
+  }
+
+  // submit the data to the database
+  const handleSubmitButton = () => {
+    //need to put fetch to the database here
+    handleCloseWeeklyGradingModal()
+  }
 
   return (
     <>
-      <button id="btn-weekly-update" onClick={(e) => handleShowWeeklyModal(e)}><BsCalendarPlusFill /> Add Weekly Update </button>
+      <button id="btn-weekly-update" onClick={(e) => {
+        let currentClass = sessionStorage.getItem('currentClass')
+        if (!currentClass) {
+          setShowWeeklyModal(false)
+          swal('No cohort selected')
+        } else {
+          handleShowWeeklyModal(e)
+        }
+      }}><BsCalendarPlusFill /> Add Weekly Update </button>
 
       {/* Weekly modal */}
       <Modal id="weekly-update-modal" size="md" centered show={showWeeklyModal} onHide={handleCloseWeeklyModal}>
@@ -42,11 +78,11 @@ export const WeeklyModal = (props) => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
+            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => { handleNextModal(); handleShowWeeklyGradingModal() }}>
+          <Button variant="primary" onClick={ handleNextModal }>
             Next
           </Button>
         </Modal.Footer>
@@ -82,8 +118,10 @@ export const WeeklyModal = (props) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={(e) => { handleCloseWeeklyGradingModal(); handleShowWeeklyModal(e) }}>Back</Button>
-          <Button variant="primary" onClick={handleCloseWeeklyGradingModal}>
+          <Button variant="secondary" onClick={ handleBackButton }>
+            Back
+          </Button>
+          <Button variant="primary" onClick={ handleSubmitButton }>
             Submit ✓
           </Button>
         </Modal.Footer>

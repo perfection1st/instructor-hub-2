@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
+import swal from 'sweetalert';
 
 export const ProjectModal = (props) => {
 
@@ -11,16 +12,18 @@ export const ProjectModal = (props) => {
 
   // state for storing the current project that is selected
   const [currentSelectedProject, setCurrentSelectedProject] = useState("")
-
   // state for storing all of the project names that are fetched from the database
   const [allProjectNames, setAllProjectNames] = useState([]);
-
   // state for project modal displaying/not displaying
   const [showProjectModal, setShowProjectModal] = useState(false);
+  // state for Project grading modal displaying/not displaying
+  const [showProjectGradingModal, setShowProjectGradingModal] = useState(false);
+
+  /////////////////// PROJECT MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close project modal function
   const handleCloseProjectModal = () => {
     setCurrentSelectedProject("")
-    // setSelectedStudents([]);
+    setSelectedStudents([]);
     setShowProjectModal(false);
   }
   // open project modal function
@@ -33,16 +36,30 @@ export const ProjectModal = (props) => {
     setShowProjectModal(true);
   }
 
-  // state for Project grading modal displaying/not displaying
-  const [showProjectGradingModal, setShowProjectGradingModal] = useState(false);
+  /////////////////// PROJECT GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close Project grading modal function
-  const handleCloseProjectGradingModal = () => setShowProjectGradingModal(false);
+  const handleCloseProjectGradingModal = () => {
+    setShowProjectGradingModal(false);
+    setSelectedStudents([]);
+  }
+
   // open Project grading modal function
-  const handleShowProjectGradingModal = () => setShowProjectGradingModal(true);
+  const handleShowProjectGradingModal = () => {
+    setShowProjectGradingModal(true);
+  }
+
 
   return (
     <>
-      <button id="btn-project-update" onClick={handleShowProjectModal}><BsFileEarmarkCodeFill /> Project Update </button>
+      <button id="btn-project-update" onClick={() => {
+        let currentClass = sessionStorage.getItem('currentClass')
+        if (!currentClass) {
+          setShowProjectModal(false)
+          swal('No cohort selected')
+        } else {
+          handleShowProjectModal()
+        }
+      }}><BsFileEarmarkCodeFill /> Project Update </button>
 
       {/* Project modal */}
       <Modal id="project-update-modal" size="md" centered show={showProjectModal} onHide={handleCloseProjectModal}>
@@ -56,7 +73,7 @@ export const ProjectModal = (props) => {
               if (currentSelectedProject === names.project_name) {
                 return
               }
-              return <option key={names.project_id} value={names.project_name}>{names.project_name}</option>
+              return <option key={names.project_id} value={names.project_id}>{names.project_name}</option>
             })}
           </select>
           <ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
