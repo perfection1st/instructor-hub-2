@@ -6,7 +6,9 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useEffect, useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import Form from 'react-bootstrap/Form';
+import { GenerateGroupsModal } from './GenerateGroupsModal' 
 
 
 export const StudentList = (props) => {
@@ -64,7 +66,7 @@ export const StudentList = (props) => {
         >
           {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
 
-        </DropdownButton>
+        </DropdownButton><GenerateGroupsModal students={students} />
       </div>
       <div id="student-list-container">
         <div id="student-table-container">
