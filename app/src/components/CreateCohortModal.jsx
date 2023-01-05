@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import swal from 'sweetalert';
 
 export const CreateCohortModal = () => {
   // backend url 
