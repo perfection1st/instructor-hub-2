@@ -36,7 +36,7 @@ export const ProjectModal = (props) => {
     setShowProjectModal(true);
   }
 
-/////////////////// PROJECT GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
+  /////////////////// PROJECT GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close Project grading modal function
   const handleCloseProjectGradingModal = () => {
     setShowProjectGradingModal(false);
@@ -73,7 +73,7 @@ export const ProjectModal = (props) => {
               if (currentSelectedProject === names.project_name) {
                 return
               }
-              return <option key={names.project_id} value={names.project_name}>{names.project_name}</option>
+              return <option key={names.project_id} value={names.project_id}>{names.project_name}</option>
             })}
           </select>
           <ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />

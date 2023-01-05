@@ -1,5 +1,4 @@
 import { LoadingDropdown } from './Loading';
-import { StudentStats } from './StudentStats';
 import { StudentAverages } from './StudentAverages';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -7,8 +6,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useState, useEffect, Suspense } from 'react';
-import Form from 'react-bootstrap/Form';
+import { useState } from 'react';
 
 
 export const StudentList = (props) => {
@@ -76,15 +74,15 @@ export const StudentList = (props) => {
                   <td className="student-average" width={'15%'}>
                     <ButtonGroup aria-label="Basic example">
                       <Button variant="secondary" size="sm">
-                        <Badge bg="danger">30%</Badge>
+                        <Badge bg={student.learn_avg < 70 ? 'danger' : 'success'}>{student.learn_avg || 100}%</Badge>
                         <span className="visually-hidden">unread messages</span>
                       </Button>
                       <Button variant="secondary" size="sm">
-                        <Badge bg="warning">70%</Badge>
+                        <Badge bg={student.tech_avg < 70 ? 'danger' : 'success'}>{student.tech_avg || 100}%</Badge>
                         <span className="visually-hidden">unread messages</span>
                       </Button>
                       <Button variant="secondary" size="sm">
-                        <Badge bg="success">100%</Badge>
+                        <Badge bg={student.teamwork_avg < 70 ? 'danger' : 'success'}>{student.teamwork_avg || 100}%</Badge>
                         <span className="visually-hidden">unread messages</span>
                       </Button>
                     </ButtonGroup>
