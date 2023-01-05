@@ -74,9 +74,9 @@ CREATE TABLE cohorts (
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name TEXT,
-  learn_avg INT,
-  tech_avg INT,
-  teamwork_avg INT,
+  learn_avg INT DEFAULT 100 NOT NULL,
+  tech_avg INT DEFAULT 100 NOT NULL,
+  teamwork_avg INT DEFAULT 100 NOT NULL,
   server_side_test TEXT,
   client_side_test TEXT,
   cohort_name TEXT,
@@ -328,13 +328,13 @@ UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
 -- Load Proficiency Ratings
 ============================================================== */
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('1', 'Needs improvement');
+VALUES('25', 'Needs improvement');
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('2', 'Approaching standard');
+VALUES('50', 'Approaching standard');
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('3', 'Meets standard');
+VALUES('75', 'Meets standard');
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('4', 'Exceeds standard');
+VALUES('100', 'Exceeds standard');
 
 
 -- Database statistics collector:

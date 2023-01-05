@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import swal from 'sweetalert';
 
 export const CreateCohortModal = () => {
   // backend url 
@@ -49,7 +50,11 @@ export const CreateCohortModal = () => {
     })
     .then(result => result.json())
     .then(data => console.log(data))
-    .then(alert('success'))
+    .then(() => {
+      setBeginDate(null);
+      setEndDate(null);
+    })
+    .then(swal(`Cohort was succesfully created`))
   }
 
   return (
@@ -78,7 +83,7 @@ export const CreateCohortModal = () => {
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={() =>  { createCohort(); handleCloseCreateCohortModal()}}>
-            Next
+            Submit
             </Button>
         </Modal.Footer>
       </Modal>

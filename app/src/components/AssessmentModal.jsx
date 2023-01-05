@@ -46,7 +46,9 @@ export const AssessmentModal = (props) => {
   }
 
   // open assessment grading modal function
-  const handleShowAssessmentGradingModal = () => setShowAssessmentGradingModal(true);
+  const handleShowAssessmentGradingModal = () => {
+    setShowAssessmentGradingModal(true);
+  }
 
   /////////////////// NEXT, BACK, and SUBMIT BUTTON FUNCTIONS ///////////////////
   // switch between assessment modal and the assessment grading modal
@@ -57,13 +59,15 @@ export const AssessmentModal = (props) => {
 
   // go back from the assessment grading modal to the assessment modal
   const handleBackButton = () => {
+    setSelectedStudents([]);
     setShowAssessmentGradingModal(false);
     setShowAssessmentModal(true)
   }
 
   // submit the data to the database
   const handleSubmitButton = () => {
-
+    //need to put fetch to the database here
+    handleCloseAssessmentGradingModal()
   }
 
   return (
@@ -87,7 +91,7 @@ export const AssessmentModal = (props) => {
           <select id="assessment-selector" name="assessments" onChange={(e) => setCurrentSelectedAssessment(e.target.value)}>
             <option value="placeholder">-- Select Assessment --</option>
             {allAssessmentNames.map(names => {
-              return <option key={names.assessment_id} value={names.assessment_name}>{names.assessment_name}</option>
+              return <option key={names.assessment_id} value={names.assessment_id}>{names.assessment_name}</option>
             })}
           </select>
           <ul id='assessment-student-list'>

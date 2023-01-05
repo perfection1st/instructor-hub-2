@@ -66,7 +66,6 @@ export const Login = (props) => {
     } else {
       sessionStorage.setItem('username', info.username)
       sessionStorage.setItem('userToken', info.userToken)
-      sessionStorage.setItem('asanaToken', info.asanaToken)
       info.cohort ? sessionStorage.setItem('defaultCohort', info.cohort) : console.log('no default')
       setSessionToken()
     }

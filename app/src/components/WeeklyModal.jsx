@@ -7,29 +7,111 @@ import swal from 'sweetalert';
 
 export const WeeklyModal = (props) => {
   //State of all users courses
-  const { checked, setChecked, courses, setCourses, selectedStudents, setSelectedStudents } = props
+  const { courses, setCourses, selectedStudents, setSelectedStudents } = props
+
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+  // state for Weekly grading modal displaying/not displaying
+  const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
+
+  const handleDropdownChange = (student_id, type, value) => {
+    setSelectedStudents(prevStudents => prevStudents.map(student => {
+      if (student.student_id === student_id) {
+        return {
+          ...student,
+          [type]: parseInt(value),
+        };
+      }
+      return student;
+    }));
+  };
+
+
+  /////////////////// WEEKLY MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close weekly modal function
   const handleCloseWeeklyModal = () => {
     setSelectedStudents([])
     setShowWeeklyModal(false)
   };
 
-  const handleNextModal = () => setShowWeeklyModal(false);
-
   // open weekly modal function
   const handleShowWeeklyModal = (e) => {
-    setChecked(e.target.id)
     setShowWeeklyModal(true)
   };
 
-  // state for Weekly grading modal displaying/not displaying
-  const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
+  /////////////////// WEEKLY GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close Weekly grading modal function
-  const handleCloseWeeklyGradingModal = () => setShowWeeklyGradingModal(false)
+  const handleCloseWeeklyGradingModal = () => {
+    setSelectedStudents([]);
+    setShowWeeklyGradingModal(false)
+  }
+
   // open Weekly grading modal function
-  const handleShowWeeklyGradingModal = () => setShowWeeklyGradingModal(true);
+  const handleShowWeeklyGradingModal = () => {
+    setShowWeeklyGradingModal(true);
+  }
+
+  /////////////////// NEXT, BACK, and SUBMIT BUTTON FUNCTIONS ///////////////////
+  // switch between weekly modal and the weekly grading modal
+  const handleNextModal = () => {
+    setShowWeeklyModal(false);
+    handleShowWeeklyGradingModal()
+  }
+
+  // go back from the assessment grading modal to the assessment modal
+  const handleBackButton = () => {
+    setSelectedStudents([]);
+    setShowWeeklyGradingModal(false);
+    setShowWeeklyModal(true)
+  }
+
+  // submit the data to the database
+  const handleSubmitButton = () => {
+
+    //sends a fetch call to update tech skills for all selected students
+    fetch(`http://localhost:8000/api/weekly-update/tech-skills`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        students: selectedStudents.map(student => ({
+          student_id: student.student_id,
+          score: student.techAptitude * 25
+        }))
+      })
+    })
+      .then(result => result.json())
+      .then(data => {
+        console.log("tech scores posted successfully")
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+    //sends a fetch call to update tech skills for all selected students
+    fetch(`http://localhost:8000/api/weekly-update/teamwork-skills`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        students: selectedStudents.map(student => ({
+          student_id: student.student_id,
+          score: student.teamAptitude * 25
+        }))
+      })
+    })
+      .then(result => result.json())
+      .then(data => {
+        console.log("team scores posted successfully")
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+    handleCloseWeeklyGradingModal()
+  }
 
   return (
     <>
@@ -51,11 +133,11 @@ export const WeeklyModal = (props) => {
         <Modal.Body>
           <ul id='weekly-student-list'>
             {/* student list conditionally rendered based off what cohort is selected on page */}
-            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
+            <ModalList courses={courses} setShowWeeklyModal={setShowWeeklyModal} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => { handleNextModal(); handleShowWeeklyGradingModal() }}>
+          <Button variant="primary" onClick={handleNextModal}>
             Next
           </Button>
         </Modal.Footer>
@@ -70,17 +152,25 @@ export const WeeklyModal = (props) => {
           <div id='weekly-grade-input'>
             <ul id='weekly-selected-students'>
               {/* students displayed will be conditional based off students selected from previous modal */}
-              {selectedStudents.map(students => <li key={students.student_id} value={students.student_id}>
-                {students.name}
+              {selectedStudents.map(student => <li key={student.student_id} value={student.student_id}>
+                {student.name}
                 {/* adds a space between the name and dropdown */}
                 <>  </>
-                <select className='tech-aptitude'>
+                <select
+                  className='tech-aptitude'
+                  value={student.techAptitude}
+                  onChange={e => handleDropdownChange(student.student_id, 'techAptitude', e.target.value)}
+                >
                   <option value="1">Tech 1</option>
                   <option value="2">Tech 2</option>
                   <option value="3">Tech 3</option>
                   <option value="4">Tech 4</option>
                 </select>
-                <select className='team-aptitude'>
+                <select
+                  className='team-aptitude'
+                  value={student.teamAptitude}
+                  onChange={e => handleDropdownChange(student.student_id, 'teamAptitude', e.target.value)}
+                >
                   <option value="1">Team 1</option>
                   <option value="2">Team 2</option>
                   <option value="3">Team 3</option>
@@ -91,8 +181,10 @@ export const WeeklyModal = (props) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={(e) => { handleCloseWeeklyGradingModal(); handleShowWeeklyModal(e) }}>Back</Button>
-          <Button variant="primary" onClick={handleCloseWeeklyGradingModal}>
+          <Button variant="secondary" onClick={handleBackButton}>
+            Back
+          </Button>
+          <Button variant="primary" onClick={handleSubmitButton}>
             Submit ✓
           </Button>
         </Modal.Footer>
