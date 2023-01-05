@@ -200,7 +200,7 @@ app.post(`/api/learn/grades-update`, (req, res) => {
         .catch(error => res.status(404).send(error))
 })
 
-//Route that updates the student teamwork skills table 
+//Route that updates the student_teamwork_skills table with the tech scores for a group of students
 app.post(`/api/weekly-update/tech-skills`, (req, res) => {
     const students = req.body.students
     let record_date = new Date().toISOString()
@@ -211,13 +211,44 @@ app.post(`/api/weekly-update/tech-skills`, (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
-//Route updates the student teamwork skills table
+//Route updates the student_teamwork_skills table with the team scores for a group of students
 app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
     const students = req.body.students
     let record_date = new Date().toISOString()
     let values = []
     students.forEach((student) => values.push([student.student_id, student.score, record_date]))
     pool.query(format('INSERT INTO student_teamwork_skills (student_id, score, record_date) VALUES %L', values), [])
+    .then(result => res.status(200).send(result.rows)) 
+    .catch(error => res.status(404).send(error))
+})
+
+//Route posts the learn_grades table with the assessment grades for a group of students
+app.post(`/api/application-update/learn-grades-post`, (req, res) => {
+    const students = req.body.students
+    let values = []
+    students.forEach((student) => values.push([student.student_id, student.assessment_id, student.assessment_grade]))
+    pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
+    .then(result => res.status(200).send(result.rows)) 
+    .catch(error => res.status(404).send(error))
+})
+
+//Route updates the learn_grades table with the assessment grades for a group of students
+app.post(`/api/application-update/learn-grades-update`, (req, res) => {
+    const students = req.body.students
+    const promises = students.map(student => {
+        const studentId = student.student_id
+        const assessmentId = student.assessment_id
+        const assessmentGrade = student.assessment_grade
+        return pool.query(format(`UPDATE learn_grades SET assessment_grade = %s WHERE student_id = %s AND assessment_id = %s;`, assessmentGrade, studentId, assessmentId))
+      })
+      Promise.all(promises)
+    .then(result => res.status(200).send(result)) 
+    .catch(error => res.status(404).send(error))
+})
+
+//Route selects all from learn_grades table
+app.get(`/api/learn-grades`, (req, res) => {
+    pool.query(`SELECT * FROM learn_grades;`)
     .then(result => res.status(200).send(result.rows)) 
     .catch(error => res.status(404).send(error))
 })
