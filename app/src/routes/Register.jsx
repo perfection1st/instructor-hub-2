@@ -7,6 +7,9 @@ import Form from 'react-bootstrap/Form';
 import '../images/galvanize-logo.svg';
 import swal from 'sweetalert';
 import { useState } from 'react';
+import { Icon } from 'react-icons-kit';
+import {eye} from 'react-icons-kit/feather/eye';
+import {eyeOff} from 'react-icons-kit/feather/eyeOff';
 
 const URL = 'http://localhost:8000/api'
 
@@ -19,6 +22,20 @@ export const Register = () => {
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   
+    //useState for shoe/hide password
+    const [type, setType]=useState('password');
+    const [icon, setIcon]=useState(eyeOff);
+   // if statement for password icon toggle 
+    const handleToggle=()=>{
+      if(type=='password'){
+        setIcon(eye);
+        setType('text');
+      }
+      else{
+        setIcon(eyeOff);
+        setType('password');
+      }
+    }
 
   // Loading spinner
   const [isLoading, setIsLoading] = useState(false);
@@ -84,13 +101,16 @@ export const Register = () => {
       <Form id="form-register">
         <Form.Group>
         <Form.Label>Username</Form.Label>
-        <Form.Control ref={usernameRef} type="text" placeholder="type username here" required />
+        <Form.Control ref={usernameRef} type={'text'} placeholder="type username here" required />
+        
         <Form.Label>Password</Form.Label>
-
-        <Form.Control ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
-        <Form.Label>Confirm Password</Form.Label>
-
-        <Form.Control ref={confirmPasswordRef} type="password" placeholder="confirm password here" minLength={8} required />
+        <div className='password-container'>
+        <span className="show-hide-psw" onClick={handleToggle}><Icon icon={icon} size={22}/></span>
+        <Form.Control ref={passwordRef} type={type} placeholder="type password here" minLength={8} required />
+        </div>
+        <Form.Label id="password-icon">Confirm Password</Form.Label>
+        <span className="show-hide-psw-confirm" onClick={handleToggle}><Icon icon={icon} size={22}/></span>
+        <Form.Control ref={confirmPasswordRef} type={type} placeholder="confirm password here" minLength={8} required />
         
 
         

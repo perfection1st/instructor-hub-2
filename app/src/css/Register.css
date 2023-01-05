@@ -28,3 +28,23 @@ form#form-register button[type="submit"] {
     width:100%;  
 }
 
+span.show-hide-psw {
+    position:absolute;
+    cursor: pointer;
+    right:0;
+    
+
+}
+span.show-hide-psw-confirm{
+    position:absolute;
+    cursor: pointer;
+    justify-items:center;
+    right: 27em;
+    left: auto;
+    top: 41%;
+    transform: translateY(-40%);
+}
+
+.password-container {
+    width: 300px;
+}

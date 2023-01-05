@@ -7,6 +7,10 @@ import swal from 'sweetalert';
 import Spinner from 'react-bootstrap/Spinner'
 import { useState } from 'react';
 import '../images/galvanize-logo.svg';
+import { Icon } from 'react-icons-kit';
+import {eye} from 'react-icons-kit/feather/eye';
+import {eyeOff} from 'react-icons-kit/feather/eyeOff';
+
 
 
 export const Login = (props) => {
@@ -16,6 +20,21 @@ export const Login = (props) => {
   const { isLoggedIn, setIsLoggedIn } = props
   const usernameRef = useRef();
   const passwordRef = useRef();
+
+  //useState for shoe/hide password
+  const [type, setType]=useState('password');
+  const [icon, setIcon]=useState(eyeOff);
+ // if statement for password icon toggle
+  const handleToggle=()=>{
+    if(type=='password'){
+      setIcon(eye);
+      setType('text');
+    }
+    else{
+      setIcon(eyeOff);
+      setType('password');
+    }
+  }
 
   const [isLoading, setIsLoading] = useState(false);
   //Does not take user to home page yet
@@ -109,8 +128,11 @@ export const Login = (props) => {
           <Form.Group>
             <Form.Label>Username:</Form.Label>
             <Form.Control ref={usernameRef} type="text" placeholder="type username here" required />
+            <div>
             <Form.Label>Password:</Form.Label>
-            <Form.Control ref={passwordRef} type="password" placeholder="type password here" minLength={8} required />
+            <Form.Control ref={passwordRef} type={type} placeholder="type password here" minLength={8} required />
+            <span id="show-hide-psw" onClick={handleToggle}><Icon icon={icon} size={20}/></span>
+            </div>
             {/* Checks to see if button was pressed, if it was it shows a spinner */}
             { isLoading === true ?
               <Button type='submit' disabled value="Sign In">
