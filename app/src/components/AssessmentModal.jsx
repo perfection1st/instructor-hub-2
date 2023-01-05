@@ -91,7 +91,7 @@ export const AssessmentModal = (props) => {
           <select id="assessment-selector" name="assessments" onChange={(e) => setCurrentSelectedAssessment(e.target.value)}>
             <option value="placeholder">-- Select Assessment --</option>
             {allAssessmentNames.map(names => {
-              return <option key={names.assessment_id} value={names.assessment_name}>{names.assessment_name}</option>
+              return <option key={names.assessment_id} value={names.assessment_id}>{names.assessment_name}</option>
             })}
           </select>
           <ul id='assessment-student-list'>
