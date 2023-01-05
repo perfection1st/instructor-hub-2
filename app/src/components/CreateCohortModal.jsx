@@ -49,7 +49,11 @@ export const CreateCohortModal = () => {
     })
     .then(result => result.json())
     .then(data => console.log(data))
-    .then(alert('success'))
+    .then(() => {
+      setBeginDate(null);
+      setEndDate(null);
+    })
+    .then(swal(`Cohort was succesfully created`))
   }
 
   return (
@@ -78,7 +82,7 @@ export const CreateCohortModal = () => {
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={() =>  { createCohort(); handleCloseCreateCohortModal()}}>
-            Next
+            Submit
             </Button>
         </Modal.Footer>
       </Modal>

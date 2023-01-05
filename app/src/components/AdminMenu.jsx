@@ -7,6 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { GoGear, GoSignOut } from "react-icons/go";
 import { CreateCohortModal } from './CreateCohortModal';
+import { AddStudentModal } from './AddStudentsModal';
 
 export const AdminMenu = (props) => {
   const URL = 'http://localhost:8000/api'
@@ -85,6 +86,7 @@ export const AdminMenu = (props) => {
       id="dropdown-menu-align-end"
     >
       <CreateCohortModal />
+      <AddStudentModal />
       <Dropdown.Item eventKey="1" onClick={handleShowSettingsModal}><GoGear /> Settings</Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item eventKey="4" onClick={() => logout()}><GoSignOut /> Logout</Dropdown.Item>

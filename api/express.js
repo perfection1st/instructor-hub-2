@@ -210,7 +210,7 @@ app.post('/api/create/students', (req, res) => {
     students.forEach((student) => values.push([student.name, student.cohort_name, student.github]))
     pool.query(format('INSERT INTO students (name, cohort_name, github) VALUES %L RETURNING *', values), [])
         .then(result => res.send(result.rows))
-
+        .catch(error => res.send(error))
 })
 
 app.listen(PORT, () => {
