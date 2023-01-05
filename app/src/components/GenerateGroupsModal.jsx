@@ -13,13 +13,13 @@ export const GenerateGroupsModal = (props) => {
     const [showGenerateGroupsModal, setShowGenerateGroupsModal] = useState(false);
     // close Generate Groups Modal function
     const handleCloseGenerateGroupsModal = () => setShowGenerateGroupsModal(false);
-     // open Generate Groups Modal function
+    // open Generate Groups Modal function
     const handleShowGenerateGroupsModal = () => setShowGenerateGroupsModal(true);
     // state for Show Groups Modal displaying/not displaying
     const [showShowGroupsModal, setShowShowGroupsModal] = useState(false);
     // close Show Groups Modal function
     const handleCloseShowGroupsModal = () => setShowShowGroupsModal(false);
-     // open Show Groups Modal function
+    // open Show Groups Modal function
     const handleShowShowGroupsModal = () => setShowShowGroupsModal(true);
     // state for array of groups
     const [groupArray, setGroupArray] = useState([]);
@@ -32,62 +32,64 @@ export const GenerateGroupsModal = (props) => {
     function splitIntoGroups(students, numGroups) {
         const groups = [];
         for (let i = 0; i < numGroups; i++) {
-          groups.push([]);
+            groups.push([]);
         }
         while (students.length > 0) {
-          const student = students.splice(Math.floor(Math.random() * students.length), 1)[0];
-          let groupIndex = 0;
-          let minSize = Number.MAX_VALUE;
-          for (let i = 0; i < groups.length; i++) {
-            if (groups[i].length < minSize) {
-              groupIndex = i;
-              minSize = groups[i].length;
+            const student = students.splice(Math.floor(Math.random() * students.length), 1)[0];
+            let groupIndex = 0;
+            let minSize = Number.MAX_VALUE;
+            for (let i = 0; i < groups.length; i++) {
+                if (groups[i].length < minSize) {
+                    groupIndex = i;
+                    minSize = groups[i].length;
+                }
             }
-          }
-          groups[groupIndex].push(student);
+            groups[groupIndex].push(student);
         }
         setGroupArray(groups);
-      }
+    }
     useEffect(() => {
     }, [groupArray])
-    
+
     // calls splitIntoGroups function
     function loadGroups() {
-        let studentsCopy = students.slice(0, -1)
+        let studentsCopy = students.slice(0)
+        console.log(studentsCopy)
+        console.log(students)
         splitIntoGroups(studentsCopy, numOfGroupRef.current.value)
-    }  
+    }
 
     // group counter for displaying each group
-    let groupCounter = 1 
+    let groupCounter = 1
     // increments group counter
     function countGroup() {
         groupCounter++
-    } 
+    }
 
     return (
         <>
-            <Button onClick={() => students.length < 1  ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><BsGrid3X2Gap /> Generate Groups</Button>
+            <Button onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><BsGrid3X2Gap /> Generate Groups</Button>
 
             {/* Generate Groups Modal */}
             <Modal id="generate-group-modal" size="md" centered show={showGenerateGroupsModal} onHide={handleCloseGenerateGroupsModal}>
                 <Modal.Header closeButton>
-                <Modal.Title>Generate Groups</Modal.Title>
+                    <Modal.Title>Generate Groups</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <div id="input-container">
-                    Number of Groups: <input ref={numOfGroupRef} type="text" name="numOfGroups" />
-                </div>
-                    
+                    <div id="input-container">
+                        Number of Groups: <input ref={numOfGroupRef} type="text" name="numOfGroups" />
+                    </div>
+
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => { loadGroups(); handleCloseGenerateGroupsModal(); handleShowShowGroupsModal()}}>
+                    <Button variant="primary" onClick={() => { loadGroups(); handleCloseGenerateGroupsModal(); handleShowShowGroupsModal() }}>
                         Generate Groups
                     </Button>
                 </Modal.Footer>
             </Modal>
             <Modal id="show-groups-modal" size="lg" centered show={showShowGroupsModal} onHide={handleCloseShowGroupsModal}>
                 <Modal.Header closeButton>
-                <Modal.Title>Groups</Modal.Title>
+                    <Modal.Title>Groups</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {groupArray.map((group, index) =>
@@ -96,10 +98,10 @@ export const GenerateGroupsModal = (props) => {
                             <ul key={groupCounter}>{group.map(student =>
                                 <li key={student.github}>{student.name}</li>)}</ul>
                             {countGroup()}
-                        </div>)}  
+                        </div>)}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => { handleCloseShowGroupsModal()}}>
+                    <Button variant="primary" onClick={() => { handleCloseShowGroupsModal() }}>
                         Close
                     </Button>
                 </Modal.Footer>
