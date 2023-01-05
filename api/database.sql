@@ -74,9 +74,9 @@ CREATE TABLE cohorts (
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name TEXT,
-  learn_avg INT,
-  tech_avg INT,
-  teamwork_avg INT,
+  learn_avg INT DEFAULT 100 NOT NULL,
+  tech_avg INT DEFAULT 100 NOT NULL,
+  teamwork_avg INT DEFAULT 100 NOT NULL,
   server_side_test TEXT,
   client_side_test TEXT,
   cohort_name TEXT,
