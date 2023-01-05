@@ -13,6 +13,25 @@ export const WeeklyModal = (props) => {
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   // state for Weekly grading modal displaying/not displaying
   const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
+
+  const [students, setStudents] = useState(selectedStudents.map(student => ({
+    student_id: student.student_id,
+    techAptitude: 4,
+    teamAptitude: 4,
+  })));
+
+  const handleDropdownChange = (student_id, type, value) => {
+    setStudents(prevStudents => prevStudents.map(student => {
+      if (student.student_id === student_id) {
+        return {
+          ...student,
+          [type]: value,
+        };
+      }
+      return student;
+    }));
+  };
+
   
   /////////////////// WEEKLY MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close weekly modal function
@@ -24,6 +43,7 @@ export const WeeklyModal = (props) => {
   // open weekly modal function
   const handleShowWeeklyModal = (e) => {
     setShowWeeklyModal(true)
+    console.log(new Date())
   };
 
   /////////////////// WEEKLY GRADING MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
@@ -94,26 +114,36 @@ export const WeeklyModal = (props) => {
           <Modal.Title>Weekly Grades</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+
+
           <div id='weekly-grade-input'>
             <ul id='weekly-selected-students'>
-              {/* students displayed will be conditional based off students selected from previous modal */}
-              {selectedStudents.map(students => <li key={students.student_id} value={students.student_id}>
-                {students.name}
-                {/* adds a space between the name and dropdown */}
-                <>  </>
-                <select className='tech-aptitude'>
-                  <option value="1">Tech 1</option>
-                  <option value="2">Tech 2</option>
-                  <option value="3">Tech 3</option>
-                  <option value="4">Tech 4</option>
-                </select>
-                <select className='team-aptitude'>
-                  <option value="1">Team 1</option>
-                  <option value="2">Team 2</option>
-                  <option value="3">Team 3</option>
-                  <option value="4">Team 4</option>
-                </select>
-              </li>)}
+              {students.map(student => (
+                <li key={student.student_id} value={student.student_id}>
+                  {student.name}
+                  <>  </>
+                  <select
+                    className='tech-aptitude'
+                    value={student.techAptitude}
+                    onChange={e => handleDropdownChange(student.student_id, 'techAptitude', e.target.value)}
+                  >
+                    <option value="1">Tech 1</option>
+                    <option value="2">Tech 2</option>
+                    <option value="3">Tech 3</option>
+                    <option value="4">Tech 4</option>
+                  </select>
+                  <select
+                    className='team-aptitude'
+                    value={student.teamAptitude}
+                    onChange={e => handleDropdownChange(student.student_id, 'teamAptitude', e.target.value)}
+                  >
+                    <option value="1">Team 1</option>
+                    <option value="2">Team 2</option>
+                    <option value="3">Team 3</option>
+                    <option value="4">Team 4</option>
+                  </select>
+                </li>
+              ))}
             </ul>
           </div>
         </Modal.Body>
