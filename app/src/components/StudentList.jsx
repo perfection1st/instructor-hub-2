@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 export const StudentList = (props) => {
@@ -31,11 +31,19 @@ export const StudentList = (props) => {
     console.log(students)
   }
 
-  function scoreAverages() {
-    setLearnAvg(students.map(student => student.learn_avg).reduce((acc, score) => acc + score, 0))
-    setTeamworkAvg(students.map(student => student.teamwork_avg).reduce((acc, score) => acc + score, 0))
-    setTechAvg(students.map(student => student.tech_avg).reduce((acc, score) => acc + score, 0))
-  }
+  useEffect(() => {
+    let currentClass = sessionStorage.getItem('currentClass')
+    fetch(`http://localhost:8000/api/students/${currentClass}`)
+      .then(result => result.json())
+      .then(data => {
+        setStudents(data)
+      })
+      .then(() => {
+        setLearnAvg(students.map(student => student.learn_avg).reduce((acc, score) => acc + score, 0))
+        setTeamworkAvg(students.map(student => student.teamwork_avg).reduce((acc, score) => acc + score, 0))
+        setTechAvg(students.map(student => student.tech_avg).reduce((acc, score) => acc + score, 0))
+      })
+  }, [courses])
 
   //"Courses"
   return (
@@ -52,7 +60,6 @@ export const StudentList = (props) => {
             setSelectedClass(evt)
             sessionStorage.setItem('currentClass', evt)
             loadStudents(evt)
-            scoreAverages()
           }}
         >
           {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
