@@ -14,13 +14,28 @@ h2#login {
 }
 form#login label {
     margin-top:20px;
+    position: relative;
+    
 
 }
 form#login button[type="submit"] {
+    height: 100%;
     margin-top:30px;
     margin-bottom:10px;
     background-color: #00808C;
     border-color: #00808C;
     border-radius: 40px;
     width:100%;  
+}
+
+span#show-hide-psw {
+    overflow:hidden;
+    align-items: center;
+    display:inline-block;
+    outline:none;
+    border: hidden;
+    cursor: pointer;
+    position: absolute;
+    right:0;
+    
 }
