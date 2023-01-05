@@ -9,6 +9,8 @@ import swal from 'sweetalert';
 export const AddStudentModal = () => {
     const URL = "http://localhost:8000"
 
+    //Creates a state to add all new students to
+    //This state gets sent in the fetch to be added to the database
     const [students, setStudents] = useState([])
 
     //Handles the opening and closing of the modal to add students
