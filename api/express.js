@@ -200,6 +200,27 @@ app.post(`/api/learn/grades-update`, (req, res) => {
         .catch(error => res.status(404).send(error))
 })
 
+//Route that updates the student teamwork skills table 
+app.post(`/api/weekly-update/tech-skills`, (req, res) => {
+    const students = req.body.students
+    let record_date = new Date().toISOString()
+    let values = []
+    students.forEach((student) => values.push([student.student_id, student.score, record_date]))
+    pool.query(format('INSERT INTO student_tech_skills (student_id, score, record_date) VALUES %L', values), [])
+    .then(result => res.status(200).send(result.rows))
+    .catch(error => res.status(404).send(error))
+})
+
+//Route updates the student teamwork skills table
+app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
+    const students = req.body.students
+    let record_date = new Date().toISOString()
+    let values = []
+    students.forEach((student) => values.push([student.student_id, student.score, record_date]))
+    pool.query(format('INSERT INTO student_teamwork_skills (student_id, score, record_date) VALUES %L', values), [])
+    .then(result => res.status(200).send(result.rows)) 
+    .catch(error => res.status(404).send(error))
+})
 
 //Creates a route to insert multiple students into a course
 //Uses pg-format to do a mass insert with multiple values

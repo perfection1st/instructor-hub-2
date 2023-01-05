@@ -31,17 +31,19 @@ export const ModalList = (props) => {
             if (selectedStudents === []) {
                 let obj = {
                     student_id: e.target.id,
-                    name: e.target.value
+                    name: e.target.value,
+                    techAptitude: 4,
+                    teamAptitude: 4
                 }
                 setSelectedStudents(obj)
-                console.log(selectedStudents)
             } else {
                 let obj = {
                     student_id: e.target.id,
-                    name: e.target.value
+                    name: e.target.value,
+                    techAptitude: 4,
+                    teamAptitude: 4
                 }
                 setSelectedStudents([...selectedStudents, obj])
-                console.log(selectedStudents)
             }
         }
     }

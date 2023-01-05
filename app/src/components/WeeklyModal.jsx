@@ -13,6 +13,19 @@ export const WeeklyModal = (props) => {
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   // state for Weekly grading modal displaying/not displaying
   const [showWeeklyGradingModal, setShowWeeklyGradingModal] = useState(false);
+
+  const handleDropdownChange = (student_id, type, value) => {
+    setSelectedStudents(prevStudents => prevStudents.map(student => {
+      if (student.student_id === student_id) {
+        return {
+          ...student,
+          [type]: parseInt(value),
+        };
+      }
+      return student;
+    }));
+  };
+
   
   /////////////////// WEEKLY MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close weekly modal function
@@ -54,7 +67,49 @@ export const WeeklyModal = (props) => {
 
   // submit the data to the database
   const handleSubmitButton = () => {
-    //need to put fetch to the database here
+
+    //sends a fetch call to update tech skills for all selected students
+    fetch(`http://localhost:8000/api/weekly-update/tech-skills`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        students: selectedStudents.map(student => ({
+          student_id: student.student_id,
+          score: student.techAptitude
+        }))
+      })
+    })
+    .then(result => result.json())
+    .then(data => {
+        console.log("tech scores posted successfully")        
+    })
+    .catch(error => {
+      console.log(error)
+    })
+
+    //sends a fetch call to update tech skills for all selected students
+    fetch(`http://localhost:8000/api/weekly-update/teamwork-skills`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        students: selectedStudents.map(student => ({
+          student_id: student.student_id,
+          score: student.teamAptitude
+        }))
+      })
+    })
+    .then(result => result.json())
+    .then(data => {
+        console.log("team scores posted successfully")        
+    })
+    .catch(error => {
+      console.log(error)
+    })
+
     handleCloseWeeklyGradingModal()
   }
 
@@ -93,21 +148,29 @@ export const WeeklyModal = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>Weekly Grades</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body>          
           <div id='weekly-grade-input'>
             <ul id='weekly-selected-students'>
               {/* students displayed will be conditional based off students selected from previous modal */}
-              {selectedStudents.map(students => <li key={students.student_id} value={students.student_id}>
-                {students.name}
+              {selectedStudents.map(student => <li key={student.student_id} value={student.student_id}>
+                {student.name}
                 {/* adds a space between the name and dropdown */}
                 <>  </>
-                <select className='tech-aptitude'>
+                <select
+                  className='tech-aptitude'
+                  value={student.techAptitude}
+                  onChange={e => handleDropdownChange(student.student_id, 'techAptitude', e.target.value)}
+                >
                   <option value="1">Tech 1</option>
                   <option value="2">Tech 2</option>
                   <option value="3">Tech 3</option>
                   <option value="4">Tech 4</option>
                 </select>
-                <select className='team-aptitude'>
+                <select
+                  className='team-aptitude'
+                  value={student.teamAptitude}
+                  onChange={e => handleDropdownChange(student.student_id, 'teamAptitude', e.target.value)}
+                >
                   <option value="1">Team 1</option>
                   <option value="2">Team 2</option>
                   <option value="3">Team 3</option>
