@@ -8,7 +8,7 @@ import swal from 'sweetalert';
 export const WeeklyModal = (props) => {
   //State of all users courses
   const { courses, setCourses, selectedStudents, setSelectedStudents } = props
-  
+
   // state for weekly modal displaying/not displaying
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   // state for Weekly grading modal displaying/not displaying
@@ -26,7 +26,7 @@ export const WeeklyModal = (props) => {
     }));
   };
 
-  
+
   /////////////////// WEEKLY MODAL OPEN AND CLOSE FUNCTIONS ///////////////////
   // close weekly modal function
   const handleCloseWeeklyModal = () => {
@@ -77,17 +77,17 @@ export const WeeklyModal = (props) => {
       body: JSON.stringify({
         students: selectedStudents.map(student => ({
           student_id: student.student_id,
-          score: student.techAptitude
+          score: student.techAptitude * 25
         }))
       })
     })
-    .then(result => result.json())
-    .then(data => {
-        console.log("tech scores posted successfully")        
-    })
-    .catch(error => {
-      console.log(error)
-    })
+      .then(result => result.json())
+      .then(data => {
+        console.log("tech scores posted successfully")
+      })
+      .catch(error => {
+        console.log(error)
+      })
 
     //sends a fetch call to update tech skills for all selected students
     fetch(`http://localhost:8000/api/weekly-update/teamwork-skills`, {
@@ -98,17 +98,17 @@ export const WeeklyModal = (props) => {
       body: JSON.stringify({
         students: selectedStudents.map(student => ({
           student_id: student.student_id,
-          score: student.teamAptitude
+          score: student.teamAptitude * 25
         }))
       })
     })
-    .then(result => result.json())
-    .then(data => {
-        console.log("team scores posted successfully")        
-    })
-    .catch(error => {
-      console.log(error)
-    })
+      .then(result => result.json())
+      .then(data => {
+        console.log("team scores posted successfully")
+      })
+      .catch(error => {
+        console.log(error)
+      })
 
     handleCloseWeeklyGradingModal()
   }
@@ -137,7 +137,7 @@ export const WeeklyModal = (props) => {
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={ handleNextModal }>
+          <Button variant="primary" onClick={handleNextModal}>
             Next
           </Button>
         </Modal.Footer>
@@ -148,7 +148,7 @@ export const WeeklyModal = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>Weekly Grades</Modal.Title>
         </Modal.Header>
-        <Modal.Body>          
+        <Modal.Body>
           <div id='weekly-grade-input'>
             <ul id='weekly-selected-students'>
               {/* students displayed will be conditional based off students selected from previous modal */}
@@ -181,10 +181,10 @@ export const WeeklyModal = (props) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={ handleBackButton }>
+          <Button variant="secondary" onClick={handleBackButton}>
             Back
           </Button>
-          <Button variant="primary" onClick={ handleSubmitButton }>
+          <Button variant="primary" onClick={handleSubmitButton}>
             Submit ✓
           </Button>
         </Modal.Footer>
