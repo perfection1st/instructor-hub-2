@@ -20,25 +20,27 @@ export const AddStudentModal = () => {
     const firstNameRef = useRef()
     const lastNameRef = useRef()
     const githubUserRef = useRef()
-
-    useEffect(() => {
-        console.log(students)
-    }, ['useEffect students:', students])
  
+    //Creates a function that submits a fetch call to add the students to the database
+    //Takes place when the submit button is hit
     function submitStudents(){
+        //Gets all of the information to send in the fetch
         let cohort = sessionStorage.getItem('currentClass')
         let firstName = firstNameRef.current.value;
         let lastName = lastNameRef.current.value;
         let githubUser = githubUserRef.current.value;
-        console.log(firstName, lastName, githubUser)
+        //Checks to see if a class is selected, if it isn't sends a warning
         if (!cohort){
             swal('Please select a class to add students')
+            //Ensures that all students are added to the array, if anything is in the input box it doesn't send
         } else if ( firstName !== '' && lastName !== '' && githubUser !== ''){
             swal('Must finish adding student to submit')
+            //Will not send if there is nothing in the students array
         } else if (students.length <= 0){
             swal('No students to add')
         } else {
-            console.log(students)
+            //Sends the student array, it is an array of objects
+            //The route is set up to handle the array and do a mass query
             fetch(`${URL}/api/create/students`, {
                 method: 'POST',
                 headers: {
@@ -49,7 +51,9 @@ export const AddStudentModal = () => {
                 })
             })
             .then(result => result.json())
-            .then((data) => {
+            //Gets the data back and lets the user know the students were added
+            //Then it clears out the array and closes the modal for the next input
+            .then(() => {
                 swal('Students added!')
                 setStudents([])    
                 closeModal()
@@ -57,17 +61,25 @@ export const AddStudentModal = () => {
         }
     }
 
+    //Function to add the input students into the array to be sent as a fetch
+    //Called when the add another student button is clicked
     function addStudents(){
         let firstName = firstNameRef.current.value;
         let lastName = lastNameRef.current.value;
         let githubUser = githubUserRef.current.value;
+        //Makes sure that all sections are filled out before adding to the state
         if(firstName == '' || lastName == '' || githubUser == ''){
             swal('Please fill out all fields')
         } else {
+            //Once all inputs are filled out and the button is clicked it adds all the info to the students state
+            //The state takes all the prior inputs then adds the new one to the end
+            //After doing that it clears out the input boxes
             setStudents([...students, {"name": `${firstName} ${lastName}`, "cohort_name": sessionStorage.getItem('currentClass'), "github": `${githubUser}`}])
             clearInput()    
         }
     }
+    //Called when add another student button is clicked and the student is added to the list
+    //Once the new student is added it clears out the input fields
     function clearInput() {
         firstNameRef.current.value = '';
         lastNameRef.current.value = '';
