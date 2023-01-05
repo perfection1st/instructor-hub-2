@@ -17,7 +17,7 @@ export const StudentAverages = (props) => {
     labels: ['Learn Avg', 'Teamwork Avg', 'Tech Avg'],
     datasets: [{
       label: 'Cohort Avg',
-      data: [learnAvg / students.length, teamworkAvg / students.length, techAvg / students.length],
+      data: [Math.floor(learnAvg / students.length), Math.floor(teamworkAvg / students.length), Math.floor(techAvg / students.length)],
       backgroundColor: [
         'rgb(237, 119, 28, 0.4)',
         'rgba(54, 162, 235, 0.4)',
