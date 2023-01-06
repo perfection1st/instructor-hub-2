@@ -33,7 +33,8 @@ export const ModalList = (props) => {
                     student_id: e.target.id,
                     name: e.target.value,
                     techAptitude: 4,
-                    teamAptitude: 4
+                    teamAptitude: 4,
+                    learnGrade: 100
                 }
                 setSelectedStudents(obj)
             } else {
@@ -41,7 +42,8 @@ export const ModalList = (props) => {
                     student_id: e.target.id,
                     name: e.target.value,
                     techAptitude: 4,
-                    teamAptitude: 4
+                    teamAptitude: 4,
+                    learnGrade: 100
                 }
                 setSelectedStudents([...selectedStudents, obj])
             }
@@ -51,6 +53,7 @@ export const ModalList = (props) => {
         <>
             {/* Checks to see if the students are present in selectedStudent state
             if they are it keeps the check in the box even if modal is closed */}
+            <ul id="project-student-list">
             {studentsState
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((student) => {
@@ -77,6 +80,7 @@ export const ModalList = (props) => {
                             </li>
                     );
                 })}
+            </ul>
         </>
     )
 }

@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import swal from 'sweetalert';
+import Form from 'react-bootstrap/Form';
 
 export const AddStudentModal = () => {
     const URL = "http://localhost:8000"
@@ -91,15 +92,17 @@ export const AddStudentModal = () => {
         <>
             <Dropdown.Item id="btn-create-cohort" onClick={() => openModal()}><BsFillPersonPlusFill />  Add Students </Dropdown.Item>
 
-            <Modal id="add-student-modal" size="lg" centered show={showModal} onHide={closeModal}>
+            <Modal id="add-student-modal" size="md" centered show={showModal} onHide={closeModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add Students - {sessionStorage.getItem('currentClass') ? 'Adding To ' + sessionStorage.getItem('currentClass') : 'No Cohort Selected'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    First Name: <input ref={firstNameRef} type="text" name="firstName" />
-                    Last Name:  <input ref={lastNameRef} type="text" name="lastName" />
-                    Github:  <input ref={githubUserRef} type="text" name="github" />
-                    <></>
+                    <Form>
+                    <Form.Label>First Name:</Form.Label> <Form.Control ref={firstNameRef} type="text" name="firstName" />
+                        <Form.Label>Last Name:</Form.Label>  <Form.Control ref={lastNameRef} type="text" name="lastName" />
+                        <Form.Label>Github:</Form.Label>  <Form.Control ref={githubUserRef} type="text" name="github" />
+
+                    </Form>
                     <ul>
                         Adding these students:
                         {students.length > 0 ? students.map(student => <li key={student.github}>Name: {student.name} Github: {student.github}</li>) : <li>No current students</li>}
@@ -109,7 +112,7 @@ export const AddStudentModal = () => {
                     <Button variant="secondary" onClick={() =>  {
                         addStudents()
                         }}>
-                        Add Another Student
+                        Add Student
                     </Button>
                     <Button variant="primary" onClick={() =>  {
                         submitStudents()

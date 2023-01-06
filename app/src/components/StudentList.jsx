@@ -99,7 +99,7 @@ export const StudentList = (props) => {
         >
           {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
 
-        </DropdownButton><GenerateGroupsModal students={students} />
+        </DropdownButton>
       </div>
       <div id="student-list-container">
         <div id="student-table-container">
@@ -142,6 +142,7 @@ export const StudentList = (props) => {
         </div>
         <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} />
         <StudentInfoModal grades={grades} learnGrades={learnGrades} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
+        <GenerateGroupsModal students={students} />
       </div>
     </>
   );
