@@ -30,3 +30,6 @@ form#login button[type="submit"] {
 .password-input-group {
     margin:0;
 }
+#login-container p {
+    text-align:center;
+}

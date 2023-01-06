@@ -105,14 +105,13 @@ div#select-cohort {
   margin-top: 25px;
 }
 
-div#select-cohort button {
+div#select-cohort button, #generate-group-btn {
   background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
   border: 1px solid #ffba8c;
   outline: 1px solid #CB6928;
   color: #000;
   text-shadow: 0px 1px 0px #ffba8c;
 }
-
 /******************
   STUDENT-LIST
 *******************/
@@ -197,26 +196,45 @@ div.select-one {
   Modal Lists
 *******************/
 
-ul#weekly-student-list {
+ul#weekly-student-list, ul#project-student-list {
   list-style: none;
-  padding: 0;
+  padding:0;
 }
-
+ul#weekly-student-list li, ul#project-student-list li, ul.student-group li  {
+  padding:5px 0 5px 0;
+}
+ul#weekly-student-list li:nth-child(odd), ul#project-student-list li:nth-child(odd), ul.student-group li:nth-child(odd) {
+  background-color:#fafafa;
+}
+ul#weekly-student-list li input, ul#project-student-list li input {
+  margin-right:5px;
+}
 ul#assessment-student-list {
   list-style: none;
   padding: 0;
 }
-
 ul#project-student-list {
   list-style: none;
   padding: 0;
 }
-
-#input-container {
-  display: flex;
-  width: fit-content;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
+select#project-selector, select#assessment-selector {
+  margin-bottom:20px;
+}
+ul.student-group {
+  margin:10px 0 0 0;
+  padding:0 0 0 10px;
+  list-style-type:none;
+}
+h4.student-group-heading {
+  font-size:20px;
+  margin-top:15px;
+}
+#copy-tooltip {
+  z-index:999;
+}
+.tooltip { z-index: 1151 !important; }
+button#copy-groups-btn {
+  background-color:#fff;
+  color:#000;
+  border:0;
 }

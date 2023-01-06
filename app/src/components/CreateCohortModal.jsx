@@ -7,6 +7,7 @@ import { BsFileEarmarkCodeFill } from "react-icons/bs";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import swal from 'sweetalert';
+import Form from 'react-bootstrap/Form';
 
 export const CreateCohortModal = () => {
   // backend url 
@@ -67,9 +68,10 @@ export const CreateCohortModal = () => {
           <Modal.Title>Create Cohort</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div id="input-container">
-            Cohort Name: <input ref={cohortNameRef} type="text" name="cohortName" />
-            Instructor Name:  <input ref={instructorNameRef} type="text" name="instructorName" />
+        <Form>
+          <Form.Group>
+          <Form.Label>Cohort Name:</Form.Label> <Form.Control ref={cohortNameRef} type="text" name="cohortName" />
+          <Form.Label>Instructor Name:</Form.Label>  <Form.Control ref={instructorNameRef} type="text" name="instructorName" />
             Start Date: <DatePicker
               selected={beginDate}
               onChange={date => setBeginDate(date)}
@@ -78,7 +80,8 @@ export const CreateCohortModal = () => {
               selected={endDate}
               onChange={date => setEndDate(date)}
             />
-          </div>
+          </Form.Group>
+          </Form>
             
         </Modal.Body>
         <Modal.Footer>
