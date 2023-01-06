@@ -76,7 +76,7 @@ export const GenerateGroupsModal = (props) => {
           const text = studentGroupsRef.current.innerText;
           navigator.clipboard.writeText(text).then(
             function() {
-              console.log("Text copied to clipboard successfully!");
+              swal("Copied to clipboard");
             },
             function(err) {
               console.error("Failed to copy text: ", err);

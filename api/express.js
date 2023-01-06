@@ -42,7 +42,7 @@ app.get('/api/cohorts', (req, res) => {
 //Route to select students from cohort//
 app.get('/api/students/:cohort', (req, res) => {
     let cohortName = req.params.cohort
-    pool.query(`SELECT * FROM students WHERE cohort_name = $1`, [cohortName])
+    pool.query(`SELECT * FROM students WHERE cohort_name = $1 ORDER BY name ASC`, [cohortName])
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
 })
