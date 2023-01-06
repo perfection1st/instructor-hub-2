@@ -7,25 +7,18 @@ import Table from 'react-bootstrap/Table';
 
 export const StudentInfoModal = (props) => {
     // prop deconstruction for Student Info Modal displaying/not displaying
-    const { showStudentInfoModal, setShowStudentInfoModal, grades, learnGrades } = props
+    const { showStudentInfoModal, setShowStudentInfoModal, clickedStudent, grades, learnGrades } = props
     // close Student Info Modal function
     const handleCloseStudentInfoModal = () => setShowStudentInfoModal(false);
 
-    
-    useEffect(() => {
-
-        console.log('grades', grades)
-        console.log('learnGrades', learnGrades)
-    }, [grades])
 
     return(
-        <>
             <Modal id="student-info-modal" size="lg" centered show={showStudentInfoModal} onHide={handleCloseStudentInfoModal}>
                     <Modal.Header closeButton>
-                        <Modal.Title>{grades[0].name}</Modal.Title>
+                        <Modal.Title>{clickedStudent}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Table id="student-list" striped>
+                        <Table id="student-list" >
                             <thead>
                                 <tr>
                                     <th>Graded Content</th>
@@ -33,14 +26,14 @@ export const StudentInfoModal = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                                <th>Projects</th>
-                                <> </>
-                                {grades.map(test => <tr><td key={test.project_name}>{test.project_name}</td> <td key={test.project_id}>{test.project_passed ? 'Passed' : 'Failed'}</td></tr>)}
-                                <> </>
-                                <th>Assessments</th>
-                                <> </>
-                                {learnGrades.map(test => <tr><td key={test.assessment_name}>{test.assessment_name}</td><td key={test.assessment_id}>{test.assessment_grade}</td></tr>)}
+                                <tr>
+                                    <th>Projects</th>
+                                </tr>
+                                {grades.map(test => <tr key={test.project_grades_id}><td key={test.project_name}>{test.project_name}</td><td key={test.project_id}>{test.project_passed ? 'Passed' : 'Failed'}</td></tr>)}
+                                <tr>
+                                    <th>Assessments</th>
+                                </tr>
+                                {learnGrades.map(test => <tr key={test.learn_grade_id}><td key={test.assessment_name}>{test.assessment_name}</td><td key={test.assessment_id}>{test.assessment_grade}</td></tr>)}
                             </tbody>
                         </Table>
                     </Modal.Body>
@@ -50,6 +43,5 @@ export const StudentInfoModal = (props) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-        </>
     )
 }
