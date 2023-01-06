@@ -6,6 +6,7 @@ import { BsGrid3X2Gap } from 'react-icons/bs';
 import { IoIosCopy } from "react-icons/io";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import Form from 'react-bootstrap/Form';
 
 export const GenerateGroupsModal = (props) => {
     const { students } = props
@@ -91,14 +92,14 @@ export const GenerateGroupsModal = (props) => {
         <>
             <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><BsGrid3X2Gap /> Generate Groups</Button>
             {/* Generate Groups Modal */}
-            <Modal id="generate-group-modal" size="md" centered show={showGenerateGroupsModal} onHide={handleCloseGenerateGroupsModal}>
+            <Modal id="generate-group-modal" size="sm" centered show={showGenerateGroupsModal} onHide={handleCloseGenerateGroupsModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Generate Groups</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div id="input-container">
-                        Number of Groups: <input ref={numOfGroupRef} type="text" name="numOfGroups" />
-                    </div>
+                    <Form>
+                        <Form.Label>Number of Groups:</Form.Label> <Form.Control ref={numOfGroupRef} type="text" name="numOfGroups" />
+                    </Form>
 
                 </Modal.Body>
                 <Modal.Footer>
@@ -121,7 +122,7 @@ export const GenerateGroupsModal = (props) => {
         >
           <Button id="copy-groups-btn" className="btn-lg"><IoIosCopy id="copy-groups" onClick={copyToClipboard} /></Button>
         </OverlayTrigger>
-                    </Modal.Title>
+                </Modal.Title>
                 </Modal.Header>
                 <Modal.Body id="groups-modal-body" ref={studentGroupsRef}>
                     {groupArray.map((group, index) =>
