@@ -24,7 +24,7 @@ export const AssessmentModal = (props) => {
   const [currentLearnGrades, setCurrentLearnGrades] = useState([])
 
 
-  // this function sets the selected name and ID states for the selected assessment
+  // this function sets the currentSelectedAssessmentName and currentSelectedAssessmentID states for the selected assessment
   const handleSelectAssessment = (e) => {
     setCurrentSelectedAssessmentName(e.target.value);
     const selectedAssessment = allAssessmentNames.find(assessment => assessment.assessment_name === e.target.value);
@@ -121,6 +121,7 @@ export const AssessmentModal = (props) => {
     })
 
     // sends a fetch call to post learn grades for all selected students who do not already have grades in the database
+    // this will only fire the fetch call if the filteredStudentsWhoDoNotAlreadyHaveGrades variable has a value in it
     if(filteredStudentsWhoDoNotAlreadyHaveGrades.length > 0){
       fetch(`${URL}/api/application-update/learn-grades-post`, {
         method: 'POST',
@@ -137,7 +138,7 @@ export const AssessmentModal = (props) => {
       })
       .then(result => result.json())
       .then(data => {
-        console.log("learn grades posted successfully")        
+        swal("learn grades posted successfully")        
       })
       .catch(error => {
         console.log(error)
@@ -145,6 +146,7 @@ export const AssessmentModal = (props) => {
     }
 
     // sends a fetch call to update learn grades for all selected students who already have grades in the database
+    // this will only fire the fetch call if the filteredStudentsWhoAlreadyHaveGrades variable has a value in it
     if(filteredStudentsWhoAlreadyHaveGrades.length > 0){
       fetch(`${URL}/api/application-update/learn-grades-update`, {
         method: 'POST',
@@ -161,7 +163,7 @@ export const AssessmentModal = (props) => {
       })
       .then(result => result.json())
       .then(data => {
-        console.log("learn grades posted successfully")        
+        swal("learn grades posted successfully")        
       })
       .catch(error => {
         console.log(error)
@@ -190,8 +192,11 @@ export const AssessmentModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <select id="assessment-selector" name="assessments" onChange={(e) => handleSelectAssessment(e)}>
-            <option value="placeholder">-- Select Assessment --</option>
+            <option value="placeholder">{currentSelectedAssessmentName === "" ? "-- Select Assessment --" : currentSelectedAssessmentName}</option>
             {allAssessmentNames.map(names => {
+              if(currentSelectedAssessmentName === names.assessment_name){
+                return
+              }
               return <option key={names.assessment_id} value={names.assessment_name}>{names.assessment_name}</option>
             })}
           </select>
@@ -231,9 +236,7 @@ export const AssessmentModal = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleBackButton}>Back</Button>
-          <Button variant="primary" onClick={handleSubmitButton}>
-            Submit ✓
-          </Button>
+          <Button variant="primary" onClick={handleSubmitButton}>Submit ✓</Button>
         </Modal.Footer>
       </Modal>
     </>

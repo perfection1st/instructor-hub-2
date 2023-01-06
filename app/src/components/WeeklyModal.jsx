@@ -83,7 +83,7 @@ export const WeeklyModal = (props) => {
     })
       .then(result => result.json())
       .then(data => {
-        console.log("tech scores posted successfully")
+        swal("team / tech scores posted successfully")
       })
       .catch(error => {
         console.log(error)
@@ -104,7 +104,7 @@ export const WeeklyModal = (props) => {
     })
       .then(result => result.json())
       .then(data => {
-        console.log("team scores posted successfully")
+        swal("team / tech scores posted successfully")
       })
       .catch(error => {
         console.log(error)
