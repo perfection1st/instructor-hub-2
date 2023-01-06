@@ -200,6 +200,8 @@ app.post(`/api/learn/grades-update`, (req, res) => {
         .catch(error => res.status(404).send(error))
 })
 
+////////////////////////////////////////ROUTES FOR WEEKLY UPDATE MODAL////////////////////////////////////////
+
 //Route that updates the student_teamwork_skills table with the tech scores for a group of students
 app.post(`/api/weekly-update/tech-skills`, (req, res) => {
     const students = req.body.students
@@ -221,6 +223,8 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
     .then(result => res.status(200).send(result.rows)) 
     .catch(error => res.status(404).send(error))
 })
+
+////////////////////////////////////////ROUTES FOR ASSESSMENT MODAL////////////////////////////////////////
 
 //Route posts the learn_grades table with the assessment grades for a group of students
 app.post(`/api/application-update/learn-grades-post`, (req, res) => {
@@ -249,6 +253,42 @@ app.post(`/api/application-update/learn-grades-update`, (req, res) => {
 //Route selects all from learn_grades table
 app.get(`/api/learn-grades`, (req, res) => {
     pool.query(`SELECT * FROM learn_grades;`)
+    .then(result => res.status(200).send(result.rows)) 
+    .catch(error => res.status(404).send(error))
+})
+
+////////////////////////////////////////ROUTES FOR PROJECT MODAL////////////////////////////////////////
+
+//Route posts the project_grades table with the project grades for a group of students
+app.post(`/api/application-update/project-grades-post`, (req, res) => {
+    const students = req.body.students
+    let values = []
+    students.forEach((student) => values.push([student.student_id, student.project_id, student.project_passed]))
+    pool.query(format('INSERT INTO project_grades (student_id, project_id, project_passed) VALUES %L', values), [])
+    .then(result => res.status(200).send(result.rows)) 
+    .catch(error => res.status(404).send(error))
+})
+
+//Route updates the project_grades table with the project grades for a group of students
+app.post(`/api/application-update/project-grades-update`, (req, res) => {
+    const students = req.body.students
+    const promises = students.map(student => {
+        const studentId = student.student_id
+        const projectId = student.project_id
+        const projectPassed = student.project_passed
+        return pool.query(format(`UPDATE project_grades SET project_passed = %L WHERE student_id = %s AND project_id = %s;`, projectPassed, studentId, projectId)) 
+      })
+      Promise.all(promises)
+    .then(result => res.status(200).send(result)) 
+    .catch(error => {
+        res.status(404).send(error)
+        console.log(error)
+    })
+})
+
+//Route selects all from the project)grades table
+app.get(`/api/project-grades`, (req, res) => {
+    pool.query(`SELECT * FROM project_grades;`)
     .then(result => res.status(200).send(result.rows)) 
     .catch(error => res.status(404).send(error))
 })

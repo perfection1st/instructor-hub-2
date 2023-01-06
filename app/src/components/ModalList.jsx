@@ -34,7 +34,8 @@ export const ModalList = (props) => {
                     name: e.target.value,
                     techAptitude: 4,
                     teamAptitude: 4,
-                    learnGrade: 100
+                    learnGrade: 100,
+                    projectGrade: "Pass"
                 }
                 setSelectedStudents(obj)
             } else {
@@ -43,7 +44,8 @@ export const ModalList = (props) => {
                     name: e.target.value,
                     techAptitude: 4,
                     teamAptitude: 4,
-                    learnGrade: 100
+                    learnGrade: 100,
+                    projectGrade: "Pass"
                 }
                 setSelectedStudents([...selectedStudents, obj])
             }
