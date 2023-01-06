@@ -58,8 +58,10 @@ export const Register = () => {
     //Ensures all fields are filled out
     if (inputPassword.length < 8 || inputPassword.length > 12){
       swal('Password must be between 8 - 12 characters')
+      setIsLoading(false)
     } else if(!inputUsername || !inputPassword){
       swal('Please fill out all boxes')
+      setIsLoading(false)
     } else {
       //Sends users information to create account
       fetch(`${URL}/create/user`, {
