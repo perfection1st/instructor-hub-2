@@ -29,7 +29,8 @@ export const StudentList = (props) => {
   const [showStudentInfoModal, setShowStudentInfoModal] = useState(false);
 
   // open Student Info Modal function
-  const handleShowStudentInfoModal = (studentId) => {
+  const handleShowStudentInfoModal = (name) => {
+    setClickedStudent(name)
     setShowStudentInfoModal(true)
     };
   // state for current student clicked
@@ -40,7 +41,8 @@ export const StudentList = (props) => {
   const [learnGrades, setLearnGrades] = useState([])
 
   const url = "http://localhost:8000"
-
+  
+  //Does a fetch to get the students
   function loadStudents(evt) {
     console.log(evt)
     fetch(`${URL}/students/${evt}`)
@@ -49,6 +51,7 @@ export const StudentList = (props) => {
     console.log(students)
   }
 
+  //Does a fetch to get all of the students scores from the current class
   useEffect(() => {
     let currentClass = sessionStorage.getItem('currentClass')
     fetch(`http://localhost:8000/api/students/${currentClass}`)
@@ -115,10 +118,11 @@ export const StudentList = (props) => {
             <tbody>
               {students.map(student =>
                 <tr key={student.student_id} >
-                  <td value={student.student_id} onClick={() => {
+                  <td value={student.student_id} onClick={(e) => {
                     getLearnGrades(student.student_id)
                     getGrades(student.student_id)
-                    handleShowStudentInfoModal(student.student_id) }}>{student.name}</td>
+                    handleShowStudentInfoModal(student.name) 
+                   }}>{student.name}</td>
                   <td>{student.github}</td>
                   <td className="student-average" width={'15%'}>
                     <ButtonGroup aria-label="Basic example">
@@ -141,8 +145,8 @@ export const StudentList = (props) => {
           </Table>
         </div>
         <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} />
-        <StudentInfoModal grades={grades} learnGrades={learnGrades} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
         <GenerateGroupsModal students={students} />
+        <StudentInfoModal grades={grades} learnGrades={learnGrades} clickedStudent={clickedStudent} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
       </div>
     </>
   );
