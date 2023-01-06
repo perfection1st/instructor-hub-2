@@ -9,6 +9,7 @@ import Badge from 'react-bootstrap/Badge';
 import { useState, useEffect, Suspense } from 'react';
 import Form from 'react-bootstrap/Form';
 import { GenerateGroupsModal } from './GenerateGroupsModal' 
+import { StudentInfoModal } from './StudentInfoModal'
 
 
 export const StudentList = (props) => {
@@ -24,6 +25,21 @@ export const StudentList = (props) => {
   const [learnAvg, setLearnAvg] = useState(0)
   const [teamworkAvg, setTeamworkAvg] = useState(0)
   const [techAvg, setTechAvg] = useState(0)
+  // state for Student Info Modal displaying/not displaying
+  const [showStudentInfoModal, setShowStudentInfoModal] = useState(false);
+
+  // open Student Info Modal function
+  const handleShowStudentInfoModal = (studentId) => {
+    setShowStudentInfoModal(true)
+    };
+  // state for current student clicked
+  const [clickedStudent, setClickedStudent] = useState();
+  // useState for assessment grades and project grades
+  const [grades, setGrades] = useState([])
+  // useState for learn grades
+  const [learnGrades, setLearnGrades] = useState([])
+
+  const url = "http://localhost:8000"
 
   function loadStudents(evt) {
     console.log(evt)
@@ -46,6 +62,23 @@ export const StudentList = (props) => {
         setTechAvg(students.map(student => student.tech_avg).reduce((acc, score) => acc + score, 0))
       })
   }, [courses])
+  function getGrades(id) {
+    console.log(id)
+    // fetch for assessment and project grades.
+        fetch(`${url}/api/student/scores/${id}`)
+            .then(result => result.json())
+            .then(data => setGrades(data))
+            // .then(fetch(`${url}/api/student/learn/scores/${id}`)
+            //         .then(result => result.json())
+            //         .then(data => setGrades(data)))
+          }
+  function getLearnGrades(id){
+    console.log(id)
+    // fetch for assessment and project grades.
+        fetch(`${url}/api/student/learn/scores/${id}`)
+            .then(result => result.json())
+            .then(data => setLearnGrades(data))
+    }
 
   //"Courses"
   return (
@@ -81,8 +114,11 @@ export const StudentList = (props) => {
             </thead>
             <tbody>
               {students.map(student =>
-                <tr key={student.student_id}>
-                  <td >{student.name}</td>
+                <tr key={student.student_id} >
+                  <td value={student.student_id} onClick={() => {
+                    getLearnGrades(student.student_id)
+                    getGrades(student.student_id)
+                    handleShowStudentInfoModal(student.student_id) }}>{student.name}</td>
                   <td>{student.github}</td>
                   <td className="student-average" width={'15%'}>
                     <ButtonGroup aria-label="Basic example">
@@ -105,6 +141,7 @@ export const StudentList = (props) => {
           </Table>
         </div>
         <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} />
+        <StudentInfoModal grades={grades} learnGrades={learnGrades} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
         <GenerateGroupsModal students={students} />
       </div>
     </>
