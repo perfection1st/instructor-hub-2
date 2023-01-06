@@ -265,36 +265,6 @@ app.post('/api/create/students', (req, res) => {
         .catch(error => res.send(error))
 })
 
-app.get('/api/student/scores/:id', (req, res) => {
-    let studentId = req.params.id
-    pool.query(`SELECT *
-                FROM students
-                RIGHT JOIN project_grades
-                ON students.student_id = project_grades.student_id 
-                AND students.student_id=$1
-                JOIN projects
-                ON project_grades.project_id = projects.project_id`, [studentId])
-      .then(result => res.status(200).send(result.rows))
-      .catch(error => {
-        console.log(error)
-        res.status(404).send(error)
-      })
-  })
-
-  app.get('/api/student/learn/scores/:id', (req, res) => {
-    let studentId = req.params.id
-    pool.query(`SELECT *
-                FROM learn_grades
-                RIGHT JOIN learn
-                ON learn_grades.assessment_id=learn.assessment_id
-                WHERE learn_grades.student_id=$1`, [studentId])
-      .then(result => res.status(200).send(result.rows))
-      .catch(error => {
-        console.log(error)
-        res.status(404).send(error)
-      })
-  })
-
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
 });
