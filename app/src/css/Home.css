@@ -238,3 +238,7 @@ button#copy-groups-btn {
   color:#000;
   border:0;
 }
+#student-name:hover{
+  cursor: pointer;
+  background-color:#fff;
+}

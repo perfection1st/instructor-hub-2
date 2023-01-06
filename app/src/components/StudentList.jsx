@@ -118,7 +118,7 @@ export const StudentList = (props) => {
             <tbody>
               {students.map(student =>
                 <tr key={student.student_id} >
-                  <td value={student.student_id} onClick={(e) => {
+                  <td id="student-name" value={student.student_id} onClick={(e) => {
                     getLearnGrades(student.student_id)
                     getGrades(student.student_id)
                     handleShowStudentInfoModal(student.name) 
