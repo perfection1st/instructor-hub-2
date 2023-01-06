@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 const URL = 'http://localhost:8000/api'
 
@@ -95,21 +96,19 @@ export const Register = () => {
   return(
     <>
     <div id="register-container">
-
       <h1 id="register-logo">GALVANIZE</h1>
       <h2 id="register"> Register </h2>
       <Form id="form-register">
         <Form.Group>
-        <Form.Label>Username</Form.Label>
-        <Form.Control ref={usernameRef} type={'text'} placeholder="type username here" required />
-        
-        <Form.Label>Password</Form.Label>
-        <div className='password-container'>
-        <span className="show-hide-psw" onClick={handleToggle}><Icon icon={icon} size={22}/></span>
-        <Form.Control ref={passwordRef} type={type} placeholder="type password here" minLength={8} required />
-        </div>
+          <Form.Label>Username</Form.Label>
+          <Form.Control ref={usernameRef} type={'text'} placeholder="type username here" required />
+          <Form.Label>Password</Form.Label>
+        <InputGroup className="pw-input-group">
+          <Form.Control ref={passwordRef} type={type} placeholder="type password here" minLength={8} required />
+          <InputGroup.Text><span className="show-hide-psw" title="Show/Hide Password" onClick={handleToggle}><Icon icon={icon} size={22}/></span></InputGroup.Text>
+        </InputGroup>
+
         <Form.Label id="password-icon">Confirm Password</Form.Label>
-        <span className="show-hide-psw-confirm" onClick={handleToggle}><Icon icon={icon} size={22}/></span>
         <Form.Control ref={confirmPasswordRef} type={type} placeholder="confirm password here" minLength={8} required />
         
 

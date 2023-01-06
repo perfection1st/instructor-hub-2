@@ -10,6 +10,7 @@ import '../images/galvanize-logo.svg';
 import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 
 
@@ -128,11 +129,11 @@ export const Login = (props) => {
           <Form.Group>
             <Form.Label>Username:</Form.Label>
             <Form.Control ref={usernameRef} type="text" placeholder="type username here" required />
-            <div>
             <Form.Label>Password:</Form.Label>
-            <Form.Control ref={passwordRef} type={type} placeholder="type password here" minLength={8} required />
-            <span id="show-hide-psw" onClick={handleToggle}><Icon icon={icon} size={20}/></span>
-            </div>
+            <InputGroup className="pw-input-group">
+              <Form.Control ref={passwordRef} type={type} placeholder="type password here" minLength={8} required />
+              <InputGroup.Text><span id="show-hide-psw" onClick={handleToggle}><Icon icon={icon} size={20}/></span></InputGroup.Text>
+            </InputGroup>
             {/* Checks to see if button was pressed, if it was it shows a spinner */}
             { isLoading === true ?
               <Button type='submit' disabled value="Sign In">

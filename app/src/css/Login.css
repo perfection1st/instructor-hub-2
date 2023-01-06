@@ -27,15 +27,6 @@ form#login button[type="submit"] {
     border-radius: 40px;
     width:100%;  
 }
-
-span#show-hide-psw {
-    overflow:hidden;
-    align-items: center;
-    display:inline-block;
-    outline:none;
-    border: hidden;
-    cursor: pointer;
-    position: absolute;
-    right:0;
-    
+.password-input-group {
+    margin:0;
 }
