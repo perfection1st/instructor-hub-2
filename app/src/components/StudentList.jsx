@@ -65,19 +65,15 @@ export const StudentList = (props) => {
         setTechAvg(students.map(student => student.tech_avg).reduce((acc, score) => acc + score, 0))
       })
   }, [courses])
+
+  //Does a fetch when student is clicked to get their grades from projects
   function getGrades(id) {
-    console.log(id)
-    // fetch for assessment and project grades.
         fetch(`${url}/api/student/scores/${id}`)
             .then(result => result.json())
             .then(data => setGrades(data))
-            // .then(fetch(`${url}/api/student/learn/scores/${id}`)
-            //         .then(result => result.json())
-            //         .then(data => setGrades(data)))
           }
+  //Does a fetch when student is clicked to get their grades from learn content
   function getLearnGrades(id){
-    console.log(id)
-    // fetch for assessment and project grades.
         fetch(`${url}/api/student/learn/scores/${id}`)
             .then(result => result.json())
             .then(data => setLearnGrades(data))
