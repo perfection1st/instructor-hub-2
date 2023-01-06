@@ -13,12 +13,10 @@ h2#register {
     color: rgb(89, 92, 105);
     text-align: center;
 }
-
 form#form-register label {
     margin-top:20px;
 
 }
-
 form#form-register button[type="submit"] {
     margin-top:30px;
     margin-bottom:10px;
@@ -27,24 +25,6 @@ form#form-register button[type="submit"] {
     border-radius: 40px;
     width:100%;  
 }
-
-span.show-hide-psw {
-    position:absolute;
-    cursor: pointer;
-    right:0;
-    
-
-}
-span.show-hide-psw-confirm{
-    position:absolute;
-    cursor: pointer;
-    justify-items:center;
-    right: 27em;
-    left: auto;
-    top: 41%;
-    transform: translateY(-40%);
-}
-
-.password-container {
-    width: 300px;
+.password-input-group {
+    margin:0;
 }
