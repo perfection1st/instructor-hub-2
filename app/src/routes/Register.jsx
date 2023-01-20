@@ -62,14 +62,14 @@ export const Register = () => {
       setIsLoading(false);
     } else {
       //Sends users information to create account
-      fetch(`${URL}/create/user`, {
+      fetch(`${URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           //TODO change to email
-          username: `${inputEmail}`,
+          email: `${inputEmail}`,
           password: `${inputPassword}`,
         }),
       })
@@ -78,8 +78,8 @@ export const Register = () => {
         //If result is false then username is already taken
         //If result is true the account was created
         .then((data) => {
-          if (data[0].result == "false") {
-            swal("Username Is Taken");
+          if (data.response == "Email already exists") {
+            swal("Email Is Taken");
           } else {
             swal("Account Created, you may now log in");
             setAccountCreated(true);

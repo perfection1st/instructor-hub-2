@@ -12,7 +12,7 @@ const saltRounds = 10;
 
 //Used to access jwt tools
 const jwt = require('jsonwebtoken');
-const { json } = require('express');
+//const { json } = require('express');
 
 //Creates random strings for tokens
 const Str = require('@supercharge/strings')
@@ -30,6 +30,136 @@ pool.connect();
 
 app.use(cors());
 app.use(express.json());
+
+
+
+// =====================================================================
+// -------------------------New Login Routes----------------------------
+// =====================================================================
+
+app.post('/api/login', (req, res) => {
+    //Gets email and password from request body
+    const email = req.body.email;
+    const password = req.body.password;
+    if(email === undefined || password === undefined){
+        res.send("No Email or password");
+        //next({status:401, message:"No password or username"});
+        return;
+    }
+
+    pool.query('SELECT * FROM users WHERE email = $1', [email])
+    .then(results=>{
+        //If there are no emails that match send Incorrect Email message
+        if(results.rows.length === 0){
+            res.send({response:"Incorrect Email"});
+        }else{
+            //creates user 
+            if(results.rows[0].password === password){
+                const user = {email:email, password:password, user_id:results.rows[0].user_id};
+                const accessToken = jwt.sign(user, process.env.TOKEN_SECRET);
+                res.json({user: user, accessToken: accessToken});
+            }else{
+                res.send({response:"Wrong password"});
+            }
+        }
+    })
+    .catch((err)=>console.log(err));
+});
+
+app.post('/api/register', (req, res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+    if(password === undefined || email === undefined){
+        res.send("No Email or Password");
+        //next({status:401, message:"No password or username"});
+        return;
+    }
+
+    pool.query('INSERT INTO users (email, password) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING RETURNING *', [email, password])
+    .then((results)=>{
+        if(results.rows.length === 0){
+            //If email exists
+            res.status(409).send({ response:"Email already exists" });
+        }else{
+            const user = {email:email, password:password, user_id:results.rows[0].user_id};
+                const accessToken = jwt.sign(user, process.env.TOKEN_SECRET);
+                res.json({user: user, accessToken: accessToken});
+        }
+    })
+    .catch((error)=>{
+        res.send(`Error:${JSON.stringify(error)}`);
+        //next({status:500, message:"Server Error 2"});
+        return;
+    });
+});
+
+
+
+
+
+
+
+
+// =====================================================================
+// ----------------------End of New Login Routes------------------------
+// =====================================================================
+
+
+
+
+
+
+//Route handler for user login
+// app.post('/api/login', (req, res) => {
+//     const user = req.body.username
+//     const password = req.body.password
+//     pool.query('SELECT * FROM users WHERE email = $1', [user])
+//     //Checks to see if the username matches stored username
+//     .then(data => {
+//         //If username doesn't match a stored username it sends back Incorrect Username
+//         if (data.rows.length === 0) {
+//             res.send([{ response: 'Incorrect Email' }])
+//         } else {
+//                 //If username matches it does a bcrypt compare to check if the password is correct
+//                 bcrypt.compare(password, data.rows[0].password, function (err, result) {
+//                     //If passowrd is correct it sends the users information
+//                     result == true ?
+//                     res.send([{ username: data.rows[0].email, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token }]) :
+//                     res.send([{ response: 'false' }])
+//                 })
+//             }
+//         })
+// })
+
+//Old Register
+// app.post('/api/create/user', (req, res) => {
+//     //Creates a random string with 25 different characters
+//     const random = Str.random(25)
+//     const user = req.body
+//     //Creates an account specific json web token using username and a random string
+//     //TODO change to email
+//     const accountToken = jwt.sign({ id: user.username }, random)
+//     //Creates a random string to be updated each time user signs in
+//     //First created token is a place holder
+//     const sessionToken = Str.random(30)
+//     //hashes the input password to be stored securely
+//     bcrypt.hash(user.password, saltRounds, (err, hash) => {
+//         //The password is hashed now and can be stored with the hash parameter
+//         //TODO change to email
+//         pool.query('INSERT INTO users (email, password, token, session_token) VALUES ($1, $2, $3, $4) ON CONFLICT (email) DO NOTHING RETURNING *',
+//             [user.username, hash, accountToken, sessionToken])
+//             //Checks to see what was returned
+//             //If a account already exists it sends back result.rows with a length of zero
+//             //If account was created it sends back the account info
+//             .then(result => {
+//                 result.rows.length === 0 ?
+//                     res.status(409).send([{ result: 'false' }]) : res.status(201).send([{ result: 'true' }])
+//             })
+//             .catch(error => res.status(400).send(error))
+//     })
+// })
+
+
 
 
 //Gets all the cohorts
@@ -86,54 +216,7 @@ app.patch('/api/default-cohort', (req, res) => {
 // })
 
 //Route to create a new user
-app.post('/api/create/user', (req, res) => {
-    //Creates a random string with 25 different characters
-    const random = Str.random(25)
-    const user = req.body
-    //Creates an account specific json web token using username and a random string
-    //TODO change to email
-    const accountToken = jwt.sign({ id: user.username }, random)
-    //Creates a random string to be updated each time user signs in
-    //First created token is a place holder
-    const sessionToken = Str.random(30)
-    //hashes the input password to be stored securely
-    bcrypt.hash(user.password, saltRounds, (err, hash) => {
-        //The password is hashed now and can be stored with the hash parameter
-        //TODO change to email
-        pool.query('INSERT INTO users (email, password, token, session_token) VALUES ($1, $2, $3, $4) ON CONFLICT (email) DO NOTHING RETURNING *',
-            [user.username, hash, accountToken, sessionToken])
-            //Checks to see what was returned
-            //If a account already exists it sends back result.rows with a length of zero
-            //If account was created it sends back the account info
-            .then(result => {
-                result.rows.length === 0 ?
-                    res.status(409).send([{ result: 'false' }]) : res.status(201).send([{ result: 'true' }])
-            })
-            .catch(error => res.status(400).send(error))
-    })
-})
 
-//Route handler for user login
-app.post('/api/login', (req, res) => {
-    const user = req.body.username
-    const password = req.body.password
-    pool.query('SELECT * FROM users WHERE email = $1', [user])
-        //Checks to see if the username matches stored username
-        .then(data => {
-            //If username doesn't match a stored username it sends back Incorrect Username
-            if (data.rows.length === 0) {
-                res.send([{ response: 'Incorrect Email' }])
-            } else {
-                //If username matches it does a bcrypt compare to check if the password is correct
-                bcrypt.compare(password, data.rows[0].password, function (err, result) {
-                    //If passowrd is correct it sends the users information
-                    result == true ?
-                        res.send([{ username: data.rows[0].email, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token }]) :
-                        res.send([{ response: 'false' }])
-                })
-            }
-        })
-})
 
 //Route to verify the user logging in
 app.post('/api/authent', (req, res) => {
@@ -152,28 +235,6 @@ app.post('/api/authent', (req, res) => {
         })
         .catch(error => res.status(404).send(error))
 })
-
-//Route to update users session token on login
-//Takes place after successful password authentication
-app.patch('/api/token', (req, res) => {
-    const user = req.body.username
-    //Creates a random string for the session token
-    const sessionToken = Str.random(30)
-    //Updates the current session token with the new one and returns new token
-    pool.query('UPDATE users SET session_token = $1 WHERE email = $2 RETURNING session_token', [sessionToken, user])
-        .then(result => res.status(200).send(result.rows))
-        .catch(error => res.status(404).send(error))
-})
-
-
-
-
-
-
-
-
-
-
 
 
 

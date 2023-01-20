@@ -60,7 +60,7 @@ export const Login = (props) => {
         },
         body: JSON.stringify({
           //TODO change to email
-          username: `${inputEmail}`,
+          email: `${inputEmail}`,
           password: `${inputPassword}`,
         }),
       })
@@ -72,18 +72,18 @@ export const Login = (props) => {
   //If the response is not the users information it gives an alert
   //If login was successful it sets session storage to users info
   function verifyLogin(data) {
-    let info = data[0];
+    let info = data;
     console.log(info);
-    if (info.response === "Incorrect Username") {
-      swal("Incorrect Username");
+    if (info.response === "Incorrect Email") {
+      swal("Incorrect Email");
       setIsLoading(false);
-    } else if (info.response === "false") {
+    } else if (info.response === "Wrong Password") {
       swal("Incorrect Password");
       setIsLoading(false);
     } else {
       //TODO change to email
-      sessionStorage.setItem("username", info.username);
-      sessionStorage.setItem("userToken", info.userToken);
+      sessionStorage.setItem("username", info.email);
+      sessionStorage.setItem("userToken", info.accessToken);
       info.cohort
         ? sessionStorage.setItem("defaultCohort", info.cohort)
         : console.log("no default");
@@ -93,27 +93,15 @@ export const Login = (props) => {
   //Creates a new session token on each log in
   //This token is verfied on the home page to ensure it is the correct user
   function setSessionToken() {
-    fetch(`${URL}/token`, {
-      method: "PATCH",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: sessionStorage.getItem("username"),
-      }),
-    })
-      .then((result) => result.json())
-      .then((data) => {
-        sessionStorage.setItem("sessionToken", data[0].session_token);
-      })
-      //Sets the loading state to false so button reappears
-      .then(setIsLoading(false))
-      //Sets loggin to true to redirect user to home page
-      //Uses in line function so session token has time to set
-      //Ran into a problem where this would run before token could place which caused a null token to be sent in home
-      //This fixes that bug
-      .then(() => setIsLoggedIn(true));
+    //sessionStorage.setItem("sessionToken", );
+
+    //Sets the loading state to false so button reappears
+    setIsLoading(false);
+    //Sets loggin to true to redirect user to home page
+    //Uses in line function so session token has time to set
+    //Ran into a problem where this would run before token could place which caused a null token to be sent in home
+    //This fixes that bug
+    setIsLoggedIn(true);
   }
   //if user is already logged in, they will be automatically navigated to the home page
   if (isLoggedIn) {
