@@ -49,6 +49,7 @@ export const Register = () => {
     //Checks to make sure the passwords match
     //If they don't it exits the function
     if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+      setIsLoading(false);
       return swal("Passwords don't match, please try again!");
     } else {
       inputPassword = passwordRef.current.value;
@@ -62,24 +63,23 @@ export const Register = () => {
       setIsLoading(false);
     } else {
       //Sends users information to create account
-      fetch(`${URL}/create/user`, {
+      fetch(`${URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           //TODO change to email
-          username: `${inputEmail}`,
+          email: `${inputEmail}`,
           password: `${inputPassword}`,
         }),
       })
         .then((result) => result.json())
-        //Checks to see the result sent from api
-        //If result is false then username is already taken
-        //If result is true the account was created
         .then((data) => {
-          if (data[0].result == "false") {
-            swal("Username Is Taken");
+          //Checks to see the result sent from api
+          if (data.response == "Email already exists") {
+            swal("Email Is Taken");
+            setIsLoading(false);
           } else {
             swal("Account Created, you may now log in");
             setAccountCreated(true);
