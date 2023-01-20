@@ -68,7 +68,7 @@ CREATE EXTENSION pgcrypto;
  ============================================================== */
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  username VARCHAR (50) UNIQUE,
+  email VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
   default_cohort TEXT,
   token VARCHAR(255),
