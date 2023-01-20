@@ -49,7 +49,7 @@ export const Login = (props) => {
     let inputPassword = passwordRef.current.value;
     //Checks to ensure both a username and password were input
     if (!inputEmail || !inputPassword) {
-      swal("Both username and Paswword are required");
+      swal("Both username and Password are required");
       setIsLoading(false);
     } else {
       //Sends a request to the login to verify username and password

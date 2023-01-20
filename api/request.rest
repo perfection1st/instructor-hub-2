@@ -9,7 +9,6 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8000/api/login
-
 Content-Type: application/json
 
 {
@@ -17,7 +16,7 @@ Content-Type: application/json
     "password":"password123"
 }
 
-
+###
 
 
 
@@ -32,29 +31,8 @@ Content-Type: application/json
 
 # templatesvvv
 
-GET http://localhost:8000/api/test
-
 ###
 
-POST http://localhost:3001/api/login
-Content-Type: application/json
-
-{
-    "username":"Gabe",
-    "password":"password123"
-}
-
-###
-
-POST http://localhost:3001/api/register
-Content-Type: application/json
-
-{
-    "username":"Taylor",
-    "password":"password123"
-}
-
-###
 
 GET http://localhost:3001/api/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkdhYmUiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwidXNlcl9pZCI6NSwiaWF0IjoxNjcwNjQxNDE5fQ.FZ1hmhv62myAOSB1g6bEI2J55ZbUHHhThYoy6lLrfIA

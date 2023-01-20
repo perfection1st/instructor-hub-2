@@ -55,9 +55,7 @@ CREATE EXTENSION pgcrypto;
   user_id SERIAL PRIMARY KEY,
   email VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
-  default_cohort TEXT,
-  token VARCHAR(255),
-  session_token VARCHAR(255)
+  default_cohort TEXT
 );
 
 CREATE TABLE cohorts (
