@@ -1,22 +1,40 @@
 -- Clean the slate
 DROP TABLE IF EXISTS students CASCADE;
+
 DROP TABLE IF EXISTS users CASCADE;
+
 DROP TABLE IF EXISTS cohorts CASCADE;
+
 DROP TABLE IF EXISTS coding_groups CASCADE;
+
 DROP TABLE IF EXISTS notes CASCADE;
+
 DROP TABLE IF EXISTS projects CASCADE;
+
 DROP TABLE IF EXISTS learn CASCADE;
+
 DROP TABLE IF EXISTS project_grades CASCADE;
+
 DROP TABLE IF EXISTS learn_grades CASCADE;
+
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
+
 DROP TABLE IF EXISTS pairs CASCADE;
+
 DROP TABLE IF EXISTS proficiency_rates CASCADE;
+
 DROP TABLE IF EXISTS student_teamwork_skills CASCADE;
+
 DROP TABLE IF EXISTS student_tech_skills CASCADE;
+
 DROP FUNCTION IF EXISTS calc_projavg() CASCADE;
+
 DROP TRIGGER IF EXISTS project ON project_grades CASCADE;
+
 DROP TRIGGER IF EXISTS cohortavg ON students CASCADE;
+
 DROP TRIGGER IF EXISTS trig_student_copy on students CASCADE;
+
 DROP TRIGGER IF EXISTS trig_cohort_copy ON cohorts CASCADE;
 
 DROP EXTENSION IF EXISTS pgcrypto;
@@ -45,13 +63,10 @@ CREATE EXTENSION pgcrypto;
 ------ (4) calc_cohortmin()
 ------ (5) calc_cohortmax()
 ------ (6) calc_cohortavg()
-
-
-
 /* ============================================================
--- SECTION 1: Create tables and relations
-============================================================== */
-  CREATE TABLE users (
+ -- SECTION 1: Create tables and relations
+ ============================================================== */
+CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   username VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
@@ -74,16 +89,20 @@ CREATE TABLE cohorts (
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name TEXT,
-  learn_avg INT DEFAULT 100 NOT NULL,
-  tech_avg INT DEFAULT 100 NOT NULL,
-  teamwork_avg INT DEFAULT 100 NOT NULL,
-  server_side_test TEXT,
-  client_side_test TEXT,
+  dve INT DEFAULT 0 NOT NULL,
+  loops INT DEFAULT 0 NOT NULL,
+  fun INT DEFAULT 0 NOT NULL,
+  arrays INT DEFAULT 0 NOT NULL,
+  obj INT DEFAULT 0 NOT NULL,
+  dom_api INT DEFAULT 0 NOT NULL,
+  ss INT DEFAULT 0 NOT NULL,
+  s_db INT DEFAULT 0 NOT NULL,
+  react INT DEFAULT 0 NOT NULL,
   cohort_name TEXT,
   ETS_date DATE,
   github TEXT,
   FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
-  );
+);
 
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
@@ -122,13 +141,13 @@ CREATE TABLE student_tech_skills (
   FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
 );
 
-  CREATE TABLE student_teamwork_skills (
-    student_id INT,
-    score INT,
-    record_date TIMESTAMPTZ,
-    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-    FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
-  );
+CREATE TABLE student_teamwork_skills (
+  student_id INT,
+  score INT,
+  record_date TIMESTAMPTZ,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
+);
 
 --THIS ALLOWS TRACKING STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (
@@ -136,16 +155,55 @@ CREATE TABLE projects (
   project_name TEXT
 );
 
-INSERT INTO projects (project_name) VALUES ('Checkerboard');
-INSERT INTO projects (project_name) VALUES ('Stoplight');
-INSERT INTO projects (project_name) VALUES ('Twiddler');
-INSERT INTO projects (project_name) VALUES ('TV Show Finder');
-INSERT INTO projects (project_name) VALUES ('Hack-a-thon');
-INSERT INTO projects (project_name) VALUES ('Front End Project');
-INSERT INTO projects (project_name) VALUES ('React MVP');
-INSERT INTO projects (project_name) VALUES ('Front End Capstone');
-INSERT INTO projects (project_name) VALUES ('System Design Captosone');
-INSERT INTO projects (project_name) VALUES ('Blue Ocean');
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Checkerboard');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Stoplight');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Twiddler');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('TV Show Finder');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Hack-a-thon');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Front End Project');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('React MVP');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Front End Capstone');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('System Design Captosone');
+
+INSERT INTO
+  projects (project_name)
+VALUES
+  ('Blue Ocean');
 
 CREATE TABLE project_grades (
   project_grades_id SERIAL PRIMARY KEY,
@@ -154,27 +212,63 @@ CREATE TABLE project_grades (
   project_passed BOOLEAN,
   notes TEXT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT
-  --removes learn grades if student is deleted. Cannot delete projects without deleting grades first
+  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT --removes learn grades if student is deleted. Cannot delete projects without deleting grades first
 );
+
 ----this index ensures students don't have duplicate grades
-CREATE UNIQUE INDEX project_grades_only_one_per_student
-    ON project_grades (student_id, project_id);
+CREATE UNIQUE INDEX project_grades_only_one_per_student ON project_grades (student_id, project_id);
 
 CREATE TABLE learn (
   assessment_id SERIAL PRIMARY KEY,
   assessment_name TEXT
 );
 
-INSERT INTO learn (assessment_name) VALUES ('Data Types, Variables, and Expressions Assessment');
-INSERT INTO learn (assessment_name) VALUES ('Loops and Control Flow Assessment');
-INSERT INTO learn (assessment_name) VALUES ('Functions Assessment');
-INSERT INTO learn (assessment_name) VALUES ('Arrays Assessment');
-INSERT INTO learn (assessment_name) VALUES ('Objects Assessment');
-INSERT INTO learn (assessment_name) VALUES ('DOM API Assessment');
-INSERT INTO learn (assessment_name) VALUES ('Server Side Assessment');
-INSERT INTO learn (assessment_name) VALUES ('Server and DB Assessment');
-INSERT INTO learn (assessment_name) VALUES ('React Assessment');
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  (
+    'Data Types, Variables, and Expressions Assessment'
+  );
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('Loops and Control Flow Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('Functions Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('Arrays Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('Objects Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('DOM API Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('Server Side Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('Server and DB Assessment');
+
+INSERT INTO
+  learn (assessment_name)
+VALUES
+  ('React Assessment');
 
 CREATE TABLE learn_grades (
   learn_grade_id SERIAL PRIMARY KEY,
@@ -182,164 +276,242 @@ CREATE TABLE learn_grades (
   assessment_id INT,
   assessment_grade INT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT
-  --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
-
+  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
 );
+
 ----this index ensures students don't have duplicate grades
-CREATE UNIQUE INDEX learn_grades_only_one_per_student
-    ON learn_grades (student_id, assessment_id);
-
-
+CREATE UNIQUE INDEX learn_grades_only_one_per_student ON learn_grades (student_id, assessment_id);
 
 /* ============================================================
--- SECTION 2: FUNCTIONS AND TRIGGERS
-============================================================== */
+ -- SECTION 2: FUNCTIONS AND TRIGGERS
+ ============================================================== */
 --- (1) UPDATE STUDENT'S TECH SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
 ----FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
-CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
-    SELECT AVG(student_tech_skills.score) as avg
-    FROM student_tech_skills
-    WHERE student_id = NEW.student_id
-  )
-UPDATE students
-SET tech_avg = scores.avg
-FROM scores
-WHERE student_id = NEW.student_id;
+CREATE
+OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $ $ BEGIN WITH scores AS (
+  SELECT
+    AVG(student_tech_skills.score) as avg
+  FROM
+    student_tech_skills
+  WHERE
+    student_id = NEW.student_id
+)
+UPDATE
+  students
+SET
+  tech_avg = scores.avg
+FROM
+  scores
+WHERE
+  student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 ----TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER tech_skills_trigger
 AFTER
 INSERT
   OR
-UPDATE ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
-
+UPDATE
+  ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
 
 --- (2) UPDATE STUDENT'S TEAMWORK SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
 ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
-CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
-    SELECT AVG(student_teamwork_skills.score) as avg
-    FROM student_teamwork_skills
-    WHERE student_id = NEW.student_id
-  )
-UPDATE students
-SET teamwork_avg = scores.avg
-FROM scores
-WHERE student_id = NEW.student_id;
+CREATE
+OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $ $ BEGIN WITH scores AS (
+  SELECT
+    AVG(student_teamwork_skills.score) as avg
+  FROM
+    student_teamwork_skills
+  WHERE
+    student_id = NEW.student_id
+)
+UPDATE
+  students
+SET
+  teamwork_avg = scores.avg
+FROM
+  scores
+WHERE
+  student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER teamwrk_skills_trigger
 AFTER
 INSERT
   OR
-UPDATE ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
-
+UPDATE
+  ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
 
 --- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
 -- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
-CREATE OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT AVG(learn_grades.assessment_grade) as avg
-    FROM learn_grades
-    WHERE student_id = NEW.student_id
-  )
-UPDATE students
-SET learn_avg = grades.avg
-FROM grades
-WHERE student_id = NEW.student_id;
+CREATE
+OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+  SELECT
+    AVG(learn_grades.assessment_grade) as avg
+  FROM
+    learn_grades
+  WHERE
+    student_id = NEW.student_id
+)
+UPDATE
+  students
+SET
+  learn_avg = grades.avg
+FROM
+  grades
+WHERE
+  student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER learn
 AFTER
 INSERT
   OR
-UPDATE OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
-
+UPDATE
+  OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
 --- (4)  UPDATE COHORT'S LOWEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
 -- FUNCTION:UPDATE COHORT LOWEST AVG SCORE
-CREATE OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT MIN(students.learn_avg) as min
-    FROM students
-    WHERE cohort_name = NEW.cohort_name
-  )
-UPDATE cohorts
-SET cohort_min = grades.min
-FROM grades
-WHERE cohort_name = new.cohort_name;
+CREATE
+OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+  SELECT
+    MIN(students.learn_avg) as min
+  FROM
+    students
+  WHERE
+    cohort_name = NEW.cohort_name
+)
+UPDATE
+  cohorts
+SET
+  cohort_min = grades.min
+FROM
+  grades
+WHERE
+  cohort_name = new.cohort_name;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
 CREATE TRIGGER cohortmin
 AFTER
 INSERT
   OR
-UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
-
+UPDATE
+  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
 
 --- (5)  UPDATE COHORT'S HIGHEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
 -- FUNCTION:UPDATE COHORT HIGHEST AVG SCORE
-CREATE OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT MAX(students.learn_avg) as max
-    FROM students
-    WHERE cohort_name = new.cohort_name
-  )
-UPDATE cohorts
-SET cohort_max = grades.max
-FROM grades
-WHERE cohort_name = new.cohort_name;
+CREATE
+OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+  SELECT
+    MAX(students.learn_avg) as max
+  FROM
+    students
+  WHERE
+    cohort_name = new.cohort_name
+)
+UPDATE
+  cohorts
+SET
+  cohort_max = grades.max
+FROM
+  grades
+WHERE
+  cohort_name = new.cohort_name;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
 CREATE TRIGGER cohortmax
 AFTER
-UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
+UPDATE
+  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
 
 -- Update cohort avg
 --- (6)  UPDATE THE OVERALL AVERAGE OF STUDENT'S ASSESSMENT-AVERAGES FOR THE COHORT WHEN
 ---      STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
 -- FUNCTION:UPDATE COHORT OVERALL AVG SCORE
-CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT AVG(students.learn_avg) as avg
-    FROM students
-    WHERE cohort_name = new.cohort_name
-  )
-UPDATE cohorts
-SET cohort_avg = grades.avg
-FROM grades
-WHERE cohort_name = new.cohort_name;
+CREATE
+OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+  SELECT
+    AVG(students.learn_avg) as avg
+  FROM
+    students
+  WHERE
+    cohort_name = new.cohort_name
+)
+UPDATE
+  cohorts
+SET
+  cohort_avg = grades.avg
+FROM
+  grades
+WHERE
+  cohort_name = new.cohort_name;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
 CREATE TRIGGER cohortavg
 AFTER
-UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
-
+UPDATE
+  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
 
 /* ============================================================
--- Load Proficiency Ratings
-============================================================== */
-INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('25', 'Needs improvement');
-INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('50', 'Approaching standard');
-INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('75', 'Meets standard');
-INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES('100', 'Exceeds standard');
+ -- Load Proficiency Ratings
+ ============================================================== */
+INSERT INTO
+  proficiency_rates (skill_id, skill_descr)
+VALUES
+  ('25', 'Needs improvement');
 
+INSERT INTO
+  proficiency_rates (skill_id, skill_descr)
+VALUES
+  ('50', 'Approaching standard');
+
+INSERT INTO
+  proficiency_rates (skill_id, skill_descr)
+VALUES
+  ('75', 'Meets standard');
+
+INSERT INTO
+  proficiency_rates (skill_id, skill_descr)
+VALUES
+  ('100', 'Exceeds standard');
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
-
 -- Linear Regression to see if learn scores are predictive of tech skills for a cohort.
 -- The closer R^2 is to 1, the stronger the predictive power
 -- SELECT regr_r2(learn_avg, tech_skills) as r2_learn_tech FROM students
