@@ -13,7 +13,17 @@ export const StudentAverages = (props) => {
   const { students, learnAvg, teamworkAvg, techAvg } = props;
 
   var data = {
-    labels: ["DVE", "Loops", "Functions", "Arrays", "Objects", "DOM API"],
+    labels: [
+      "DVE",
+      "Loops",
+      "Functions",
+      "Arrays",
+      "Objects",
+      "DOM API",
+      "Server Side",
+      "Server and Database",
+      "React",
+    ],
     datasets: [
       {
         label: "Cohort Avg",

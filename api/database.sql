@@ -82,6 +82,15 @@ CREATE TABLE cohorts (
   end_date DATE,
   instructor TEXT,
   cohort_avg INT,
+  dve_avg INT,
+  loop_avg INT,
+  functions_avg INT,
+  arrays_avg INT,
+  objects_avg INT,
+  dom_api_avg INT,
+  server_side_avg INT,
+  server_and_database_avg INT,
+  react_avg INT,
   cohort_min INT,
   cohort_max INT
 );
