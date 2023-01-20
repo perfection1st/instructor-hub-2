@@ -62,11 +62,7 @@ export const Home = (props) => {
     //     setIsLoadingCourses(false);
     //     dbCohorts()
     // })
-<<<<<<< HEAD
-  }, []);
-=======
   }, [courses]);
->>>>>>> de614a7 (blah)
 
   function dbCohorts() {
     fetch(`${URL}/cohorts`)
