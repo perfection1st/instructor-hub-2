@@ -62,7 +62,7 @@ export const Home = (props) => {
     //     setIsLoadingCourses(false);
     //     dbCohorts()
     // })
-  }, [courses]);
+  }, []);
 
   function dbCohorts() {
     fetch(`${URL}/cohorts`)
