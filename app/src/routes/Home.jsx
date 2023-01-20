@@ -14,28 +14,13 @@ export const Home = (props) => {
   const [courses, setCourses] = useState([]);
   const [isLoadingCourses, setIsLoadingCourses] = useState(true);
 
-  //Sends a fetch to verify users tokens
-  //If tokens don't match tokens stored under the logged in user they are logged out
-  //And then returned to login page
-  // useEffect(() => {
-  //   //Runs after timeout to ensure token updates
-  //   //Gets the tokens stored in session on login
-  // //   fetch(`${URL}/authent`, {
-  // //     method: "POST",
-  // //     headers: {
-  // //       "Content-Type": "application/json",
-  // //     },
-  // //     body: JSON.stringify({
-  // //       username: sessionStorage.getItem("username"),
-  // //       userToken: sessionStorage.getItem("userToken"),
-  // //       sessionToken: sessionStorage.getItem("sessionToken"),
-  // //     }),
-  // //   })
-  // //     .then((result) => result.json())
-  // //     .then((data) => {
-  // //       data[0]?.response == "true" ? setIsLoggedIn(true) : kickUser();
-  // //     });
-  // // }, []);
+  useEffect(() => {
+    if (sessionStorage.getItem("accessToken")) {
+      setIsLoggedIn(true);
+    } else {
+      kickUser();
+    }
+  });
 
   function kickUser() {
     swal("Not Authenticated");
@@ -65,7 +50,12 @@ export const Home = (props) => {
   }, []);
 
   function dbCohorts() {
-    fetch(`${URL}/cohorts`)
+    fetch(`${URL}/cohorts`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
+    })
       .then((result) => result.json())
       .then((data) => {
         setCourses(data);

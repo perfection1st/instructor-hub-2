@@ -81,28 +81,19 @@ export const Login = (props) => {
       swal("Incorrect Password");
       setIsLoading(false);
     } else {
-      //TODO change to email
-      sessionStorage.setItem("username", info.email);
-      sessionStorage.setItem("userToken", info.accessToken);
+      sessionStorage.setItem("email", info.user.email);
+      sessionStorage.setItem("accessToken", info.accessToken);
+
+      //TODO update cohort
       info.cohort
         ? sessionStorage.setItem("defaultCohort", info.cohort)
         : console.log("no default");
-      setSessionToken();
+
+      setIsLoading(false);
+      setIsLoggedIn(true);
     }
   }
-  //Creates a new session token on each log in
-  //This token is verfied on the home page to ensure it is the correct user
-  function setSessionToken() {
-    //sessionStorage.setItem("sessionToken", );
 
-    //Sets the loading state to false so button reappears
-    setIsLoading(false);
-    //Sets loggin to true to redirect user to home page
-    //Uses in line function so session token has time to set
-    //Ran into a problem where this would run before token could place which caused a null token to be sent in home
-    //This fixes that bug
-    setIsLoggedIn(true);
-  }
   //if user is already logged in, they will be automatically navigated to the home page
   if (isLoggedIn) {
     return <Navigate to="/" />;
