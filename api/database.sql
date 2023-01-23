@@ -29,14 +29,10 @@ DROP TABLE IF EXISTS student_tech_skills CASCADE;
 
 DROP FUNCTION IF EXISTS calc_projavg() CASCADE;
 
-DROP TRIGGER IF EXISTS project ON project_grades CASCADE;
-
-DROP TRIGGER IF EXISTS cohortavg ON students CASCADE;
-
-DROP TRIGGER IF EXISTS trig_student_copy on students CASCADE;
-
-DROP TRIGGER IF EXISTS trig_cohort_copy ON cohorts CASCADE;
-
+-- DROP TRIGGER IF EXISTS project ON project_grades CASCADE;
+-- DROP TRIGGER IF EXISTS cohortavg ON students CASCADE;
+-- DROP TRIGGER IF EXISTS trig_student_copy on students CASCADE;
+-- DROP TRIGGER IF EXISTS trig_cohort_copy ON cohorts CASCADE;
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
@@ -68,7 +64,7 @@ CREATE EXTENSION pgcrypto;
  ============================================================== */
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  email VARCHAR (50) UNIQUE,
+  username VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
   default_cohort TEXT,
   token VARCHAR(255),
@@ -98,6 +94,7 @@ CREATE TABLE cohorts (
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name TEXT,
+  assessment_student_avg INT,
   dve INT DEFAULT 0 NOT NULL,
   loops INT DEFAULT 0 NOT NULL,
   fun INT DEFAULT 0 NOT NULL,
@@ -296,206 +293,176 @@ CREATE UNIQUE INDEX learn_grades_only_one_per_student ON learn_grades (student_i
  ============================================================== */
 --- (1) UPDATE STUDENT'S TECH SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
 ----FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
-CREATE
-OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $ $ BEGIN WITH scores AS (
-  SELECT
-    AVG(student_tech_skills.score) as avg
-  FROM
-    student_tech_skills
-  WHERE
-    student_id = NEW.student_id
-)
-UPDATE
-  students
-SET
-  tech_avg = scores.avg
-FROM
-  scores
-WHERE
-  student_id = NEW.student_id;
-
-RETURN NEW;
-
-END;
-
-$ $ LANGUAGE 'plpgsql';
-
-----TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER tech_skills_trigger
-AFTER
-INSERT
-  OR
-UPDATE
-  ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
-
---- (2) UPDATE STUDENT'S TEAMWORK SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
----- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
-CREATE
-OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $ $ BEGIN WITH scores AS (
-  SELECT
-    AVG(student_teamwork_skills.score) as avg
-  FROM
-    student_teamwork_skills
-  WHERE
-    student_id = NEW.student_id
-)
-UPDATE
-  students
-SET
-  teamwork_avg = scores.avg
-FROM
-  scores
-WHERE
-  student_id = NEW.student_id;
-
-RETURN NEW;
-
-END;
-
-$ $ LANGUAGE 'plpgsql';
-
----- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER teamwrk_skills_trigger
-AFTER
-INSERT
-  OR
-UPDATE
-  ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
-
---- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
--- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
-CREATE
-OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
-  SELECT
-    AVG(learn_grades.assessment_grade) as avg
-  FROM
-    learn_grades
-  WHERE
-    student_id = NEW.student_id
-)
-UPDATE
-  students
-SET
-  learn_avg = grades.avg
-FROM
-  grades
-WHERE
-  student_id = NEW.student_id;
-
-RETURN NEW;
-
-END;
-
-$ $ LANGUAGE 'plpgsql';
-
--- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER learn
-AFTER
-INSERT
-  OR
-UPDATE
-  OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
-
---- (4)  UPDATE COHORT'S LOWEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
--- FUNCTION:UPDATE COHORT LOWEST AVG SCORE
-CREATE
-OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $ $ BEGIN WITH grades AS (
-  SELECT
-    MIN(students.learn_avg) as min
-  FROM
-    students
-  WHERE
-    cohort_name = NEW.cohort_name
-)
-UPDATE
-  cohorts
-SET
-  cohort_min = grades.min
-FROM
-  grades
-WHERE
-  cohort_name = new.cohort_name;
-
-RETURN NEW;
-
-END;
-
-$ $ LANGUAGE 'plpgsql';
-
--- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
-CREATE TRIGGER cohortmin
-AFTER
-INSERT
-  OR
-UPDATE
-  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
-
---- (5)  UPDATE COHORT'S HIGHEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
--- FUNCTION:UPDATE COHORT HIGHEST AVG SCORE
-CREATE
-OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $ $ BEGIN WITH grades AS (
-  SELECT
-    MAX(students.learn_avg) as max
-  FROM
-    students
-  WHERE
-    cohort_name = new.cohort_name
-)
-UPDATE
-  cohorts
-SET
-  cohort_max = grades.max
-FROM
-  grades
-WHERE
-  cohort_name = new.cohort_name;
-
-RETURN NEW;
-
-END;
-
-$ $ LANGUAGE 'plpgsql';
-
--- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
-CREATE TRIGGER cohortmax
-AFTER
-UPDATE
-  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
-
--- Update cohort avg
---- (6)  UPDATE THE OVERALL AVERAGE OF STUDENT'S ASSESSMENT-AVERAGES FOR THE COHORT WHEN
----      STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
--- FUNCTION:UPDATE COHORT OVERALL AVG SCORE
-CREATE
-OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
-  SELECT
-    AVG(students.learn_avg) as avg
-  FROM
-    students
-  WHERE
-    cohort_name = new.cohort_name
-)
-UPDATE
-  cohorts
-SET
-  cohort_avg = grades.avg
-FROM
-  grades
-WHERE
-  cohort_name = new.cohort_name;
-
-RETURN NEW;
-
-END;
-
-$ $ LANGUAGE 'plpgsql';
-
--- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
-CREATE TRIGGER cohortavg
-AFTER
-UPDATE
-  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
-
+-- CREATE
+-- OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $ $ BEGIN WITH scores AS (
+--   SELECT
+--     AVG(student_tech_skills.score) as avg
+--   FROM
+--     student_tech_skills
+--   WHERE
+--     student_id = NEW.student_id
+-- )
+-- UPDATE
+--   students
+-- SET
+--   tech_avg = scores.avg
+-- FROM
+--   scores
+-- WHERE
+--   student_id = NEW.student_id;
+-- RETURN NEW;
+-- END;
+-- $ $ LANGUAGE 'plpgsql';
+-- ----TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+-- CREATE TRIGGER tech_skills_trigger
+-- AFTER
+-- INSERT
+--   OR
+-- UPDATE
+--   ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
+-- --- (2) UPDATE STUDENT'S TEAMWORK SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
+-- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
+-- CREATE
+-- OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $ $ BEGIN WITH scores AS (
+--   SELECT
+--     AVG(student_teamwork_skills.score) as avg
+--   FROM
+--     student_teamwork_skills
+--   WHERE
+--     student_id = NEW.student_id
+-- )
+-- UPDATE
+--   students
+-- SET
+--   teamwork_avg = scores.avg
+-- FROM
+--   scores
+-- WHERE
+--   student_id = NEW.student_id;
+-- RETURN NEW;
+-- END;
+-- $ $ LANGUAGE 'plpgsql';
+-- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+-- CREATE TRIGGER teamwrk_skills_trigger
+-- AFTER
+-- INSERT
+--   OR
+-- UPDATE
+--   ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
+-- --- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
+-- -- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
+-- CREATE
+-- OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+--   SELECT
+--     AVG(learn_grades.assessment_grade) as avg
+--   FROM
+--     learn_grades
+--   WHERE
+--     student_id = NEW.student_id
+-- )
+-- UPDATE
+--   students
+-- SET
+--   learn_avg = grades.avg
+-- FROM
+--   grades
+-- WHERE
+--   student_id = NEW.student_id;
+-- RETURN NEW;
+-- END;
+-- $ $ LANGUAGE 'plpgsql';
+-- -- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+-- CREATE TRIGGER learn
+-- AFTER
+-- INSERT
+--   OR
+-- UPDATE
+--   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+-- --- (4)  UPDATE COHORT'S LOWEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
+-- -- FUNCTION:UPDATE COHORT LOWEST AVG SCORE
+-- CREATE
+-- OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+--   SELECT
+--     MIN(students.learn_avg) as min
+--   FROM
+--     students
+--   WHERE
+--     cohort_name = NEW.cohort_name
+-- )
+-- UPDATE
+--   cohorts
+-- SET
+--   cohort_min = grades.min
+-- FROM
+--   grades
+-- WHERE
+--   cohort_name = new.cohort_name;
+-- RETURN NEW;
+-- END;
+-- $ $ LANGUAGE 'plpgsql';
+-- -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
+-- CREATE TRIGGER cohortmin
+-- AFTER
+-- INSERT
+--   OR
+-- UPDATE
+--   of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
+-- --- (5)  UPDATE COHORT'S HIGHEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
+-- -- FUNCTION:UPDATE COHORT HIGHEST AVG SCORE
+-- CREATE
+-- OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+--   SELECT
+--     MAX(students.learn_avg) as max
+--   FROM
+--     students
+--   WHERE
+--     cohort_name = new.cohort_name
+-- )
+-- UPDATE
+--   cohorts
+-- SET
+--   cohort_max = grades.max
+-- FROM
+--   grades
+-- WHERE
+--   cohort_name = new.cohort_name;
+-- RETURN NEW;
+-- END;
+-- $ $ LANGUAGE 'plpgsql';
+-- -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
+-- CREATE TRIGGER cohortmax
+-- AFTER
+-- UPDATE
+--   of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
+-- -- Update cohort avg
+-- --- (6)  UPDATE THE OVERALL AVERAGE OF STUDENT'S ASSESSMENT-AVERAGES FOR THE COHORT WHEN
+-- ---      STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
+-- -- FUNCTION:UPDATE COHORT OVERALL AVG SCORE
+-- CREATE
+-- OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+--   SELECT
+--     AVG(students.learn_avg) as avg
+--   FROM
+--     students
+--   WHERE
+--     cohort_name = new.cohort_name
+-- )
+-- UPDATE
+--   cohorts
+-- SET
+--   cohort_avg = grades.avg
+-- FROM
+--   grades
+-- WHERE
+--   cohort_name = new.cohort_name;
+-- RETURN NEW;
+-- END;
+-- $ $ LANGUAGE 'plpgsql';
+-- -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
+-- CREATE TRIGGER cohortavg
+-- AFTER
+-- UPDATE
+--   of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
 /* ============================================================
  -- Load Proficiency Ratings
  ============================================================== */

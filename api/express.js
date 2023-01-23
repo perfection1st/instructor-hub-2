@@ -344,12 +344,22 @@ app.get(`/api/students`, (req, res) => {
 });
 
 //Route to get data by student id
-app.get(`/api/students/:id`, (req, res) => {
+app.get(`/api/students/grades/:id`, (req, res) => {
   pool
-    .query(`SELECT * FROM students WHERE id = ${req.params.id}`)
+    .query(`SELECT * FROM students WHERE student_id=${req.params.id}`)
     .then((result) => res.status(200).send(result.rows))
     .catch((error) => res.status(404).send(error));
 });
+
+/* === Marco Diaz example of a query === */
+
+// app.get(`/api/students/:id`, async (req, res) => {
+//   const { rows } = await pool.query(
+//     `SELECT * FROM students WHERE student_id=$1`,
+//     [req.params.id]
+//   );
+//   res.send(rows);
+// });
 
 ////////////////////////////////////////ROUTES FOR PROJECT MODAL////////////////////////////////////////
 
