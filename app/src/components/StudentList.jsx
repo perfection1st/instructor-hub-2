@@ -126,7 +126,7 @@ export const StudentList = (props) => {
               <tr>
                 <th>Name</th>
                 <th>GitHub</th>
-                <th>Performance Averages (Learn/Team/Tech)</th>
+                <th>Assessments AVG</th>
               </tr>
             </thead>
             <tbody>
