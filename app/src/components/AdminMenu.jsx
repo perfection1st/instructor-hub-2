@@ -8,11 +8,13 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { GoGear, GoSignOut } from "react-icons/go";
 import { CreateCohortModal } from './CreateCohortModal';
 import { AddStudentModal } from './AddStudentsModal';
+import { ChangeStudentName } from './ChangeStudentName';
 
 export const AdminMenu = (props) => {
   const URL = 'http://localhost:8000/api'
   const { courses, isLoadingCourses, isLoggedIn, setIsLoggedIn } = props
 
+//console.log(props)
   let user = sessionStorage.getItem('username');
 
   function logout(){
@@ -87,6 +89,7 @@ export const AdminMenu = (props) => {
     >
       <CreateCohortModal />
       <AddStudentModal />
+
       <Dropdown.Item eventKey="1" onClick={handleShowSettingsModal}><GoGear /> Settings</Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item eventKey="4" onClick={() => logout()}><GoSignOut /> Logout</Dropdown.Item>

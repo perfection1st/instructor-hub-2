@@ -87,7 +87,6 @@ export const AddStudentModal = () => {
         githubUserRef.current.value = '';
     }
 
-
     return (
         <>
             <Dropdown.Item id="btn-create-cohort" onClick={() => openModal()}><BsFillPersonPlusFill />  Add Students </Dropdown.Item>

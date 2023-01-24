@@ -4,10 +4,15 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import swal from 'sweetalert';
 import Table from 'react-bootstrap/Table';
+import { ChangeStudentName } from './ChangeStudentName';
+import {BsPencilFill} from "react-icons/bs"
+import '../css/StudentInfoModal.css'
+
+
 
 export const StudentInfoModal = (props) => {
     // prop deconstruction for Student Info Modal displaying/not displaying
-    const { showStudentInfoModal, setShowStudentInfoModal, clickedStudent, grades, learnGrades } = props
+    const { showStudentInfoModal, setShowStudentInfoModal, clickedStudent,setClickedStudent, grades, learnGrades , loadStudents} = props
     // close Student Info Modal function
     const handleCloseStudentInfoModal = () => setShowStudentInfoModal(false);
 
@@ -15,7 +20,13 @@ export const StudentInfoModal = (props) => {
     return(
             <Modal id="student-info-modal" size="lg" centered show={showStudentInfoModal} onHide={handleCloseStudentInfoModal}>
                     <Modal.Header closeButton>
-                        <Modal.Title>{clickedStudent}</Modal.Title>
+                <div className='header'> 
+
+                      <div className = 'student-name'><Modal.Title >{clickedStudent} </Modal.Title></div> 
+                    
+                    <div className = 'change-name-component'><ChangeStudentName clickedStudent ={clickedStudent} loadStudents={loadStudents} setClickedStudent={setClickedStudent}/></div>
+
+                    </div>
                     </Modal.Header>
                     <Modal.Body>
                         <Table id="student-list" >
@@ -37,6 +48,7 @@ export const StudentInfoModal = (props) => {
                             </tbody>
                         </Table>
                     </Modal.Body>
+
                     <Modal.Footer>
                         <Button variant="primary" onClick={() => { handleCloseStudentInfoModal() }}>
                             Close

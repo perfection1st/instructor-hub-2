@@ -305,6 +305,38 @@ app.post('/api/create/students', (req, res) => {
         .catch(error => res.send(error))
 })
 
+//creating a rout send a PATCH request and eidt the first name of selected student. 
+app.post('/api/students/:cohort', (req, res) => {
+    let cohortName = req.params.cohort
+    pool.query(`SELECT * FROM students WHERE cohort_name = $1 ORDER BY name ASC`, [cohortName])
+        .then(result => res.send(result.rows))
+        .catch(error => res.send(error))
+})
+
+
+app.get('/api/students/:cohort/:name', (req, res) => {
+    let cohortName = req.params.cohort
+    let studentName = req.params.name;
+    pool.query(`SELECT* FROM students WHERE cohort_name = $1 AND name = $2`, [ cohortName, studentName])
+        .then(result => res.send(result.rows))
+        .catch(error => res.send(error))
+});
+
+app.patch('/api/students/nameChange', (req, res) => {
+    let cohortName = req.body.cohort_name
+    let studentName = req.body.oldName;
+    let newName = req.body.name;
+    pool.query(`UPDATE students SET name = $1 WHERE cohort_name = $2 AND name = $3`, [newName, cohortName, studentName])
+        .then(result => res.send('Name updated'))
+        .catch(error => res.send(error))
+});
+
+
+
+
+
+
+
 app.get('/api/student/scores/:id', (req, res) => {
     let studentId = req.params.id
     pool.query(`SELECT *
@@ -334,6 +366,11 @@ app.get('/api/student/scores/:id', (req, res) => {
         res.status(404).send(error)
       })
   })
+
+  app.get('/', (req, res) => {
+    console.log('Received a GET request at the root route');
+    res.send('Hello, From Server!');
+});
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)

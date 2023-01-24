@@ -64,7 +64,7 @@ export const StudentList = (props) => {
         setTeamworkAvg(students.map(student => student.teamwork_avg).reduce((acc, score) => acc + score, 0))
         setTechAvg(students.map(student => student.tech_avg).reduce((acc, score) => acc + score, 0))
       })
-  }, [courses])
+  }, [courses, ])
 
   //Does a fetch when student is clicked to get their grades from projects
   function getGrades(id) {
@@ -142,7 +142,7 @@ export const StudentList = (props) => {
         </div>
         <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} />
         <GenerateGroupsModal students={students} />
-        <StudentInfoModal grades={grades} learnGrades={learnGrades} clickedStudent={clickedStudent} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
+        <StudentInfoModal grades={grades} learnGrades={learnGrades} clickedStudent={clickedStudent} setClickedStudent={setClickedStudent} loadStudents={loadStudents} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
       </div>
     </>
   );
