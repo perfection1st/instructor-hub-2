@@ -68,7 +68,7 @@ CREATE EXTENSION pgcrypto;
  ============================================================== */
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  email VARCHAR (50) UNIQUE,
+  username VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
   default_cohort TEXT,
   token VARCHAR(255),
@@ -98,6 +98,7 @@ CREATE TABLE cohorts (
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name TEXT,
+  assessment_student_avg INT,
   dve INT DEFAULT 0 NOT NULL,
   loops INT DEFAULT 0 NOT NULL,
   fun INT DEFAULT 0 NOT NULL,
@@ -111,6 +112,21 @@ CREATE TABLE students (
   ETS_date DATE,
   github TEXT,
   FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
+);
+
+CREATE TABLE assessment_avg (
+  student_id,
+)AS
+SELECT AVG(dve + loops + fun + arrays + obj + dom_api + ss + s_db + react) AS total_avg
+FROM students;
+
+
+CREATE TABLE  assessment_avg(
+  assessment_avg_id SERIAL PRIMARY KEY,
+  student_id INT,
+  assessment_avg INT,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (assessment_student_avg) REFERENCES students(assessment_student_avg) ON DELETE RESTRICT --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
 );
 
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
@@ -149,6 +165,14 @@ CREATE TABLE student_tech_skills (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
 );
+
+CREATE TABLE student_total_avg (
+  student_id INT,
+  total_avg INT,
+  record_date TIMESTAMPTZ,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (total_avg) REFERENCES students(assessment_student_avg) ON DELETE RESTRICT
+)
 
 CREATE TABLE student_teamwork_skills (
   student_id INT,
@@ -364,21 +388,44 @@ UPDATE
 
 --- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
 -- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
+-- CREATE
+-- OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+--   SELECT
+--     AVG(learn_grades.assessment_grade) as avg
+--   FROM
+--     learn_grades
+--   WHERE
+--     student_id = NEW.student_id
+-- )
+-- UPDATE
+--   students
+-- SET
+--   learn_avg = grades.avg
+-- FROM
+--   grades
+-- WHERE
+--   student_id = NEW.student_id;
+
+-- RETURN NEW;
+
+-- END;
+
+-- $ $ LANGUAGE 'plpgsql';
 CREATE
-OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_student_total_avg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    AVG(learn_grades.assessment_grade) as avg
+    dve, AVG(loops), AVG(fun), AVG(arrays), AVG(obj), AVG(dom_api), AVG(ss), AVG(s_db), AVG(react) AS avg
   FROM
-    learn_grades
+    students
   WHERE
     student_id = NEW.student_id
 )
 UPDATE
   students
 SET
-  learn_avg = grades.avg
+  total_avg = grades.avg
 FROM
-  grades
+  student_total_avg
 WHERE
   student_id = NEW.student_id;
 
@@ -387,6 +434,7 @@ RETURN NEW;
 END;
 
 $ $ LANGUAGE 'plpgsql';
+
 
 -- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER learn
@@ -491,10 +539,16 @@ END;
 $ $ LANGUAGE 'plpgsql';
 
 -- TRIGGER: RUNS WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED
-CREATE TRIGGER cohortavg
+-- CREATE TRIGGER cohortavg
+-- AFTER
+-- UPDATE
+--   of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
+
+CREATE TRIGGER student_avg
 AFTER
 UPDATE
-  of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
+  of assessment_student_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
+
 
 /* ============================================================
  -- Load Proficiency Ratings
