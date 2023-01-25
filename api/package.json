@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@supercharge/strings": "^1.29.1",
+    "aws-sdk": "^2.1302.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
