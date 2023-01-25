@@ -322,35 +322,35 @@ CREATE UNIQUE INDEX learn_grades_only_one_per_student ON learn_grades (student_i
 --   OR
 -- UPDATE
 --   ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
--- --- (2) UPDATE STUDENT'S TEAMWORK SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
+-- --- (2) UPDATE STUDENT'S loop grade WHEN NEW grade IS ADDED OR UPDATED.
 -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
--- CREATE
--- OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
---   SELECT
---     AVG(student_teamwork_skills.score) as avg
---   FROM
---     student_teamwork_skills
---   WHERE
---     student_id = NEW.student_id
--- )
--- UPDATE
---   students
--- SET
---   teamwork_avg = scores.avg
--- FROM
---   scores
--- WHERE
---   student_id = NEW.student_id;
--- RETURN NEW;
--- END;
--- $$ LANGUAGE 'plpgsql';
+CREATE
+OR REPLACE FUNCTION calc_loopsAvg() RETURNS trigger AS $$ BEGIN WITH grades AS (
+  SELECT
+    AVG(learn_grades.assessment_grade) AS avg  
+  FROM
+    learn_grades
+  WHERE
+    assessment_id = 2 AND student_id = NEW.student_id
+)
+UPDATE
+  students
+SET
+  loops = grades.avg
+FROM
+  grades
+WHERE
+  student_id = NEW.student_id;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER teamwrk_skills_trigger
+CREATE TRIGGER teamwrk_loopsAvg_trigger
 AFTER
 INSERT
   OR
 UPDATE
-  ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
+  OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_loopsAvg();
 -- --- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
 -- -- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
 CREATE
@@ -380,6 +380,7 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+  
 -- --- (4)  UPDATE COHORT'S LOWEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
 -- -- FUNCTION:UPDATE COHORT LOWEST AVG SCORE
 CREATE
@@ -493,3 +494,6 @@ VALUES
 -- Linear Regression to see if learn scores are predictive of tech skills for a cohort.
 -- The closer R^2 is to 1, the stronger the predictive power
 -- SELECT regr_r2(learn_avg, tech_skills) as r2_learn_tech FROM students
+
+
+

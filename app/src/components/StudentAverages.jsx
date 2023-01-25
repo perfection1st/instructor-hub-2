@@ -31,6 +31,11 @@ export const StudentAverages = (props) => {
           Math.floor(learnAvg / students.length),
           Math.floor(teamworkAvg / students.length),
           Math.floor(techAvg / students.length),
+          // Math.floor(techAvg / students.length),
+          // Math.floor(techAvg / students.length),
+          // Math.floor(techAvg / students.length),
+          // Math.floor(techAvg / students.length),
+          // Math.floor(techAvg / students.length),
         ],
         backgroundColor: [
           "rgb(237, 119, 28, 0.4)",

@@ -64,7 +64,7 @@ export const StudentList = (props) => {
         );
         setTeamworkAvg(
           students
-            .map((student) => student.teamwork_avg)
+            .map((student) => student.loops)
             .reduce((acc, score) => acc + score, 0)
         );
         setTechAvg(
