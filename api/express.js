@@ -306,21 +306,6 @@ app.post('/api/create/students', (req, res) => {
 })
 
 //creating a rout send a PATCH request and eidt the first name of selected student. 
-app.post('/api/students/:cohort', (req, res) => {
-    let cohortName = req.params.cohort
-    pool.query(`SELECT * FROM students WHERE cohort_name = $1 ORDER BY name ASC`, [cohortName])
-        .then(result => res.send(result.rows))
-        .catch(error => res.send(error))
-})
-
-
-app.get('/api/students/:cohort/:name', (req, res) => {
-    let cohortName = req.params.cohort
-    let studentName = req.params.name;
-    pool.query(`SELECT* FROM students WHERE cohort_name = $1 AND name = $2`, [ cohortName, studentName])
-        .then(result => res.send(result.rows))
-        .catch(error => res.send(error))
-});
 
 app.patch('/api/students/nameChange', (req, res) => {
     let cohortName = req.body.cohort_name
@@ -330,10 +315,6 @@ app.patch('/api/students/nameChange', (req, res) => {
         .then(result => res.send('Name updated'))
         .catch(error => res.send(error))
 });
-
-
-
-
 
 
 
