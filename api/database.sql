@@ -324,33 +324,33 @@ CREATE UNIQUE INDEX learn_grades_only_one_per_student ON learn_grades (student_i
 --   ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
 -- --- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
 -- -- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
--- CREATE
--- OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
---   SELECT
---     AVG(learn_grades.assessment_grade) as avg
---   FROM
---     learn_grades
---   WHERE
---     student_id = NEW.student_id
--- )
--- UPDATE
---   students
--- SET
---   learn_avg = grades.avg
--- FROM
---   grades
--- WHERE
---   student_id = NEW.student_id;
--- RETURN NEW;
--- END;
--- $$ LANGUAGE 'plpgsql';
--- -- -- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
--- CREATE TRIGGER learn
--- AFTER
--- INSERT
---   OR
--- UPDATE
---   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+CREATE
+OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
+  SELECT
+    AVG(learn_grades.assessment_grade) as avg
+  FROM
+    learn_grades
+  WHERE
+    student_id = NEW.student_id
+)
+UPDATE
+  students
+SET
+  learn_avg = grades.avg
+FROM
+  grades
+WHERE
+  student_id = NEW.student_id;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+-- -- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+CREATE TRIGGER learn
+AFTER
+INSERT
+  OR
+UPDATE
+  OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 -- --- (2) UPDATE STUDENT'S loop grade WHEN NEW grade IS ADDED OR UPDATED.
 -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE

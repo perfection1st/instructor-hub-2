@@ -186,8 +186,10 @@ export const StudentList = (props) => {
                   <td className="student-average" width={"15%"}>
                     <ButtonGroup aria-label="Basic example">
                       <Button variant="secondary" size="sm">
-                        <Badge bg={student.dve < 70 ? "danger" : "success"}>
-                          {student.dve || "--"}%
+                        <Badge
+                          bg={student.learn_avg < 70 ? "danger" : "success"}
+                        >
+                          {student.learn_avg || "--"}%
                         </Badge>
                         <span className="visually-hidden">unread messages</span>
                       </Button>
