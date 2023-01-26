@@ -19,16 +19,18 @@ export const StudentList = (props) => {
 
   const [selectedClass, setSelectedClass] = useState("Cohorts");
   const [students, setStudents] = useState([]);
+  //dve avg
   const [learnAvg, setLearnAvg] = useState(0);
-  // const [dveAvge, setDveAvg] useState(0);
+  //loops avg
+  const [teamworkAvg, setTeamworkAvg] = useState(0);
+  //functions avg
+  const [techAvg, setTechAvg] = useState(0);
   const [arraysAvg, setArraysAvg] = useState(0);
   const [objAvg, setObjAvg] = useState(0);
   const [domApiAvg, setDomApiAvg] = useState(0);
   const [ssAvg, setSsAvg] = useState(0);
   const [sDbAvg, setSDbAvg] = useState(0);
   const [reactAvg, setReactAvg] = useState(0);
-  const [teamworkAvg, setTeamworkAvg] = useState(0);
-  const [techAvg, setTechAvg] = useState(0);
   // state for Student Info Modal displaying/not displaying
   const [showStudentInfoModal, setShowStudentInfoModal] = useState(false);
 
