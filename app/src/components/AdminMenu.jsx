@@ -6,14 +6,18 @@ import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { GoGear, GoSignOut } from "react-icons/go";
-import { CreateCohortModal } from "./CreateCohortModal";
-import { AddStudentModal } from "./AddStudentsModal";
+import { CreateCohortModal } from './CreateCohortModal';
+import { AddStudentModal } from './AddStudentsModal';
+import { ChangeStudentName } from './ChangeStudentName';
+
 
 export const AdminMenu = (props) => {
   const URL = "http://localhost:8000/api";
   const { courses, isLoadingCourses, isLoggedIn, setIsLoggedIn } = props;
 
+
   let user = sessionStorage.getItem("email");
+
 
   function logout() {
     sessionStorage.clear();
@@ -88,6 +92,7 @@ export const AdminMenu = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <DropdownButton
         align="end"
         title={user || "User"}
@@ -104,6 +109,7 @@ export const AdminMenu = (props) => {
           <GoSignOut /> Logout
         </Dropdown.Item>
       </DropdownButton>
+
     </div>
   );
 };

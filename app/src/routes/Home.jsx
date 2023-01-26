@@ -28,6 +28,7 @@ export const Home = (props) => {
     setIsLoggedIn(false);
   }
 
+
   //Sends a fetch to get all of a users projects/classes from asana
   useEffect(() => {
     dbCohorts();
@@ -47,6 +48,7 @@ export const Home = (props) => {
     //     setIsLoadingCourses(false);
     //     dbCohorts()
     // })
+    
   }, []);
 
   function dbCohorts() {
@@ -62,6 +64,9 @@ export const Home = (props) => {
       })
       .then(setIsLoadingCourses(false));
   }
+
+
+
 
   //if user is not already logged in, they will be automatically navigated to the login page
   if (!isLoggedIn) {
