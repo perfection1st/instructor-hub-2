@@ -20,6 +20,7 @@ export const StudentList = (props) => {
   const [selectedClass, setSelectedClass] = useState("Cohorts");
   const [students, setStudents] = useState([]);
   const [learnAvg, setLearnAvg] = useState(0);
+  // const [dveAvge, setDveAvg] useState(0);
   const [teamworkAvg, setTeamworkAvg] = useState(0);
   const [techAvg, setTechAvg] = useState(0);
   // state for Student Info Modal displaying/not displaying
@@ -59,7 +60,7 @@ export const StudentList = (props) => {
       .then(() => {
         setLearnAvg(
           students
-            .map((student) => student.learn_avg)
+            .map((student) => student.dve)
             .reduce((acc, score) => acc + score, 0)
         );
         setTeamworkAvg(
@@ -147,10 +148,8 @@ export const StudentList = (props) => {
                   <td className="student-average" width={"15%"}>
                     <ButtonGroup aria-label="Basic example">
                       <Button variant="secondary" size="sm">
-                        <Badge
-                          bg={student.learn_avg < 70 ? "danger" : "success"}
-                        >
-                          {student.learn_avg || "--"}%
+                        <Badge bg={student.dve < 70 ? "danger" : "success"}>
+                          {student.dve || "--"}%
                         </Badge>
                         <span className="visually-hidden">unread messages</span>
                       </Button>
