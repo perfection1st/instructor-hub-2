@@ -307,7 +307,7 @@ app.post('/api/create/students', (req, res) => {
 
 //creating a rout send a PATCH request and eidt the first name of selected student. 
 
-app.patch('/api/students/nameChange', (req, res) => {
+app.patch('/api/students/nameChange', authenticateToken, (req, res) => {
     let cohortName = req.body.cohort_name
     let studentName = req.body.oldName;
     let newName = req.body.name;
