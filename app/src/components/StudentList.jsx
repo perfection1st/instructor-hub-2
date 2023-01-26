@@ -69,7 +69,7 @@ export const StudentList = (props) => {
         );
         setTechAvg(
           students
-            .map((student) => student.tech_avg)
+            .map((student) => student.fun)
             .reduce((acc, score) => acc + score, 0)
         );
       });
