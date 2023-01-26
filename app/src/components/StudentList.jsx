@@ -19,9 +19,18 @@ export const StudentList = (props) => {
 
   const [selectedClass, setSelectedClass] = useState("Cohorts");
   const [students, setStudents] = useState([]);
+  //dve avg
   const [learnAvg, setLearnAvg] = useState(0);
+  //loops avg
   const [teamworkAvg, setTeamworkAvg] = useState(0);
+  //functions avg
   const [techAvg, setTechAvg] = useState(0);
+  const [arraysAvg, setArraysAvg] = useState(0);
+  const [objAvg, setObjAvg] = useState(0);
+  const [domApiAvg, setDomApiAvg] = useState(0);
+  const [ssAvg, setSsAvg] = useState(0);
+  const [sDbAvg, setSDbAvg] = useState(0);
+  const [reactAvg, setReactAvg] = useState(0);
   // state for Student Info Modal displaying/not displaying
   const [showStudentInfoModal, setShowStudentInfoModal] = useState(false);
 
@@ -33,9 +42,9 @@ export const StudentList = (props) => {
   // state for current student clicked
   const [clickedStudent, setClickedStudent] = useState();
   // useState for assessment grades and project grades
-  const [grades, setGrades] = useState([]);
+  const [grades, setGrades] = useState([])
   // useState for learn grades
-  const [learnGrades, setLearnGrades] = useState([]);
+  const [learnGrades, setLearnGrades] = useState([])
 
   const url = "http://localhost:8000";
 
@@ -65,26 +74,53 @@ export const StudentList = (props) => {
         setStudents(data);
       })
       .then(() => {
-
-
         setLearnAvg(
           students
-            .map((student) => student.learn_avg)
+            .map((student) => student.dve)
             .reduce((acc, score) => acc + score, 0)
         );
         setTeamworkAvg(
           students
-            .map((student) => student.teamwork_avg)
+            .map((student) => student.loops)
             .reduce((acc, score) => acc + score, 0)
         );
         setTechAvg(
           students
-            .map((student) => student.tech_avg)
+            .map((student) => student.fun)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setArraysAvg(
+          students
+            .map((student) => student.arrays)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setObjAvg(
+          students
+            .map((student) => student.obj)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setDomApiAvg(
+          students
+            .map((student) => student.dom_api)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setSsAvg(
+          students
+            .map((student) => student.ss)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setSDbAvg(
+          students
+            .map((student) => student.s_db)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setReactAvg(
+          students
+            .map((student) => student.react)
             .reduce((acc, score) => acc + score, 0)
         );
       });
   }, [courses]);
-
 
   //Does a fetch when student is clicked to get their grades from projects
   function getGrades(id) {
@@ -145,7 +181,7 @@ export const StudentList = (props) => {
               <tr>
                 <th>Name</th>
                 <th>GitHub</th>
-                <th>Performance Averages (Learn/Team/Tech)</th>
+                <th>Assessments AVG</th>
               </tr>
             </thead>
             <tbody>
@@ -173,22 +209,6 @@ export const StudentList = (props) => {
                         </Badge>
                         <span className="visually-hidden">unread messages</span>
                       </Button>
-                      <Button variant="secondary" size="sm">
-                        <Badge
-                          bg={student.tech_avg < 70 ? "danger" : "success"}
-                        >
-                          {student.tech_avg || "--"}%
-                        </Badge>
-                        <span className="visually-hidden">unread messages</span>
-                      </Button>
-                      <Button variant="secondary" size="sm">
-                        <Badge
-                          bg={student.teamwork_avg < 70 ? "danger" : "success"}
-                        >
-                          {student.teamwork_avg || "--"}%
-                        </Badge>
-                        <span className="visually-hidden">unread messages</span>
-                      </Button>
                     </ButtonGroup>
                   </td>
                 </tr>
@@ -199,11 +219,16 @@ export const StudentList = (props) => {
         <StudentAverages
           students={students}
           learnAvg={learnAvg}
+          arraysAvg={arraysAvg}
+          objAvg={objAvg}
+          domApiAvg={domApiAvg}
+          ssAvg={ssAvg}
+          sDbAvg={sDbAvg}
+          reactAvg={reactAvg}
           teamworkAvg={teamworkAvg}
           techAvg={techAvg}
         />
         <GenerateGroupsModal students={students} />
-
         <StudentInfoModal
           grades={grades}
           learnGrades={learnGrades}
@@ -211,7 +236,6 @@ export const StudentList = (props) => {
           showStudentInfoModal={showStudentInfoModal}
           setShowStudentInfoModal={setShowStudentInfoModal}
         />
-
       </div>
     </>
   );
