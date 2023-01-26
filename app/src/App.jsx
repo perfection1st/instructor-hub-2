@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { StrictMode, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Home } from './routes/Home';
 import { Login } from './routes/Login';
@@ -10,6 +10,7 @@ export const App = ({ auth }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(auth ? auth.isLoggedIn : false);
 
   return (
+ 
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
@@ -18,5 +19,6 @@ export const App = ({ auth }) => {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
+ 
   );
 }

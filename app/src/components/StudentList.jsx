@@ -42,16 +42,20 @@ export const StudentList = (props) => {
   // state for current student clicked
   const [clickedStudent, setClickedStudent] = useState();
   // useState for assessment grades and project grades
-  const [grades, setGrades] = useState([]);
+  const [grades, setGrades] = useState([])
   // useState for learn grades
-  const [learnGrades, setLearnGrades] = useState([]);
+  const [learnGrades, setLearnGrades] = useState([])
 
   const url = "http://localhost:8000";
 
   //Does a fetch to get the students
   function loadStudents(evt) {
     console.log(evt);
-    fetch(`${URL}/students/${evt}`)
+    fetch(`${URL}/students/${evt}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
+    })
       .then((result) => result.json())
       .then((data) => setStudents(data));
     console.log(students);
@@ -60,7 +64,11 @@ export const StudentList = (props) => {
   //Does a fetch to get all of the students scores from the current class
   useEffect(() => {
     let currentClass = sessionStorage.getItem("currentClass");
-    fetch(`http://localhost:8000/api/students/${currentClass}`)
+    fetch(`http://localhost:8000/api/students/${currentClass}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
+    })
       .then((result) => result.json())
       .then((data) => {
         setStudents(data);
@@ -116,13 +124,21 @@ export const StudentList = (props) => {
 
   //Does a fetch when student is clicked to get their grades from projects
   function getGrades(id) {
-    fetch(`${url}/api/student/scores/${id}`)
+    fetch(`${url}/api/student/scores/${id}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
+    })
       .then((result) => result.json())
       .then((data) => setGrades(data));
   }
   //Does a fetch when student is clicked to get their grades from learn content
   function getLearnGrades(id) {
-    fetch(`${url}/api/student/learn/scores/${id}`)
+    fetch(`${url}/api/student/learn/scores/${id}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
+    })
       .then((result) => result.json())
       .then((data) => setLearnGrades(data));
   }

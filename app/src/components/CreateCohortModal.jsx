@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useRef } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState } from "react";
+import { useRef } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import { BsFileEarmarkCodeFill } from "react-icons/bs";
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import swal from 'sweetalert';
-import Form from 'react-bootstrap/Form';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import swal from "sweetalert";
+import Form from "react-bootstrap/Form";
 
 export const CreateCohortModal = () => {
-  // backend url 
-  const url = "http://localhost:8000"
+  // backend url
+  const url = "http://localhost:8000";
 
   // state for CreateCohort Modal displaying/not displaying
   const [showCreateCohortModal, setShowCreateCohortModal] = useState(false);
@@ -31,14 +31,15 @@ export const CreateCohortModal = () => {
   const handleAddCohortStudentsModal = () => setAddCohortStudentsModal(true);
 
   // references for fetch
-  const instructorNameRef = useRef()
-  const cohortNameRef = useRef()
-  
+  const instructorNameRef = useRef();
+  const cohortNameRef = useRef();
+
   let createCohort = () => {
     fetch(`${url}/api/create/cohort`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify({
         newCohort: {
@@ -46,50 +47,74 @@ export const CreateCohortModal = () => {
           begin_date: beginDate,
           end_date: endDate,
           instructor: instructorNameRef.current.value,
-        }
+        },
+      }),
+    })
+      .then((result) => result.json())
+      .then((data) => console.log(data))
+      .then(() => {
+        setBeginDate(null);
+        setEndDate(null);
       })
-    })
-    .then(result => result.json())
-    .then(data => console.log(data))
-    .then(() => {
-      setBeginDate(null);
-      setEndDate(null);
-    })
-    .then(swal(`Cohort was succesfully created`))
-  }
+      .then(swal(`Cohort was succesfully created`));
+  };
 
   return (
     <>
-      <Dropdown.Item id="btn-create-cohort" onClick={handleShowCreateCohortModal}><BsFileEarmarkCodeFill /> Create Cohort </Dropdown.Item>
+      <Dropdown.Item
+        id="btn-create-cohort"
+        onClick={handleShowCreateCohortModal}
+      >
+        <BsFileEarmarkCodeFill /> Create Cohort{" "}
+      </Dropdown.Item>
 
       {/* CreateCohort Modal */}
-      <Modal id="cohort-create-modal" size="md" centered show={showCreateCohortModal} onHide={handleCloseCreateCohortModal}>
+      <Modal
+        id="cohort-create-modal"
+        size="md"
+        centered
+        show={showCreateCohortModal}
+        onHide={handleCloseCreateCohortModal}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Create Cohort</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form>
-          <Form.Group>
-          <Form.Label>Cohort Name:</Form.Label> <Form.Control ref={cohortNameRef} type="text" name="cohortName" />
-          <Form.Label>Instructor Name:</Form.Label>  <Form.Control ref={instructorNameRef} type="text" name="instructorName" />
-            Start Date: <DatePicker
-              selected={beginDate}
-              onChange={date => setBeginDate(date)}
-            />
-            Graduation Date: <DatePicker
-              selected={endDate}
-              onChange={date => setEndDate(date)}
-            />
-          </Form.Group>
+          <Form>
+            <Form.Group>
+              <Form.Label>Cohort Name:</Form.Label>{" "}
+              <Form.Control ref={cohortNameRef} type="text" name="cohortName" />
+              <Form.Label>Instructor Name:</Form.Label>{" "}
+              <Form.Control
+                ref={instructorNameRef}
+                type="text"
+                name="instructorName"
+              />
+              Start Date:{" "}
+              <DatePicker
+                selected={beginDate}
+                onChange={(date) => setBeginDate(date)}
+              />
+              Graduation Date:{" "}
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+              />
+            </Form.Group>
           </Form>
-            
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary" onClick={() =>  { createCohort(); handleCloseCreateCohortModal()}}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              createCohort();
+              handleCloseCreateCohortModal();
+            }}
+          >
             Submit
-            </Button>
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
-}
+  );
+};

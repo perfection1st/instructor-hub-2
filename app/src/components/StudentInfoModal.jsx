@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useRef } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import swal from "sweetalert";
-import Table from "react-bootstrap/Table";
+import React, { useEffect, useState } from 'react';
+import { useRef } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import swal from 'sweetalert';
+import Table from 'react-bootstrap/Table';
+import { ChangeStudentName } from './ChangeStudentName';
+import {BsPencilFill} from "react-icons/bs"
+import '../css/StudentInfoModal.css'
+
+
 
 export const StudentInfoModal = (props) => {
   // prop deconstruction for Student Info Modal displaying/not displaying
@@ -23,8 +28,7 @@ export const StudentInfoModal = (props) => {
       size="lg"
       centered
       show={showStudentInfoModal}
-      onHide={handleCloseStudentInfoModal}
-    >
+      onHide={handleCloseStudentInfoModal}>
       <Modal.Header closeButton>
         <Modal.Title>{clickedStudent}</Modal.Title>
       </Modal.Header>
@@ -65,8 +69,7 @@ export const StudentInfoModal = (props) => {
           variant="primary"
           onClick={() => {
             handleCloseStudentInfoModal();
-          }}
-        >
+          }}>
           Close
         </Button>
       </Modal.Footer>

@@ -1,0 +1,24 @@
+.pen-input{
+    display: flex;
+}
+
+.pen-change-name{
+    display: flex;
+
+}
+.pen{
+margin-right: 20px;
+
+}
+:hover.pen{
+    cursor: pointer;
+    }
+.form-control{
+    margin-right: 5px;
+    min-width: 220px;
+}
+
+.change-text{
+    color: gray;
+    font-size: medium;
+}
