@@ -10,7 +10,18 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
 export const StudentAverages = (props) => {
-  const { students, learnAvg, teamworkAvg, techAvg } = props;
+  const {
+    students,
+    learnAvg,
+    arraysAvg,
+    objAvg,
+    domApiAvg,
+    ssAvg,
+    sDbAvg,
+    reactAvg,
+    teamworkAvg,
+    techAvg,
+  } = props;
 
   var data = {
     labels: [
@@ -31,11 +42,12 @@ export const StudentAverages = (props) => {
           Math.floor(learnAvg / students.length),
           Math.floor(teamworkAvg / students.length),
           Math.floor(techAvg / students.length),
-          // Math.floor(techAvg / students.length),
-          // Math.floor(techAvg / students.length),
-          // Math.floor(techAvg / students.length),
-          // Math.floor(techAvg / students.length),
-          // Math.floor(techAvg / students.length),
+          Math.floor(arraysAvg / students.length),
+          Math.floor(objAvg / students.length),
+          Math.floor(domApiAvg / students.length),
+          Math.floor(ssAvg / students.length),
+          Math.floor(sDbAvg / students.length),
+          Math.floor(reactAvg / students.length),
         ],
         backgroundColor: [
           "rgb(237, 119, 28, 0.4)",

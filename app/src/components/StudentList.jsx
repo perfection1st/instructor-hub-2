@@ -21,6 +21,12 @@ export const StudentList = (props) => {
   const [students, setStudents] = useState([]);
   const [learnAvg, setLearnAvg] = useState(0);
   // const [dveAvge, setDveAvg] useState(0);
+  const [arraysAvg, setArraysAvg] = useState(0);
+  const [objAvg, setObjAvg] = useState(0);
+  const [domApiAvg, setDomApiAvg] = useState(0);
+  const [ssAvg, setSsAvg] = useState(0);
+  const [sDbAvg, setSDbAvg] = useState(0);
+  const [reactAvg, setReactAvg] = useState(0);
   const [teamworkAvg, setTeamworkAvg] = useState(0);
   const [techAvg, setTechAvg] = useState(0);
   // state for Student Info Modal displaying/not displaying
@@ -71,6 +77,36 @@ export const StudentList = (props) => {
         setTechAvg(
           students
             .map((student) => student.fun)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setArraysAvg(
+          students
+            .map((student) => student.arrays)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setObjAvg(
+          students
+            .map((student) => student.obj)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setDomApiAvg(
+          students
+            .map((student) => student.dom_api)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setSsAvg(
+          students
+            .map((student) => student.ss)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setSDbAvg(
+          students
+            .map((student) => student.s_db)
+            .reduce((acc, score) => acc + score, 0)
+        );
+        setReactAvg(
+          students
+            .map((student) => student.react)
             .reduce((acc, score) => acc + score, 0)
         );
       });
@@ -163,6 +199,12 @@ export const StudentList = (props) => {
         <StudentAverages
           students={students}
           learnAvg={learnAvg}
+          arraysAvg={arraysAvg}
+          objAvg={objAvg}
+          domApiAvg={domApiAvg}
+          ssAvg={ssAvg}
+          sDbAvg={sDbAvg}
+          reactAvg={reactAvg}
           teamworkAvg={teamworkAvg}
           techAvg={techAvg}
         />
