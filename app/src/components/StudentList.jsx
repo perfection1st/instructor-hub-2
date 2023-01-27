@@ -235,6 +235,8 @@ export const StudentList = (props) => {
           clickedStudent={clickedStudent}
           showStudentInfoModal={showStudentInfoModal}
           setShowStudentInfoModal={setShowStudentInfoModal}
+          setClickedStudent={setClickedStudent}
+          loadStudents={loadStudents}
         />
       </div>
     </>
