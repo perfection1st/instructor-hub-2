@@ -18,6 +18,8 @@ export const StudentInfoModal = (props) => {
     clickedStudent,
     grades,
     learnGrades,
+    setClickedStudent,
+    loadStudents
   } = props;
   // close Student Info Modal function
   const handleCloseStudentInfoModal = () => setShowStudentInfoModal(false);
@@ -30,7 +32,13 @@ export const StudentInfoModal = (props) => {
       show={showStudentInfoModal}
       onHide={handleCloseStudentInfoModal}>
       <Modal.Header closeButton>
-        <Modal.Title>{clickedStudent}</Modal.Title>
+      <div className='header'> 
+
+<div className = 'student-name'><Modal.Title >{clickedStudent} </Modal.Title></div> 
+
+<div className = 'change-name-component'><ChangeStudentName clickedStudent ={clickedStudent} loadStudents={loadStudents} setClickedStudent={setClickedStudent}/></div>
+
+</div>
       </Modal.Header>
       <Modal.Body>
         <Table id="student-list">
