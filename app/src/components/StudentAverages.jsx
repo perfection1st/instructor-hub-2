@@ -23,6 +23,79 @@ export const StudentAverages = (props) => {
     techAvg,
   } = props;
 
+  let gradedLearnAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].dve !== null) {
+      gradedLearnAvg.push(students[i]);
+    }
+  }
+
+  let gradedTeamworkAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].loops !== null) {
+      gradedTeamworkAvg.push(students[i]);
+    }
+  }
+  console.log(gradedTeamworkAvg);
+
+  let gradedTechAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].fun !== null) {
+      gradedTechAvg.push(students[i]);
+    }
+  }
+
+  let gradedArraysAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].arrays !== null) {
+      gradedArraysAvg.push(students[i]);
+    }
+  }
+
+  let gradedObjAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].obj !== null) {
+      gradedObjAvg.push(students[i]);
+    }
+  }
+
+  let gradedDomApiAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].dom_api !== null) {
+      gradedDomApiAvg.push(students[i]);
+    }
+  }
+
+  let gradedSsAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].ss !== null) {
+      gradedSsAvg.push(students[i]);
+    }
+  }
+
+  let gradedSDbAvg = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].s_db !== null) {
+      gradedSDbAvg.push(students[i]);
+    }
+  }
+
+  let gradedReact = [];
+  for (let i = 0; i < students.length; i++) {
+    console.log(students[i]);
+    if (students[i].react !== null) {
+      gradedReact.push(students[i]);
+    }
+  }
+
   var data = {
     labels: [
       "DVE",
@@ -39,15 +112,15 @@ export const StudentAverages = (props) => {
       {
         label: "Cohort Avg",
         data: [
-          Math.floor(learnAvg / students.length),
-          Math.floor(teamworkAvg / students.length),
-          Math.floor(techAvg / students.length),
-          Math.floor(arraysAvg / students.length),
-          Math.floor(objAvg / students.length),
-          Math.floor(domApiAvg / students.length),
-          Math.floor(ssAvg / students.length),
-          Math.floor(sDbAvg / students.length),
-          Math.floor(reactAvg / students.length),
+          Math.floor(learnAvg / gradedLearnAvg.length),
+          Math.floor(teamworkAvg / gradedTeamworkAvg.length),
+          Math.floor(techAvg / gradedTechAvg.length),
+          Math.floor(arraysAvg / gradedArraysAvg.length),
+          Math.floor(objAvg / gradedObjAvg.length),
+          Math.floor(domApiAvg / gradedDomApiAvg.length),
+          Math.floor(ssAvg / gradedSsAvg.length),
+          Math.floor(sDbAvg / gradedSDbAvg.length),
+          Math.floor(reactAvg / gradedReact.length),
         ],
         backgroundColor: [
           "rgb(237, 119, 28, 0.4)",

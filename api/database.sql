@@ -93,16 +93,16 @@ CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name TEXT,
   assessment_student_avg INT,
-  learn_avg INT DEFAULT 100 NOT NULL,
-  dve INT DEFAULT 100 NOT NULL,
-  loops INT DEFAULT 100 NOT NULL,
-  fun INT DEFAULT 100 NOT NULL,
-  arrays INT DEFAULT 100 NOT NULL,
-  obj INT DEFAULT 100 NOT NULL,
-  dom_api INT DEFAULT 100 NOT NULL,
-  ss INT DEFAULT 100 NOT NULL,
-  s_db INT DEFAULT 100 NOT NULL,
-  react INT DEFAULT 100 NOT NULL,
+  learn_avg INT,
+  dve INT,
+  loops INT,
+  fun INT,
+  arrays INT,
+  obj INT,
+  dom_api INT,
+  ss INT,
+  s_db INT,
+  react INT,
   cohort_name TEXT,
   ETS_date DATE,
   github TEXT,
@@ -719,7 +719,7 @@ VALUES
 INSERT INTO
   proficiency_rates (skill_id, skill_descr)
 VALUES
-  ('100', 'Exceeds standard');
+  ('0', 'Exceeds standard');
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
