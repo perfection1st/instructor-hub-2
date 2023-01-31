@@ -25,7 +25,6 @@ export const StudentAverages = (props) => {
 
   let gradedLearnAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].dve !== null) {
       gradedLearnAvg.push(students[i]);
     }
@@ -33,7 +32,6 @@ export const StudentAverages = (props) => {
 
   let gradedTeamworkAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].loops !== null) {
       gradedTeamworkAvg.push(students[i]);
     }
@@ -42,7 +40,6 @@ export const StudentAverages = (props) => {
 
   let gradedTechAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].fun !== null) {
       gradedTechAvg.push(students[i]);
     }
@@ -50,7 +47,6 @@ export const StudentAverages = (props) => {
 
   let gradedArraysAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].arrays !== null) {
       gradedArraysAvg.push(students[i]);
     }
@@ -58,7 +54,6 @@ export const StudentAverages = (props) => {
 
   let gradedObjAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].obj !== null) {
       gradedObjAvg.push(students[i]);
     }
@@ -66,7 +61,6 @@ export const StudentAverages = (props) => {
 
   let gradedDomApiAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].dom_api !== null) {
       gradedDomApiAvg.push(students[i]);
     }
@@ -74,7 +68,6 @@ export const StudentAverages = (props) => {
 
   let gradedSsAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].ss !== null) {
       gradedSsAvg.push(students[i]);
     }
@@ -82,7 +75,6 @@ export const StudentAverages = (props) => {
 
   let gradedSDbAvg = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].s_db !== null) {
       gradedSDbAvg.push(students[i]);
     }
@@ -90,7 +82,6 @@ export const StudentAverages = (props) => {
 
   let gradedReact = [];
   for (let i = 0; i < students.length; i++) {
-    console.log(students[i]);
     if (students[i].react !== null) {
       gradedReact.push(students[i]);
     }

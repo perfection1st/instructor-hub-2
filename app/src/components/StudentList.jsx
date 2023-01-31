@@ -76,9 +76,8 @@ export const StudentList = (props) => {
       .then(() => {
         setLearnAvg(
           students
-            .filter((student) => student.dve > 0)
-            .reduce((sum, student) => sum + student.dve, 0) /
-            students.filter((student) => student.dve > 0).length
+            .map((student) => student.dve)
+            .reduce((acc, score) => acc + score, 0)
         );
         setTeamworkAvg(
           students
