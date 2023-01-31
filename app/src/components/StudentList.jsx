@@ -42,9 +42,9 @@ export const StudentList = (props) => {
   // state for current student clicked
   const [clickedStudent, setClickedStudent] = useState();
   // useState for assessment grades and project grades
-  const [grades, setGrades] = useState([])
+  const [grades, setGrades] = useState([]);
   // useState for learn grades
-  const [learnGrades, setLearnGrades] = useState([])
+  const [learnGrades, setLearnGrades] = useState([]);
 
   const url = "http://localhost:8000";
 
