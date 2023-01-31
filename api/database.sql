@@ -21,12 +21,6 @@ DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
 
 DROP TABLE IF EXISTS pairs CASCADE;
 
-DROP TABLE IF EXISTS proficiency_rates CASCADE;
-
-DROP TABLE IF EXISTS student_teamwork_skills CASCADE;
-
-DROP TABLE IF EXISTS student_tech_skills CASCADE;
-
 DROP FUNCTION IF EXISTS calc_projavg() CASCADE;
 
 -- DROP TRIGGER IF EXISTS project ON project_grades CASCADE;
@@ -76,15 +70,6 @@ CREATE TABLE cohorts (
   end_date DATE,
   instructor TEXT,
   cohort_avg INT,
-  dve_avg INT,
-  loop_avg INT,
-  functions_avg INT,
-  arrays_avg INT,
-  objects_avg INT,
-  dom_api_avg INT,
-  server_side_avg INT,
-  server_and_database_avg INT,
-  react_avg INT,
   cohort_min INT,
   cohort_max INT
 );
@@ -131,28 +116,6 @@ CREATE TABLE notes (
   name TEXT,
   note_date TIMESTAMPTZ,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
-);
-
-CREATE TABLE proficiency_rates (
-  skill_id INT UNIQUE,
-  skill_descr TEXT NOT NULL
-);
-
-CREATE TABLE student_tech_skills (
-  student_id INT,
-  score INT,
-  record_date TIMESTAMPTZ,
-  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
-);
-
-
-CREATE TABLE student_teamwork_skills (
-  student_id INT,
-  score INT,
-  record_date TIMESTAMPTZ,
-  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
 );
 
 --THIS ALLOWS TRACKING STUDENTS' PROJECT RATINGS/SCORES
@@ -291,39 +254,10 @@ CREATE UNIQUE INDEX learn_grades_only_one_per_student ON learn_grades (student_i
 /* ============================================================
  -- SECTION 2: FUNCTIONS AND TRIGGERS
  ============================================================== */
---- (1) UPDATE STUDENT'S TECH SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED.
-----FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
--- CREATE
--- OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
---   SELECT
---     AVG(student_tech_skills.score) as avg
---   FROM
---     student_tech_skills
---   WHERE
---     student_id = NEW.student_id
--- )
--- UPDATE
---   students
--- SET
---   tech_avg = scores.avg
--- FROM
---   scores
--- WHERE
---   student_id = NEW.student_id;
--- RETURN NEW;
--- END;
--- $$ LANGUAGE 'plpgsql';
--- ----TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
--- CREATE TRIGGER tech_skills_trigger
--- AFTER
--- INSERT
---   OR
--- UPDATE
---   ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
 -- --- (3) UPDATE STUDENT'S LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN.
 -- -- FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
     AVG(learn_grades.assessment_grade) as avg
   FROM
@@ -339,9 +273,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- -- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER learn
 AFTER
@@ -349,16 +287,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+
 -- --- (2) UPDATE STUDENT'S loop grade WHEN NEW grade IS ADDED OR UPDATED.
 -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_loopsGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_loopsGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade)  loops  
+    (learn_grades.assessment_grade) loops
   FROM
     learn_grades
   WHERE
-    assessment_id = 2 AND student_id = NEW.student_id
+    assessment_id = 2
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -368,9 +308,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER teamwrk_loopsGrade_trigger
 AFTER
@@ -378,16 +322,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_loopsGrade();
-  --- (3) UPDATE STUDENT'S dve grade WHEN NEW grade IS ADDED OR UPDATED.
+
+--- (3) UPDATE STUDENT'S dve grade WHEN NEW grade IS ADDED OR UPDATED.
 -- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_dveGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_dveGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS dve  
+    (learn_grades.assessment_grade) AS dve
   FROM
     learn_grades
   WHERE
-    assessment_id = 1 AND student_id = NEW.student_id
+    assessment_id = 1
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -397,9 +343,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER dveGrade
 AFTER
@@ -407,16 +357,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_dveGrade();
+
 --   -- --- (4) UPDATE STUDENT'S functions grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_functionsGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_functionsGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS functions  
+    (learn_grades.assessment_grade) AS functions
   FROM
     learn_grades
   WHERE
-    assessment_id = 3 AND student_id = NEW.student_id
+    assessment_id = 3
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -426,9 +378,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER functionsGrade
 AFTER
@@ -436,16 +392,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_functionsGrade();
+
 --   -- --- (2) UPDATE STUDENT'S arrays grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_arraysGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_arraysGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS arrays  
+    (learn_grades.assessment_grade) AS arrays
   FROM
     learn_grades
   WHERE
-    assessment_id = 4 AND student_id = NEW.student_id
+    assessment_id = 4
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -455,9 +413,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER ArraysGrade
 AFTER
@@ -465,16 +427,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_arraysGrade();
+
 --   -- --- (5) UPDATE STUDENT'S obj grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_objGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_objGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS obj  
+    (learn_grades.assessment_grade) AS obj
   FROM
     learn_grades
   WHERE
-    assessment_id = 5 AND student_id = NEW.student_id
+    assessment_id = 5
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -484,9 +448,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER objGrade
 AFTER
@@ -494,16 +462,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_objGrade();
+
 --   -- --- (6) UPDATE STUDENT'S dom_api grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_domApiGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_domApiGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS avg  
+    (learn_grades.assessment_grade) AS avg
   FROM
     learn_grades
   WHERE
-    assessment_id = 6 AND student_id = NEW.student_id
+    assessment_id = 6
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -513,9 +483,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER domApiGrade
 AFTER
@@ -523,16 +497,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_domApiGrade();
+
 -- -- --- (7) UPDATE STUDENT'S ss grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_ssGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_ssGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS ss  
+    (learn_grades.assessment_grade) AS ss
   FROM
     learn_grades
   WHERE
-    assessment_id = 7 AND student_id = NEW.student_id
+    assessment_id = 7
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -542,9 +518,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER ssGrade
 AFTER
@@ -552,16 +532,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_ssGrade();
+
 --   -- --- (2) UPDATE STUDENT'S s_db grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_sDbGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_sDbGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS sDb  
+    (learn_grades.assessment_grade) AS sDb
   FROM
     learn_grades
   WHERE
-    assessment_id = 8 AND student_id = NEW.student_id
+    assessment_id = 8
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -571,9 +553,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER sDbGrade
 AFTER
@@ -581,17 +567,18 @@ INSERT
   OR
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_sDbGrade();
-  
+
 --   -- --- (2) UPDATE STUDENT'S react grade WHEN NEW grade IS ADDED OR UPDATED.
 -- -- ---- FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
 CREATE
-OR REPLACE FUNCTION calc_reactGrade() RETURNS trigger AS $$ BEGIN WITH grades AS (
+OR REPLACE FUNCTION calc_reactGrade() RETURNS trigger AS $ $ BEGIN WITH grades AS (
   SELECT
-    (learn_grades.assessment_grade) AS react  
+    (learn_grades.assessment_grade) AS react
   FROM
     learn_grades
   WHERE
-    assessment_id = 9 AND student_id = NEW.student_id
+    assessment_id = 9
+    AND student_id = NEW.student_id
 )
 UPDATE
   students
@@ -601,9 +588,13 @@ FROM
   grades
 WHERE
   student_id = NEW.student_id;
+
 RETURN NEW;
+
 END;
-$$ LANGUAGE 'plpgsql';
+
+$ $ LANGUAGE 'plpgsql';
+
 -- ---- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER reactGrade
 AFTER
@@ -612,7 +603,6 @@ INSERT
 UPDATE
   OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_reactGrade();
 
-  
 -- --- (4)  UPDATE COHORT'S LOWEST ASSESSMENT AVERAGE WHEN STUDENT'S LEARN AVERAGE IS ADDED OR UPDATED.
 -- -- FUNCTION:UPDATE COHORT LOWEST AVG SCORE
 -- CREATE
@@ -726,6 +716,3 @@ VALUES
 -- Linear Regression to see if learn scores are predictive of tech skills for a cohort.
 -- The closer R^2 is to 1, the stronger the predictive power
 -- SELECT regr_r2(learn_avg, tech_skills) as r2_learn_tech FROM students
-
-
-

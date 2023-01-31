@@ -130,7 +130,17 @@ export const StudentList = (props) => {
       },
     })
       .then((result) => result.json())
-      .then((data) => setGrades(data));
+      .then((data) => {
+        let studentIdData = [];
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].student_id === id) {
+            console.log(data[i]);
+            studentIdData.push(data[i]);
+            console.log(studentIdData);
+            setGrades(studentIdData);
+          }
+        }
+      });
   }
   //Does a fetch when student is clicked to get their grades from learn content
   function getLearnGrades(id) {
