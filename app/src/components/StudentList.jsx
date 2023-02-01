@@ -168,8 +168,23 @@ export const StudentList = (props) => {
             setSelectedClass(evt);
             sessionStorage.setItem("currentClass", evt);
             loadStudents(evt);
+            setSelectedClass(evt);
+            sessionStorage.setItem("currentClass", evt);
+            loadStudents(evt);
           }}
         >
+          {isLoadingCourses ? (
+            <LoadingDropdown />
+          ) : (
+            courses.map((course) => (
+              <Dropdown.Item
+                key={course.cohort_id}
+                eventKey={course.cohort_name}
+              >
+                {course.cohort_name}
+              </Dropdown.Item>
+            ))
+          )}
           {isLoadingCourses ? (
             <LoadingDropdown />
           ) : (
@@ -208,6 +223,19 @@ export const StudentList = (props) => {
                   >
                     {student.name}
                   </td>
+              {students.map((student) => (
+                <tr key={student.student_id}>
+                  <td
+                    id="student-name"
+                    value={student.student_id}
+                    onClick={(e) => {
+                      getLearnGrades(student.student_id);
+                      getGrades(student.student_id);
+                      handleShowStudentInfoModal(student.name);
+                    }}
+                  >
+                    {student.name}
+                  </td>
                   <td>{student.github}</td>
                   <td className="student-average" width={"15%"}>
                     <ButtonGroup aria-label="Basic example">
@@ -221,6 +249,8 @@ export const StudentList = (props) => {
                       </Button>
                     </ButtonGroup>
                   </td>
+                </tr>
+              ))}
                 </tr>
               ))}
             </tbody>

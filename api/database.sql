@@ -60,7 +60,10 @@ CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   email VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
-  default_cohort TEXT
+  default_cohort TEXT,
+  img text,
+  token VARCHAR(255),
+  session_token VARCHAR(255)
 );
 
 CREATE TABLE cohorts (

@@ -242,3 +242,17 @@ button#copy-groups-btn {
   cursor: pointer;
   background-color:#fff;
 }
+#profile-pic{
+  display: flexbox;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  margin-left: 500px;
+}
+#header{
+  display: flex;
+}
+#admin-menu{
+  margin-left: 40px;
+  margin-top: 20px;
+}

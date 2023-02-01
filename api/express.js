@@ -1,8 +1,15 @@
 //Sets up requires that the server needs
 const express = require("express");
 const app = express();
-const cors = require("cors");
-require("dotenv").config();
+const cors = require('cors');
+require('dotenv').config();
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+const fs =require ('fs')
+const util = require('util')
+const unlinkFile= util.promisify(fs.unlink)
+
+const { uploadFile, getFileStream } = require ('./s3')
 
 const { Pool } = require("pg");
 
@@ -184,6 +191,38 @@ app.get("/api/students/:cohortdc", authenticateToken, (req, res) => {
     .then((result) => res.send(result.rows))
     .catch((error) => res.send(error));
 });
+// Route to storage image //
+app.post('/image' , upload.single('image') , async (req, res) =>{
+    const file= req.file
+    console.log(file)
+    const result=await uploadFile(file)
+    await unlinkFile(file.path)
+    console.log(result)
+    res.send({imagePath:`/image/${result.Key}`})
+})
+
+app.get('/image/:key',(req,res) =>{
+    const key = req.params.key
+    const readStream= getFileStream(key)
+    readStream.pipe(res)
+
+})
+app.get('/images/:username',(req,res) =>{
+    let username = req.params.username
+    pool.query(`SELECT img FROM users WHERE username = $1 `,[username] )
+        .then(result => res.send(result.rows))
+        .catch(error => res.send(error))
+
+})
+app.patch('/update/img',(req,res)=>{
+    const user = req.body.username
+    const img = req.body.img
+    //Updates the current img with the new one and returns new img
+    pool.query('UPDATE users SET img = $1 WHERE username = $2 RETURNING img', [img, user])
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
+})
+
 
 //Route selects students from list inside modal//
 app.post("/api/selectedstudents", authenticateToken, (req, res) => {
@@ -228,6 +267,52 @@ app.patch("/api/default-cohort", authenticateToken, (req, res) => {
 // })
 
 //Route to create a new user
+app.post('/api/create/user', (req, res) => {
+    //Creates a random string with 25 different characters
+    const random = Str.random(25)
+    const user = req.body
+    //Creates an account specific json web token using username and a random string
+    const accountToken = jwt.sign({ id: user.username }, random)
+    //Creates a random string to be updated each time user signs in
+    //First created token is a place holder
+    const sessionToken = Str.random(30)
+    //hashes the input password to be stored securely
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+        //The password is hashed now and can be stored with the hash parameter
+        pool.query(`INSERT INTO users (username, password, img, token, session_token) VALUES ($1, $2,'/image/f84dd5fb0bda1ba2d636c0bfdc795115', $3, $4) ON CONFLICT (username) DO NOTHING RETURNING *`,
+            [user.username, hash, accountToken, sessionToken])
+            //Checks to see what was returned
+            //If a account already exists it sends back result.rows with a length of zero
+            //If account was created it sends back the account info
+            .then(result => {
+                result.rows.length === 0 ?
+                    res.status(409).send([{ result: 'false' }]) : res.status(201).send([{ result: 'true' }])
+            })
+            .catch(error => res.status(400).send(error))
+    })
+})
+
+//Route handler for user login
+app.post('/api/login', (req, res) => {
+    const user = req.body.username
+    const password = req.body.password
+    pool.query('SELECT * FROM users WHERE username = $1', [user])
+        //Checks to see if the username matches stored username
+        .then(data => {
+            //If username doesn't match a stored username it sends back Incorrect Username
+            if (data.rows.length === 0) {
+                res.send([{ response: 'Incorrect Username' }])
+            } else {
+                //If username matches it does a bcrypt compare to check if the password is correct
+                bcrypt.compare(password, data.rows[0].password, function (err, result) {
+                    //If passowrd is correct it sends the users information
+                    result == true ?
+                        res.send([{ username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token }]) :
+                        res.send([{ response: 'false' }])
+                })
+            }
+        })
+})
 
 //Route to verify the user logging in
 app.post("/api/authent", authenticateToken, (req, res) => {
