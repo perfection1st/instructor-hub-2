@@ -3,6 +3,13 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+const fs =require ('fs')
+const util = require('util')
+const unlinkFile= util.promisify(fs.unlink)
+
+const { uploadFile, getFileStream } = require ('./s3')
 
 const { Pool } = require('pg');
 
@@ -46,6 +53,38 @@ app.get('/api/students/:cohort', (req, res) => {
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
 })
+// Route to storage image //
+app.post('/image' , upload.single('image') , async (req, res) =>{
+    const file= req.file
+    console.log(file)
+    const result=await uploadFile(file)
+    await unlinkFile(file.path)
+    console.log(result)
+    res.send({imagePath:`/image/${result.Key}`})
+})
+
+app.get('/image/:key',(req,res) =>{
+    const key = req.params.key
+    const readStream= getFileStream(key)
+    readStream.pipe(res)
+
+})
+app.get('/images/:username',(req,res) =>{
+    let username = req.params.username
+    pool.query(`SELECT img FROM users WHERE username = $1 `,[username] )
+        .then(result => res.send(result.rows))
+        .catch(error => res.send(error))
+
+})
+app.patch('/update/img',(req,res)=>{
+    const user = req.body.username
+    const img = req.body.img
+    //Updates the current img with the new one and returns new img
+    pool.query('UPDATE users SET img = $1 WHERE username = $2 RETURNING img', [img, user])
+        .then(result => res.status(200).send(result.rows))
+        .catch(error => res.status(404).send(error))
+})
+
 
 //Route selects students from list inside modal//
 app.post('/api/selectedstudents', (req, res) => {
@@ -97,7 +136,7 @@ app.post('/api/create/user', (req, res) => {
     //hashes the input password to be stored securely
     bcrypt.hash(user.password, saltRounds, (err, hash) => {
         //The password is hashed now and can be stored with the hash parameter
-        pool.query('INSERT INTO users (username, password, token, session_token) VALUES ($1, $2, $3, $4) ON CONFLICT (username) DO NOTHING RETURNING *',
+        pool.query(`INSERT INTO users (username, password, img, token, session_token) VALUES ($1, $2,'/image/f84dd5fb0bda1ba2d636c0bfdc795115', $3, $4) ON CONFLICT (username) DO NOTHING RETURNING *`,
             [user.username, hash, accountToken, sessionToken])
             //Checks to see what was returned
             //If a account already exists it sends back result.rows with a length of zero
