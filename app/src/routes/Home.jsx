@@ -27,6 +27,9 @@ export const Home = (props) => {
     swal("Not Authenticated");
     sessionStorage.clear();
     setIsLoggedIn(false);
+    swal("Not Authenticated");
+    sessionStorage.clear();
+    setIsLoggedIn(false);
   }
 
 
