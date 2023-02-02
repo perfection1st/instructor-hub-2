@@ -247,6 +247,7 @@ button#copy-groups-btn {
   border-radius: 50%;
   height: 70px;
   width: 70px;
+  border-color: #000;
   margin-left: 500px;
 }
 #header{
