@@ -35,13 +35,13 @@ export default function ProfilePhoto() {
     console.log(result.imagePath);
     axios.patch(
       `${URL}/update/img`,
-      { username: sessionStorage.getItem("username"), img: result.imagePath },
+      { email: sessionStorage.getItem("email"), img: result.imagePath },
       { headers: { "Content-Type": "application/json" } }
     );
     setShow(false);
   };
   useEffect(() => {
-    fetch(`${URL}/images/${sessionStorage.getItem("username")}`)
+    fetch(`${URL}/images/${sessionStorage.getItem("email")}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data[0].img);
@@ -50,11 +50,14 @@ export default function ProfilePhoto() {
   });
   return (
     <div>
-      <Image
-        onClick={() => setShow(true)}
-        src={`${URL}${profile}`}
-        id="profile-pic"
-      ></Image>
+      <div>
+        <Image
+          id="profile-pic"
+          style={{ backgroundSize: "contain" }}
+          onClick={() => setShow(true)}
+          src={`${URL}${profile}`}
+        ></Image>
+      </div>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Change Profile Picture</Modal.Title>
