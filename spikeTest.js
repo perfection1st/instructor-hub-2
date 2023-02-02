@@ -1,6 +1,8 @@
 import http from "k6/http";
 import { sleep } from "k6";
 
+//the point of this test is to gradually push your APIs beyond its breaking point
+
 export const options = {
   scenarios: {
     stress: {
@@ -23,7 +25,7 @@ export const options = {
 };
 
 export default function () {
-  const BASE_URL = "https://localhost:3000"; // make sure this is not production
+  const BASE_URL = "http://localhost:3000"; // make sure this is not production
   const responses = http.batch([
     [
       "GET",
