@@ -24,11 +24,12 @@ VALUES (
     asana_access_token
   )
 VALUES (
-    'Mr. Egg',
+    'simon',
     crypt('password', gen_salt('bf')),
     'MCSP15',
     'heres_another_asana_access_token'
   );
+  
 
   INSERT INTO users (
     username,
