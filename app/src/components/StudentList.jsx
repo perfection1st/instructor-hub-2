@@ -223,34 +223,25 @@ export const StudentList = (props) => {
                   >
                     {student.name}
                   </td>
-              {students.map((student) => (
-                <tr key={student.student_id}>
-                  <td
-                    id="student-name"
-                    value={student.student_id}
-                    onClick={(e) => {
-                      getLearnGrades(student.student_id);
-                      getGrades(student.student_id);
-                      handleShowStudentInfoModal(student.name);
-                    }}
-                  >
-                    {student.name}
-                  </td>
-                  <td>{student.github}</td>
-                  <td className="student-average" width={"15%"}>
-                    <ButtonGroup aria-label="Basic example">
-                      <Button variant="secondary" size="sm">
-                        <Badge
-                          bg={student.learn_avg < 70 ? "danger" : "success"}
-                        >
-                          {student.learn_avg || "--"}%
-                        </Badge>
-                        <span className="visually-hidden">unread messages</span>
-                      </Button>
-                    </ButtonGroup>
-                  </td>
-                </tr>
-              ))}
+                  {students.map((student) => (
+                    <tr key={student.student_id}>
+                      <td>{student.github}</td>
+                      <td className="student-average" width={"15%"}>
+                        <ButtonGroup aria-label="Basic example">
+                          <Button variant="secondary" size="sm">
+                            <Badge
+                              bg={student.learn_avg < 70 ? "danger" : "success"}
+                            >
+                              {student.learn_avg || "--"}%
+                            </Badge>
+                            <span className="visually-hidden">
+                              unread messages
+                            </span>
+                          </Button>
+                        </ButtonGroup>
+                      </td>
+                    </tr>
+                  ))}
                 </tr>
               ))}
             </tbody>
