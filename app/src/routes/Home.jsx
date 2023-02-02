@@ -7,7 +7,6 @@ import { StudentList } from "../components/StudentList";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
 
-
 export const Home = (props) => {
   const URL = "http://localhost:8000/api";
   const { isLoggedIn, setIsLoggedIn } = props;
@@ -27,24 +26,19 @@ export const Home = (props) => {
     swal("Not Authenticated");
     sessionStorage.clear();
     setIsLoggedIn(false);
+    swal("Not Authenticated");
+    sessionStorage.clear();
+    setIsLoggedIn(false);
   }
-
-
-
-
-
 
   //const [update, setUpate] = useState(true)
 
   //Sends a fetch to get all of a users projects/classes from asana
   useEffect(() => {
-
-
     setTimeout(() => {
       // code to be executed after 1 minute
       dbCohorts();
-  }, 600);
- 
+    }, 600);
 
     //Was used when connected to asana, no longer used
     //Sends a fetch to get all users info
@@ -62,9 +56,7 @@ export const Home = (props) => {
     //     setIsLoadingCourses(false);
     //     dbCohorts()
     // })
-    
-  }, [courses]);
-
+  }, []);
 
   function dbCohorts() {
     fetch(`${URL}/cohorts`, {
@@ -80,28 +72,28 @@ export const Home = (props) => {
       .then(setIsLoadingCourses(false));
   }
 
-//   const [courses, setCourses] = useState([]);
-// const [isLoading, setIsLoading] = useState(true);
+  //   const [courses, setCourses] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
 
-// useEffect(() => {
-//     if (isLoading) {
-//         dbCohorts();
-//     }
-// }, [isLoading]);
+  // useEffect(() => {
+  //     if (isLoading) {
+  //         dbCohorts();
+  //     }
+  // }, [isLoading]);
 
-// function dbCohorts() {
-//     fetch(`${URL}/cohorts`, {
-//         method: "GET",
-//         headers: {
-//             Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-//         },
-//     })
-//         .then((result) => result.json())
-//         .then((data) => {
-//             setCourses(data);
-//         })
-//         .then(() => setIsLoading(false));
-// }
+  // function dbCohorts() {
+  //     fetch(`${URL}/cohorts`, {
+  //         method: "GET",
+  //         headers: {
+  //             Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+  //         },
+  //     })
+  //         .then((result) => result.json())
+  //         .then((data) => {
+  //             setCourses(data);
+  //         })
+  //         .then(() => setIsLoading(false));
+  // }
 
   //if user is not already logged in, they will be automatically navigated to the login page
   if (!isLoggedIn) {
