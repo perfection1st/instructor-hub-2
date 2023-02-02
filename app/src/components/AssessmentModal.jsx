@@ -14,6 +14,8 @@ export const AssessmentModal = (props) => {
     setChecked,
     selectedStudents,
     setSelectedStudents,
+    studentData,
+    setStudentData,
   } = props;
   const URL = "http://localhost:8000";
 
@@ -44,8 +46,8 @@ export const AssessmentModal = (props) => {
 
   //this function sets the selected grade for the respective student and assigns it to the selected students state
   const handleSelectAssessmentGrade = (e, student_id) => {
-    setSelectedStudents((prevStudents) =>
-      prevStudents.map((student) => {
+    studentData =>
+      studentData.map((student) => {
         if (student.student_id === student_id) {
           return {
             ...student,
@@ -62,7 +64,7 @@ export const AssessmentModal = (props) => {
   const handleCloseAssessmentModal = () => {
     setCurrentSelectedAssessmentName("");
     setCurrentSelectedAssessmentID(0);
-    setSelectedStudents([]);
+    // setSelectedStudents([]);
     setShowAssessmentModal(false);
   };
 
@@ -77,6 +79,16 @@ export const AssessmentModal = (props) => {
       .then((data) => {
         setAllAssessmentNames(data);
       });
+      
+      fetch(`${URL}/api/learn-grades`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCurrentLearnGrades(data);
+        });
     setShowAssessmentModal(true);
   };
 
@@ -325,3 +337,55 @@ export const AssessmentModal = (props) => {
     </>
   );
 };
+
+
+return (
+  <Modal>
+    <Modal.Body>
+      <Select onChange={(e) => handleSelectAssessment(e)}>
+      <option value="">-- Select Assessment --</option>
+            {allAssessmentNames.map((names) => {
+              if (currentSelectedAssessmentName === names.assessment_name) {
+                return;
+              }
+              return (
+                <option key={names.assessment_id} value={names.assessment_name}>
+                  {setCurrentSelectedAssessmentName(`${names.assessment_name}`)}
+                </option>
+              );
+            })}
+      </Select>
+
+      {currentSelectedAssessmentName !== '' && (
+        <Table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {studentData.map(() => (
+              <tr key={studentData.student_id}>
+                <td>{studentData.name}</td>
+                <td>
+                  {studentData.grade ? (
+                    student.grade
+                  ) : (
+                    <Form.Control
+                      onChange={e => handleChange(e, `${student.student_id}`)}
+                      type="number"
+                      placeholder="Enter grade"
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Modal.Body>
+  </Modal>
+);
+}
+}
