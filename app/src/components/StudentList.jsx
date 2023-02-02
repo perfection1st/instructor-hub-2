@@ -168,23 +168,8 @@ export const StudentList = (props) => {
             setSelectedClass(evt);
             sessionStorage.setItem("currentClass", evt);
             loadStudents(evt);
-            setSelectedClass(evt);
-            sessionStorage.setItem("currentClass", evt);
-            loadStudents(evt);
           }}
         >
-          {isLoadingCourses ? (
-            <LoadingDropdown />
-          ) : (
-            courses.map((course) => (
-              <Dropdown.Item
-                key={course.cohort_id}
-                eventKey={course.cohort_name}
-              >
-                {course.cohort_name}
-              </Dropdown.Item>
-            ))
-          )}
           {isLoadingCourses ? (
             <LoadingDropdown />
           ) : (
@@ -223,25 +208,19 @@ export const StudentList = (props) => {
                   >
                     {student.name}
                   </td>
-                  {students.map((student) => (
-                    <tr key={student.student_id}>
-                      <td>{student.github}</td>
-                      <td className="student-average" width={"15%"}>
-                        <ButtonGroup aria-label="Basic example">
-                          <Button variant="secondary" size="sm">
-                            <Badge
-                              bg={student.learn_avg < 70 ? "danger" : "success"}
-                            >
-                              {student.learn_avg || "--"}%
-                            </Badge>
-                            <span className="visually-hidden">
-                              unread messages
-                            </span>
-                          </Button>
-                        </ButtonGroup>
-                      </td>
-                    </tr>
-                  ))}
+                  <td>{student.github}</td>
+                  <td className="student-average" width={"15%"}>
+                    <ButtonGroup aria-label="Basic example">
+                      <Button variant="secondary" size="sm">
+                        <Badge
+                          bg={student.learn_avg < 70 ? "danger" : "success"}
+                        >
+                          {student.learn_avg || "--"}%
+                        </Badge>
+                        <span className="visually-hidden">unread messages</span>
+                      </Button>
+                    </ButtonGroup>
+                  </td>
                 </tr>
               ))}
             </tbody>
