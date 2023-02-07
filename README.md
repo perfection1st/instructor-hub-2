@@ -20,7 +20,7 @@ Instructor Hub is a web application used by instructors to grade students and ag
 
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
-![Visual Studio Code](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
+![Visual Studio Code](https://img.shields.io/badge/Visual*Studio*Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
 
 ![Discord](https://camo.githubusercontent.com/f868f43f3c084669121e55e633ca5c3e11d382872ab7db663789f5c736c71a43/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446973636f72642d3538363546323f7374796c653d666f722d7468652d6261646765266c6f676f3d646973636f7264266c6f676f436f6c6f723d7768697465)
 ![Trello](https://camo.githubusercontent.com/529f3db66dcea87286a50a8bbb379acc5b6485805215e4cce5365aa43b7ddaca/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5472656c6c6f2d3030353243433f7374796c653d666f722d7468652d6261646765266c6f676f3d7472656c6c6f266c6f676f436f6c6f723d7768697465)
@@ -48,30 +48,28 @@ Next create your postgres database, copy `database.sql` and `seed.sql` from the 
 
 Create an .env file in the following format:
 
-```
-PG_CONNECT="postgresql://postgres:docker@127.0.0.1:5432/blueocean"
-COOKIES_SECRET_KEY=""
-TOKEN_SECRET="hello"
-AWS_BUCKET_NAME='upload-img-s3'
-AWS_BUCKET_REGION='us-east-1'
-AWS_ACCESS_KEY='fill with access key'
-AWS_SECRET_KEY='fill with secret key'
+PG*CONNECT="postgresql://postgres:docker@127.0.0.1:5432/blueocean"
+COOKIES*SECRET*KEY=""
+TOKEN*SECRET="hello"
+AWS*BUCKET*NAME='upload-img-s3'
+AWS*BUCKET*REGION='us-east-1'
+AWS*ACCESS*KEY='fill with access key'
+AWS*SECRET*KEY='fill with secret key'
 
 To start in a development environment use `npm start` in the root and `npm run dev` in the `/api` directory.
 
-
 ## Unit Testing/Integration Testing w/ JEST
 
-*Installation:*
+_Installation:_
 To use Jest, you first need to install it as a dev dependency in your project by running npm install --save-dev jest.
 
-*Configuration:*
+_Configuration:_
 Create a jest.config.js file in the root of your project and add the following basic configuration:
-    module.exports = {
-        testEnvironment: 'node'
-    };
+module.exports = {
+testEnvironment: 'node'
+};
 
-*Writing Tests:*
+_Writing Tests:_
 Jest uses the describe and test functions to write tests.
 Write your tests as individual functions inside describe blocks.
 For example:
@@ -82,11 +80,11 @@ For example:
         });
         });
 
-*Running Tests:*
+_Running Tests:_
 Run the tests by using the command npm run test in your terminal.
 Jest will automatically detect and run all the tests in your project.
 
-*Testing Async Code:*
+_Testing Async Code:_
 To test asynchronous code, you can use the async and await keywords.
 Wrap your asynchronous code inside an async function and then call the function inside a test.
 For example:
@@ -100,10 +98,10 @@ For example:
 
 ## Load Testing w/ K6
 
-*Installation:*
+_Installation:_
 Install K6 by running npm install -g k6 in your terminal.
 
-*Writing Scripts:*
+_Writing Scripts:_
 K6 scripts are written in JavaScript.
 Create a new file with a .js extension and add the following code to import the K6 library:
 
@@ -116,16 +114,15 @@ For example:
         http.get('https://test.com');
     }
 
-*Load Testing:*
+_Load Testing:_
 Load testing is used to test the performance of a system under normal or expected load conditions. Example can be found in root directory.
 
-*Spike Testing:*
+_Spike Testing:_
 Spike testing is used to test the system's performance during sudden and unexpected increases in load. Example can be found in root directory.
 
-*Soak Testing:*
+_Soak Testing:_
 Soak testing is used to test the system's performance over an extended period of time.
 Example can be found in the root directory.
-```
 
 ## E2E Testing with Selenium
 
