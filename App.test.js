@@ -2,6 +2,8 @@ import React from "react";
 import { App } from "./app/src/App";
 import { render, cleanup } from "@testing-library/react";
 
+//This does not work. dont run this test.
+
 afterEach(cleanup);
 
 describe("App", () => {
