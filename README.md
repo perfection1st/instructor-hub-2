@@ -35,9 +35,9 @@ The following libraries and utilities are required to run the application:
 - [React-Bootstrap](https://react-bootstrap.github.io/)
 - [React-Suite](https://rsuitejs.com/)
 - [Axios](https://axios-http.com/docs/intro)
-- [AWS-SDK] (https://docs.aws.amazon.com/sdk-for-javascript/index.html)
-- [Charts] (https://documentation.image-charts.com/chart.js/)
-- [React-Datepicker] (https://reactdatepicker.com/)
+- [AWS-SDK](https://docs.aws.amazon.com/sdk-for-javascript/index.html)
+- [Charts](https://documentation.image-charts.com/chart.js/)
+- [React-Datepicker](https://reactdatepicker.com/)
 - [React Icons](https://react-icons.github.io/react-icons/search)
 
 ## Installation:
