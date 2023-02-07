@@ -48,6 +48,7 @@ Next create your postgres database, copy `database.sql` and `seed.sql` from the 
 
 Create an .env file in the following format:
 
+```
 PG*CONNECT="postgresql://postgres:docker@127.0.0.1:5432/blueocean"
 COOKIES*SECRET*KEY=""
 TOKEN*SECRET="hello"
@@ -55,6 +56,7 @@ AWS*BUCKET*NAME='upload-img-s3'
 AWS*BUCKET*REGION='us-east-1'
 AWS*ACCESS*KEY='fill with access key'
 AWS*SECRET*KEY='fill with secret key'
+```
 
 To start in a development environment use `npm start` in the root and `npm run dev` in the `/api` directory.
 
