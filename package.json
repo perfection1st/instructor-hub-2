@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"cd api && npm run dev\" \"cd app && npm run start\""
+  }
+}
