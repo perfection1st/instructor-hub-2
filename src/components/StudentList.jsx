@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
-import { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Form from 'react-bootstrap/Form';
 import { GenerateGroupsModal } from './GenerateGroupsModal' 
 import { StudentInfoModal } from './StudentInfoModal'

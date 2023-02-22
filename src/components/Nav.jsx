@@ -2,7 +2,7 @@ import { WeeklyModal } from './WeeklyModal';
 import { ProjectModal } from './ProjectModal';
 import { AssessmentModal } from './AssessmentModal';
 import { CreateCohortModal } from './CreateCohortModal';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 
 

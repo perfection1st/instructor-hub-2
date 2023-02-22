@@ -23,7 +23,7 @@ const format = require('pg-format')
 const PORT = 8000;
 
 //Sets up the pool for the server
-const pool = new Pool({ database: process.env.DB_name});
+const pool = new Pool({ database: 'blueocean'});
 pool.connect();
 
 app.use(cors());

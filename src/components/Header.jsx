@@ -1,3 +1,4 @@
+import React from 'react';
 import '../images/galvanize-logo.svg';
 import {AdminMenu} from './AdminMenu';
 

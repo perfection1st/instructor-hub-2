@@ -4,14 +4,14 @@
   "type": "module",
   "workspaces": [
     "server",
-    "client"
+    "src"
   ],
   "dependencies": {
     "concurrently": "^7.6.0"
   },
   "scripts": {
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\"",
-    "dev:client": "npm run dev --workspace=client",
+    "dev": "concurrently \"npm:dev:*\"",
+    "dev:src": "npm run dev --workspace=src",
     "dev:server": "npm run dev --workspace=server",
     "db:seed": "psql -f server/seed.sql blueocean"
   }
