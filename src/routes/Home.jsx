@@ -1,3 +1,4 @@
+import React from 'react';
 import '../css/Home.css';
 import { useMemo } from 'react';
 import { Navigate } from 'react-router-dom';

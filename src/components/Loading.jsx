@@ -1,3 +1,4 @@
+import React from 'react';
 import { Placeholder } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 
