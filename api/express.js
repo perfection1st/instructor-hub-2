@@ -23,9 +23,7 @@ const format = require('pg-format')
 const PORT = 8000;
 
 //Sets up the pool for the server
-const pool = new Pool({
-    connectionString: process.env.PG_CONNECT
-});
+const pool = new Pool({ database: process.env.DB_name});
 pool.connect();
 
 app.use(cors());
