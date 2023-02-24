@@ -1,3 +1,5 @@
+//const asana = require('asana'); //Asana Integration
+
 //Sets up requires that the server needs
 const express = require('express');
 const app = express();
@@ -28,6 +30,19 @@ pool.connect();
 
 app.use(cors());
 app.use(express.json());
+
+
+
+/************************ Asana Integration ********************/
+
+
+// const client = asana.Client.create().useAccessToken('PERSONAL_ACCESS_TOKEN');
+
+// client.tasks.createTask({field: "value", field: "value", pretty: true})
+//     .then((result) => {
+//         console.log(result);
+//     });
+/************************ Asana Integration ********************/
 
 
 //Gets all the cohorts
