@@ -1,42 +1,44 @@
-//const asana = require('asana'); //Asana Integration
+// import { Client } from 'asana'; //Asana Integration
 
 //Sets up requires that the server needs
-const express = require('express');
+import express, { json as _json } from 'express';
 const app = express();
-const cors = require('cors');
-require('dotenv').config();
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const { Pool } = require('pg');
+import pg from 'pg';
 
 //Sets up encryption hashing tools:
-const bcrypt = require('bcrypt');
+import { hash as _hash, compare } from 'bcrypt';
 const saltRounds = 10;
 
 //Used to access jwt tools
-const jwt = require('jsonwebtoken');
-const { json } = require('express');
+import jsonwebtoken from 'jsonwebtoken';
+const {sign} = jsonwebtoken;
+import { json } from 'express';
 
 //Creates random strings for tokens
-const Str = require('@supercharge/strings')
+import strings from '@supercharge/strings'; ///string.random
 
-const format = require('pg-format')
+import format from 'pg-format';
 
 //Sets up env and port
 const PORT = 8000;
 
 //Sets up the pool for the server
-
-const pool = new Pool({ connectionString: process.env.DB_name });
+const pool = new pg.Pool({ connectionString: process.env.DB_name });
+pool.connect();
 
 app.use(cors());
-app.use(express.json());
+app.use(_json());
 
 
 
 /************************ Asana Integration ********************/
 
 
-// const client = asana.Client.create().useAccessToken('PERSONAL_ACCESS_TOKEN');
+// const client = Client.create().useAccessToken('1/1204033748668812:a2f332ccb5e2b3e415e1676d794b5563');
 
 // client.tasks.createTask({field: "value", field: "value", pretty: true})
 //     .then((result) => {
@@ -100,15 +102,15 @@ app.patch('/api/default-cohort', (req, res) => {
 //Route to create a new user
 app.post('/api/create/user', (req, res) => {
     //Creates a random string with 25 different characters
-    const random = Str.random(25)
+    const random = strings.random(25)
     const user = req.body
     //Creates an account specific json web token using username and a random string
-    const accountToken = jwt.sign({ id: user.username }, random)
+    const accountToken = sign({ id: user.username }, random)
     //Creates a random string to be updated each time user signs in
     //First created token is a place holder
-    const sessionToken = Str.random(30)
+    const sessionToken = strings.random(30)
     //hashes the input password to be stored securely
-    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+    _hash(user.password, saltRounds, (err, hash) => {
         //The password is hashed now and can be stored with the hash parameter
         pool.query('INSERT INTO users (username, password, token, session_token) VALUES ($1, $2, $3, $4) ON CONFLICT (username) DO NOTHING RETURNING *',
             [user.username, hash, accountToken, sessionToken])
@@ -135,7 +137,7 @@ app.post('/api/login', (req, res) => {
                 res.send([{ response: 'Incorrect Username' }])
             } else {
                 //If username matches it does a bcrypt compare to check if the password is correct
-                bcrypt.compare(password, data.rows[0].password, function (err, result) {
+                compare(password, data.rows[0].password, function (err, result) {
                     //If passowrd is correct it sends the users information
                     result == true ?
                         res.send([{ username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token }]) :
@@ -168,7 +170,7 @@ app.post('/api/authent', (req, res) => {
 app.patch('/api/token', (req, res) => {
     const user = req.body.username
     //Creates a random string for the session token
-    const sessionToken = Str.random(30)
+    const sessionToken = strings.random(30)
     //Updates the current session token with the new one and returns new token
     pool.query('UPDATE users SET session_token = $1 WHERE username = $2 RETURNING session_token', [sessionToken, user])
         .then(result => res.status(200).send(result.rows))
