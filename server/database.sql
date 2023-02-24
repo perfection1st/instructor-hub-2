@@ -144,7 +144,7 @@ INSERT INTO projects (project_name) VALUES ('Hack-a-thon');
 INSERT INTO projects (project_name) VALUES ('Front End Project');
 INSERT INTO projects (project_name) VALUES ('React MVP');
 INSERT INTO projects (project_name) VALUES ('Front End Capstone');
-INSERT INTO projects (project_name) VALUES ('System Design Captosone');
+INSERT INTO projects (project_name) VALUES ('System Design Capstone');
 INSERT INTO projects (project_name) VALUES ('Blue Ocean');
 
 CREATE TABLE project_grades (
