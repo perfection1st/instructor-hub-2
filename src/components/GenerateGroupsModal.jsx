@@ -40,7 +40,7 @@ export const GenerateGroupsModal = (props) => {
         while (students.length > 0) {
             const student = students.splice(Math.floor(Math.random() * students.length), 1)[0];
             let groupIndex = 0;
-            let minSize = Number.MAX_VALUE;
+            let minSize = numGroups;
             for (let i = 0; i < groups.length; i++) {
                 if (groups[i].length < minSize) {
                     groupIndex = i;
