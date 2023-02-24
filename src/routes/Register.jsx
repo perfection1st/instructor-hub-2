@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/Register.css';
+// import '../css/Register.css';
 import Spinner from 'react-bootstrap/Spinner'
 import { Navigate, Link } from 'react-router-dom';
 import { useRef } from 'react';
