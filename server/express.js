@@ -38,7 +38,7 @@ app.use(_json());
 /************************ Asana Integration ********************/
 
 
-// const client = Client.create().useAccessToken('1/1204033748668812:a2f332ccb5e2b3e415e1676d794b5563');
+// const client = Client.create().useAccessToken( process.env.asanaPrivateToken);
 
 // client.tasks.createTask({field: "value", field: "value", pretty: true})
 //     .then((result) => {
