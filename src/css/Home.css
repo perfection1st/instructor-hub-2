@@ -33,14 +33,25 @@ p {
   font-size: 18px;
 }
 
+#page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+#header-container {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+}
+
 header {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  width: 100%;
-  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  width: 90%;
 }
 
 header h1 {
@@ -49,22 +60,36 @@ header h1 {
   text-indent: -9999px;
 }
 
-div#home-container {
-  width: 1000px;
-  min-height: 500px;
-  margin-top: 20px;
+#home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+  /* min-height: 500px; */
+  /* margin-top: 20px; */
 }
 
-div#admin-menu {
-  display: grid;
-  justify-content: end;
+#admin-menu {
+  margin: 0 30px;
 }
 
-div#admin-menu button {
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-  border: 1px solid #ffba8c;
-  outline: 1px solid #cb6928;
-  color: #000;
+#navbar-left-container {
+  display: flex;
+  margin: 0 0 0 30px;
+  align-items: center;
+}
+
+.navbar-title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  width: 350px;
+  font-size: 20px;
+  margin: 0 0 0 10px;
 }
 
 /******************
@@ -77,36 +102,10 @@ nav {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 100px;
-}
-
-nav svg {
-  margin-right: 2px;
-  margin-bottom: 3px;
-}
-
-nav button {
-  width: 75%;
-  height: 50%;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-  border: 1px solid #ffba8c;
-  outline: 1px solid #cb6928;
-  text-shadow: 0px 1px 0px #ffba8c;
-  font-weight: bold;
-}
-
-nav button:hover {
-  outline: 1px solid #6e3916;
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-}
-
-nav button:active {
-  outline: 1px solid #6e3916;
-  background-image: linear-gradient(to top, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
+  /* height: 100px; */
+  background-color: white;
 }
 
 div#select-cohort {
