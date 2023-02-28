@@ -1,4 +1,4 @@
-// import { Client } from 'asana'; //Asana Integration
+import { Client } from 'asana'; //Asana Integration
 
 //Sets up requires that the server needs
 import express, { json as _json } from 'express';
@@ -38,12 +38,12 @@ app.use(_json());
 /************************ Asana Integration ********************/
 
 
-// const client = Client.create().useAccessToken( process.env.asanaPrivateToken);
+const client = Client.create().useAccessToken( process.env.asanaPrivateToken);
 
-// client.tasks.createTask({field: "value", field: "value", pretty: true})
-//     .then((result) => {
-//         console.log(result);
-//     });
+client.tasks.createTask({field: "value", field: "value", pretty: true})
+    .then((result) => {
+        console.log(result);
+    });
 /************************ Asana Integration ********************/
 
 
