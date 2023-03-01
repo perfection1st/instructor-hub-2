@@ -83,6 +83,7 @@ export const AdminMenu = (props) => {
       </Modal>
       <DropdownButton
         variant="primary"
+        menuVariant="dark"
         align="end"
         title={user || "User"}
         id="dropdown-menu-align-end"

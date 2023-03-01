@@ -88,9 +88,9 @@ export const Home = (props) => {
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
         />
+      <Nav />
       </div>
       <div id="home-container">
-        <Nav />
         <StudentList
           courses={courses}
           isLoadingCourses={isLoadingCourses}

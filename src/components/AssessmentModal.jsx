@@ -175,7 +175,7 @@ export const AssessmentModal = (props) => {
 
   return (
     <>
-      <button id="btn-assessment-update" onClick={() => {
+      <Button id="btn-assessment-update" onClick={() => {
         let currentClass = sessionStorage.getItem('currentClass')
         if (!currentClass) {
           setShowAssessmentModal(false)
@@ -183,7 +183,7 @@ export const AssessmentModal = (props) => {
         } else {
           handleShowAssessmentModal()
         }
-      }}><BsBarChartLineFill /> Assessments</button>
+      }}><BsBarChartLineFill /> Assessments</Button>
 
       {/* Assessment modal */}
       <Modal id="assessment-update-modal" size="md" centered show={showAssessmentModal} onHide={handleCloseAssessmentModal}>

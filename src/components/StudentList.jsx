@@ -16,11 +16,10 @@ export const StudentList = (props) => {
 
   const URL = 'http://localhost:8000/api'
 
-
   //State courses is set in home
   const { courses, setCourses, isLoadingCourses, setIsLoadingCourses } = props
 
-  const [selectedClass, setSelectedClass] = useState('Cohorts')
+  // const [selectedClass, setSelectedClass] = useState('Cohorts')
   const [students, setStudents] = useState([])
   const [learnAvg, setLearnAvg] = useState(0)
   const [teamworkAvg, setTeamworkAvg] = useState(0)
@@ -81,10 +80,10 @@ export const StudentList = (props) => {
 
   //"Courses"
   return (
-    <>
+    <div id='dashboard-main'>
       <div id="select-cohort">
-        <h2>Student List</h2>
-        <DropdownButton
+        <h2>{sessionStorage.currentClass} Student List</h2>
+        {/* <DropdownButton
           align="end"
           title={selectedClass}
           menuVariant="dark"
@@ -98,14 +97,13 @@ export const StudentList = (props) => {
         >
           {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
 
-        </DropdownButton>
+        </DropdownButton> */}
       </div>
       <div id="student-list-container">
         <div id="student-table-container">
-          <Table id="student-list" striped>
+          <Table id="student-list" striped bordered hover>
             <thead>
               <tr>
-
                 <th>Name</th>
                 <th>GitHub</th>
                 <th>Performance Averages (Learn/Team/Tech)</th>
@@ -140,10 +138,10 @@ export const StudentList = (props) => {
             </tbody>
           </Table>
         </div>
-        <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} />
-        <GenerateGroupsModal students={students} />
+        {/* <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} /> */}
+        {/* <GenerateGroupsModal students={students} /> */}
         <StudentInfoModal grades={grades} learnGrades={learnGrades} clickedStudent={clickedStudent} showStudentInfoModal={showStudentInfoModal} setShowStudentInfoModal={setShowStudentInfoModal}/>
       </div>
-    </>
+    </div>
   );
 }
