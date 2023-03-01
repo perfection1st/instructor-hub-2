@@ -81,8 +81,8 @@ export const StudentList = (props) => {
   //"Courses"
   return (
     <div id='dashboard-main'>
-      <div id="select-cohort">
-        <h2>{sessionStorage.currentClass} Student List</h2>
+      <div id="student-list-header">
+        <h2>{sessionStorage.currentClass} - Students</h2>
         {/* <DropdownButton
           align="end"
           title={selectedClass}
