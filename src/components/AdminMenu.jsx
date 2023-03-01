@@ -89,7 +89,6 @@ export const AdminMenu = (props) => {
         id="dropdown-menu-align-end"
       >
         <CreateCohortModal />
-        <AddStudentModal />
         <Dropdown.Item eventKey="1" onClick={handleShowSettingsModal}>
           <GoGear /> Settings
         </Dropdown.Item>
