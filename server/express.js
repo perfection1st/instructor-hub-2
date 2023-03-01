@@ -1,26 +1,20 @@
 import { Client } from 'asana'; //Asana Integration
-
 //Sets up requires that the server needs
 import express, { json as _json } from 'express';
 const app = express();
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
-
 import pg from 'pg';
-
 //Sets up encryption hashing tools:
 import { hash as _hash, compare } from 'bcrypt';
 const saltRounds = 10;
-
 //Used to access jwt tools
 import jsonwebtoken from 'jsonwebtoken';
 const {sign} = jsonwebtoken;
 import { json } from 'express';
-
 //Creates random strings for tokens
 import strings from '@supercharge/strings'; ///string.random
-
 import format from 'pg-format';
 
 //Sets up env and port
@@ -30,22 +24,13 @@ const PORT = 8000;
 const pool = new pg.Pool({ connectionString: process.env.DB_name });
 pool.connect();
 
+//Adding Asana Integration
+const client = Client.create().useAccessToken(process.env.asanaPrivateToken);
+let asanaProjectId = 1203082294663367; //Project name: Galvanize Blue Ocean Test Board
+let asanaSectionId = 1204041854702376; //Section name: Students
+
 app.use(cors());
 app.use(_json());
-
-
-
-/************************ Asana Integration ********************/
-
-
-const client = Client.create().useAccessToken( process.env.asanaPrivateToken);
-
-client.tasks.createTask({field: "value", field: "value", pretty: true})
-    .then((result) => {
-        console.log(result);
-    });
-/************************ Asana Integration ********************/
-
 
 //Gets all the cohorts
 app.get('/api/cohorts', (req, res) => {
@@ -211,6 +196,15 @@ app.post(`/api/learn/grades-update`, (req, res) => {
     let assessment_grade = req.body.assessment_grade
     //updates the learn_grades table in the database
     pool.query(`INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_id, assessment_id, assessment_grade])
+        .then(result => {
+            console.log("Inside Asana **********************");
+            //const client = Client.create().useAccessToken(process.env.asanaPrivateToken);
+            //Create a sub task
+            client.tasks.createSubtaskForTask(1204083444763917, {name: "React Assessment 250%", pretty: true})
+                .then((result) => {
+                    console.log(result);
+                });
+        })    
         .then(result => res.status(200).send(result.rows))
         .catch(error => res.status(404).send(error))
 })
@@ -245,7 +239,18 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
 app.post(`/api/application-update/learn-grades-post`, (req, res) => {
     const students = req.body.students
     let values = []
-    students.forEach((student) => values.push([student.student_id, student.assessment_id, student.assessment_grade]))
+    students.forEach((student) => {
+        values.push([student.student_id, student.assessment_id, student.assessment_grade])
+        //console.log(values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
+        console.log(values[0][1], values[0][2]);
+
+        //Create a sub task
+        client.tasks.createSubtaskForTask(1204083444763917, {name: `${values[0][1]}: ${values[0][2]}`, pretty: true})
+        .then((result) => {
+            console.log("*************** Subtask created ***************")
+            //console.log(result);
+        })
+    })
     pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
     .then(result => res.status(200).send(result.rows)) 
     .catch(error => res.status(404).send(error))
@@ -314,10 +319,32 @@ app.get(`/api/project-grades`, (req, res) => {
 app.post('/api/create/students', (req, res) => {
     const students = req.body.students
     let values = []
-    students.forEach((student) => values.push([student.name, student.cohort_name, student.github]))
+    students.forEach((student) => {
+        values.push([student.name, student.cohort_name, student.github])
+        //Create the student record in the asana board
+        client.tasks.createTask({projects: ["1203082294663367"], name: `${values[0][0]}`, pretty: true})
+        .then((result) => {
+            //console.log(result);
+        })
+        .catch(function(err){
+            console.error(err);
+        });
+    })
+
+    //Create the student record in the database 
     pool.query(format('INSERT INTO students (name, cohort_name, github) VALUES %L RETURNING *', values), [])
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
+
+ 
+    //get all taskid for those students
+        // client.tasks.getTasksForSection(1204041854702376, {param: "value", param: "value", opt_pretty: true})
+        // .then((result) => {
+        //     console.log(result);
+        // });
+
+    //post to update the database with those taskid
+
 })
 
 app.get('/api/student/scores/:id', (req, res) => {
