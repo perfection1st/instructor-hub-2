@@ -11,23 +11,22 @@ export const Nav = (props) => {
 
   return (
     <div className="nav-container">
-      <nav>
-        <WeeklyModal
-          courses={courses}
-          selectedStudents={selectedStudents}
-          setSelectedStudents={setSelectedStudents}
-        />
-        <ProjectModal
-          courses={courses}
-          selectedStudents={selectedStudents}
-          setSelectedStudents={setSelectedStudents}
-        />
-        <AssessmentModal
-          courses={courses}
-          selectedStudents={selectedStudents}
-          setSelectedStudents={setSelectedStudents}
-        />
-      </nav>
+      <WeeklyModal
+        courses={courses}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
+      />
+      <ProjectModal
+        courses={courses}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
+      />
+      <AssessmentModal
+        courses={courses}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
+      />
+      <CreateCohortModal />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { BsFillPersonPlusFill } from "react-icons/bs";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import swal from "sweetalert";
 import Form from "react-bootstrap/Form";
 
@@ -96,9 +96,8 @@ export const AddStudentModal = () => {
 
   return (
     <>
-      {/* <Dropdown.Item id="btn-create-cohort" onClick={() => openModal()}><BsFillPersonPlusFill />  Add Students </Dropdown.Item> */}
       <Button id="add-student-btn" onClick={() => openModal()}>
-        <BsFillPersonPlusFill />Add a Student
+        <AiOutlineUserAdd size={20}/>Add Students
       </Button>
 
       <Modal id="add-student-modal" size="md" centered show={showModal} onHide={closeModal}>

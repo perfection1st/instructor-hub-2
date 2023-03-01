@@ -18,9 +18,9 @@ export const Header = (props) => {
   const [selectedClass, setSelectedClass] = useState("Cohorts");
   const [students, setStudents] = useState([]);
 
-  function loadStudents(evt) {
-    // console.log(evt)
-    fetch(`${URL}/students/${evt}`)
+  function loadStudents(e) {
+    // console.log(e)
+    fetch(`${URL}/students/${e}`)
       .then((result) => result.json())
       .then((data) => setStudents(data));
     // console.log(students)
@@ -45,13 +45,13 @@ export const Header = (props) => {
             <DropdownButton
               align="end"
               title={selectedClass}
-              menuVariant="dark"
+              menuVariant="light"
               id="dropdown-menu-align-end"
               size="md"
-              onSelect={(evt) => {
-                setSelectedClass(evt);
-                sessionStorage.setItem("currentClass", evt);
-                loadStudents(evt);
+              onSelect={(e) => {
+                setSelectedClass(e);
+                sessionStorage.setItem("currentClass", e);
+                loadStudents(e);
               }}
             >
               {isLoadingCourses ? (
@@ -71,14 +71,9 @@ export const Header = (props) => {
               setIsLoggedIn={setIsLoggedIn}
               className="admin-menu"
             />
-            
           </div>
         </Container>
       </Navbar>
-      {/* <header>
-        <img src={Logo} alt="Galvanize Logo" height={50} />
-        <AdminMenu courses={courses} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      </header> */}
     </>
   );
 };
