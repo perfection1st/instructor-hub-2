@@ -8,6 +8,7 @@ import { StudentList } from "../components/StudentList";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { StudentAverages } from "../components/StudentAverages";
+import Groups from "../components/Groups";
 
 export const Home = (props) => {
   const URL = "http://localhost:8000/api";
@@ -124,7 +125,7 @@ export const Home = (props) => {
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
         />
-      <Nav />
+        <Nav />
       </div>
       <div id="home-container">
         <StudentList
@@ -133,7 +134,15 @@ export const Home = (props) => {
           setIsLoadingCourses={setIsLoadingCourses}
           data-testid="student-list"
         />
-        <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg}/>
+        <div id="graph-groups-container">
+          <StudentAverages
+            students={students}
+            learnAvg={learnAvg}
+            teamworkAvg={teamworkAvg}
+            techAvg={techAvg}
+          />
+          <Groups students={students}/>
+        </div>
       </div>
     </div>
   );

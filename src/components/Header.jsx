@@ -64,7 +64,6 @@ export const Header = (props) => {
                 ))
               )}
             </DropdownButton>
-
             <AdminMenu
               courses={courses}
               isLoggedIn={isLoggedIn}

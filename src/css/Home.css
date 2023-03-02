@@ -48,10 +48,6 @@ header {
   width: 80%;
 }
 
-#admin-menu {
-  margin: 0 30px;
-}
-
 #navbar-left-container {
   display: flex;
   margin: 0 0 0 30px;
@@ -61,6 +57,7 @@ header {
 #navbar-right-container {
   display: flex;
   flex-direction: row;
+  gap: 20px;
 }
 
 .navbar-title {
@@ -194,6 +191,33 @@ td.student-average button:hover {
 /******************
   STUDENT-AVG-GRAPH
 *******************/
+#graph-groups-container {
+  display: flex;
+  gap: 50px;
+}
+
+#student-avg-graph {
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 10px;
+  padding: 50px;
+  height: fit-content;
+  width: fit-content;
+}
+
+#groups-container {
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 10px;
+  padding: 50px;
+  width: 100%;
+}
+
+#groups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 div.select-all,
 div.select-one {

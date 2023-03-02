@@ -8,8 +8,8 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
 
-export const GenerateGroupsModal = (props) => {
-    const { students } = props
+export const GenerateGroupsModal = ({ students }) => {
+    // const { students } = props
     // ***** change to props instead of using fetch *** //
 
     // state for Generate Groups Modal displaying/not displaying
@@ -50,15 +50,17 @@ export const GenerateGroupsModal = (props) => {
             groups[groupIndex].push(student);
         }
         setGroupArray(groups);
+        console.log(groups);
     }
-    useEffect(() => {
-    }, [groupArray])
+
+    // useEffect(() => {
+    // }, [groupArray])
 
     // calls splitIntoGroups function
     function loadGroups() {
         let studentsCopy = students.slice(0)
-        console.log(studentsCopy)
-        console.log(students)
+        // console.log(studentsCopy)
+        // console.log(students)
         splitIntoGroups(studentsCopy, numOfGroupRef.current.value)
     }
 

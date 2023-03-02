@@ -5,12 +5,9 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Table from "react-bootstrap/Table";
-import Badge from "react-bootstrap/Badge";
 import React, { useState, useEffect, Suspense } from "react";
 import Form from "react-bootstrap/Form";
-import { GenerateGroupsModal } from "./GenerateGroupsModal";
 import { StudentInfoModal } from "./StudentInfoModal";
-import { BsFillPersonPlusFill } from "react-icons/bs";
 import { AddStudentModal } from "./AddStudentsModal";
 
 export const StudentList = (props) => {
@@ -90,7 +87,6 @@ export const StudentList = (props) => {
       <div id="student-list-header">
         <h2>{sessionStorage.currentClass} - Students</h2>
         <div id="student-list-buttons-container">
-          <GenerateGroupsModal students={students} />
           <AddStudentModal />
         </div>
       </div>
@@ -123,29 +119,12 @@ export const StudentList = (props) => {
                   <td>{student.learn_avg}</td>
                   <td>{student.tech_avg}</td>
                   <td>{student.teamwork_avg}</td>
-                  {/* <td className="student-average" width={'15%'}>
-                    <ButtonGroup aria-label="Basic example">
-                      <Button variant="secondary" size="sm">
-                        <Badge bg={student.learn_avg < 70 ? 'danger' : 'success'}>{student.learn_avg || '--'}%</Badge>
-                        <span className="visually-hidden">unread messages</span>
-                      </Button>
-                      <Button variant="secondary" size="sm">
-                        <Badge bg={student.tech_avg < 70 ? 'danger' : 'success'}>{student.tech_avg || '--'}%</Badge>
-                        <span className="visually-hidden">unread messages</span>
-                      </Button>
-                      <Button variant="secondary" size="sm">
-                        <Badge bg={student.teamwork_avg < 70 ? 'danger' : 'success'}>{student.teamwork_avg || '--'}%</Badge>
-                        <span className="visually-hidden">unread messages</span>
-                      </Button>
-                    </ButtonGroup>
-                  </td> */}
                   <td>{student.github}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </div>
-        {/* <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg} /> */}
         <StudentInfoModal
           grades={grades}
           learnGrades={learnGrades}
