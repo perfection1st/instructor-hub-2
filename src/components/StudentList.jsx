@@ -89,21 +89,10 @@ export const StudentList = (props) => {
     <div id="dashboard-main">
       <div id="student-list-header">
         <h2>{sessionStorage.currentClass} - Students</h2>
-        {/* <DropdownButton
-          align="end"
-          title={selectedClass}
-          menuVariant="dark"
-          id="dropdown-menu-align-end"
-          size="md"
-          onSelect={function (evt) {
-            setSelectedClass(evt)
-            sessionStorage.setItem('currentClass', evt)
-            loadStudents(evt)
-          }}
-        >
-          {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
-
-        </DropdownButton> */}
+        <div id="student-list-buttons-container">
+          <GenerateGroupsModal students={students} />
+          <AddStudentModal />
+        </div>
       </div>
       <div id="student-list-container">
         <div id="student-table-container">
@@ -164,10 +153,6 @@ export const StudentList = (props) => {
           showStudentInfoModal={showStudentInfoModal}
           setShowStudentInfoModal={setShowStudentInfoModal}
         />
-      </div>
-      <div id="student-list-buttons-container">
-        <GenerateGroupsModal students={students} />
-        <AddStudentModal />
       </div>
     </div>
   );

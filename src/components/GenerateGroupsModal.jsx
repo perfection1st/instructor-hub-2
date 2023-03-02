@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import swal from 'sweetalert';
-import { BsGrid3X2Gap } from 'react-icons/bs';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 import { IoIosCopy } from "react-icons/io";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -90,7 +90,7 @@ export const GenerateGroupsModal = (props) => {
 
     return (
         <>
-            <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><BsGrid3X2Gap /> Generate Groups</Button>
+            <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><HiOutlineUserGroup size={20} color="white"/> Generate Groups</Button>
             {/* Generate Groups Modal */}
             <Modal id="generate-group-modal" size="sm" centered show={showGenerateGroupsModal} onHide={handleCloseGenerateGroupsModal}>
                 <Modal.Header closeButton>

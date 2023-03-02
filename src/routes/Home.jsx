@@ -7,6 +7,7 @@ import { Nav } from "../components/Nav";
 import { StudentList } from "../components/StudentList";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
+import { StudentAverages } from "../components/StudentAverages";
 
 export const Home = (props) => {
   const URL = "http://localhost:8000/api";
@@ -14,6 +15,40 @@ export const Home = (props) => {
 
   const [courses, setCourses] = useState([]);
   const [isLoadingCourses, setIsLoadingCourses] = useState(true);
+
+  // State needed for the Graph Component
+  const [students, setStudents] = useState([]);
+  const [learnAvg, setLearnAvg] = useState(0);
+  const [teamworkAvg, setTeamworkAvg] = useState(0);
+  const [techAvg, setTechAvg] = useState(0);
+
+  // Fetch the students
+  function fetchStudents() {
+    fetch(`${URL}/students`)
+      .then((result) => result.json())
+      .then((data) => setStudents(data));
+  }
+
+  // Fetch the scores of all students within the cohort and set the average Learn, Teamwork, and Tech grades
+  useEffect(() => {
+    let currentClass = sessionStorage.getItem("currentClass");
+    fetch(`http://localhost:8000/api/students/${currentClass}`)
+      .then((result) => result.json())
+      .then((data) => {
+        setStudents(data);
+      })
+      .then(() => {
+        setLearnAvg(
+          students.map((student) => student.learn_avg).reduce((acc, score) => acc + score, 0)
+        );
+        setTeamworkAvg(
+          students.map((student) => student.teamwork_avg).reduce((acc, score) => acc + score, 0)
+        );
+        setTechAvg(
+          students.map((student) => student.tech_avg).reduce((acc, score) => acc + score, 0)
+        );
+      });
+  }, [courses]);
 
   //Sends a fetch to verify users tokens
   //If tokens don't match tokens stored under the logged in user they are logged out
@@ -47,6 +82,7 @@ export const Home = (props) => {
   //Sends a fetch to get all of a users projects/classes from asana
   useEffect(() => {
     dbCohorts();
+    fetchStudents();
     //Was used when connected to asana, no longer used
     //Sends a fetch to get all users info
     // fetch('https://app.asana.com/api/1.0/projects', {
@@ -97,6 +133,7 @@ export const Home = (props) => {
           setIsLoadingCourses={setIsLoadingCourses}
           data-testid="student-list"
         />
+        <StudentAverages students={students} learnAvg={learnAvg} teamworkAvg={teamworkAvg} techAvg={techAvg}/>
       </div>
     </div>
   );

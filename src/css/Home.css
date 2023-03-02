@@ -105,6 +105,18 @@ header {
   padding: 50px;
 }
 
+#student-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#student-list-buttons-container {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
 #student-list-container {
   display: flex;
   border: 1px solid black;
@@ -166,14 +178,6 @@ td.student-average button:hover {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #999;
-}
-
-#student-list-buttons-container {
-  display: flex;
-  justify-content: end;
-  margin: 10px 0 0 0;
-  gap: 10px;
-  width: 100%;
 }
 
 /* #generate-group-btn {
