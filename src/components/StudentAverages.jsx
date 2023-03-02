@@ -52,6 +52,7 @@ export const StudentAverages = (props) => {
   //render
   return (
     <div id="student-avg-graph">
+    <h2>Cohort Performance</h2>
       <Bar id='bar'
         data={data}
         height={330}

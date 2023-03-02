@@ -115,7 +115,7 @@ export const WeeklyModal = (props) => {
 
   return (
     <>
-      <button id="btn-weekly-update" onClick={(e) => {
+      <Button id="btn-weekly-update" onClick={(e) => {
         let currentClass = sessionStorage.getItem('currentClass')
         if (!currentClass) {
           setShowWeeklyModal(false)
@@ -123,7 +123,7 @@ export const WeeklyModal = (props) => {
         } else {
           handleShowWeeklyModal(e)
         }
-      }}><BsCalendarPlusFill /> Add Weekly Update </button>
+      }}><BsCalendarPlusFill /> Add Weekly Update </Button>
 
       {/* Weekly modal */}
       <Modal id="weekly-update-modal" size="md" centered show={showWeeklyModal} onHide={handleCloseWeeklyModal}>

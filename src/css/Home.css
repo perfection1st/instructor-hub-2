@@ -12,131 +12,139 @@ body {
   margin: 0;
   justify-items: center;
   font-family: "Assistant", sans-serif;
-  background-image: linear-gradient(
-    to right bottom,
-    #c9eaff,
-    #d7edff,
-    #e4f0ff,
-    #eff4ff,
-    #f7f8ff,
-    #f7f8ff,
-    #f7f8ff,
-    #f7f8ff,
-    #eff4ff,
-    #e4f0ff,
-    #d7edff,
-    #c9eaff
-  );
+  background-color: white;
 }
 
 p {
   font-size: 18px;
 }
 
+#page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+#header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+}
+
 header {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  width: 100%;
-  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  width: 90%;
 }
 
-header h1 {
-  width: 235px;
-  background: url("../images/galvanize-logo.svg") no-repeat;
-  text-indent: -9999px;
+#home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
 }
 
-div#home-container {
-  width: 1000px;
-  min-height: 500px;
-  margin-top: 20px;
+#navbar-left-container {
+  display: flex;
+  margin: 0 0 0 30px;
+  align-items: center;
 }
 
-div#admin-menu {
-  display: grid;
-  justify-content: end;
+#navbar-right-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
-div#admin-menu button {
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-  border: 1px solid #ffba8c;
-  outline: 1px solid #cb6928;
-  color: #000;
+.navbar-title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  width: 350px;
+  font-size: 20px;
+  margin: 0 0 0 10px;
 }
 
 /******************
   NAVIGATION
 *******************/
-nav {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+.nav-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 100vw;
+  gap: 20px;
+  background-color: rgb(52, 52, 52);
+}
+
+.btn {
+  display: flex;
   align-items: center;
-  width: 100%;
-  height: 100px;
+  gap: 7px;
 }
-
-nav svg {
-  margin-right: 2px;
-  margin-bottom: 3px;
-}
-
-nav button {
-  width: 75%;
-  height: 50%;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-  border: 1px solid #ffba8c;
-  outline: 1px solid #cb6928;
-  text-shadow: 0px 1px 0px #ffba8c;
-  font-weight: bold;
-}
-
-nav button:hover {
-  outline: 1px solid #6e3916;
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-}
-
-nav button:active {
-  outline: 1px solid #6e3916;
-  background-image: linear-gradient(to top, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-}
-
-div#select-cohort {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  margin-top: 25px;
-}
-
-div#select-cohort button,
-#generate-group-btn {
-  background-image: linear-gradient(to bottom, #ffa76d, #ffa061, #ff9955, #ff9149, #ff8a3d);
-  border: 1px solid #ffba8c;
-  outline: 1px solid #cb6928;
-  color: #000;
-  text-shadow: 0px 1px 0px #ffba8c;
-}
+ 
 /******************
   STUDENT-LIST
 *******************/
-div#student-list-container {
-  display: grid;
-  grid-template-columns: 4fr 2fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 25px;
-  grid-row-gap: 0px;
+#dashboard-main {
+  border: 1px solid black;
+  box-shadow: 10px 10px;
+  border-radius: 20px;
+  margin: 20px 0 20px 0;
+  padding: 50px;
+}
+
+#student-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#student-list-buttons-container {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+#student-list-container {
+  display: flex;
+  border: 1px solid black;
+  width: 100%;
   margin-top: 10px;
-  height: 200px !important;
+}
+
+#student-table {
+  /* width: 100%; */
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+#student-table-container {
+  width: 100%;
+}
+
+/* #student-table-header {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(5, 1fr);
+} */
+
+#student-table thead {
+  position: sticky;
+  background-color: #d2d2d2;
+  z-index: 2;
+}
+
+#student-table tbody {
+  z-index: 1;
 }
 
 td.student-average button {
@@ -147,32 +155,6 @@ td.student-average button {
 td.student-average button:hover {
   background-color: #dadada;
   border: 1px solid #d4d4d4;
-}
-
-table#student-list {
-  display: block;
-  height: 330px !important;
-  overflow-y: scroll;
-  box-shadow: inset 0 0px -15px #ccc;
-}
-
-table#student-list h3 {
-  font-size: 20px;
-}
-
-table#student-list thead {
-  position: sticky;
-  top: 0;
-  height: 20px;
-  background-color: #eee;
-  vertical-align: middle;
-  padding: 0;
-  z-index: 2;
-  box-shadow: 0 0px 15px #ccc;
-}
-
-table#student-list tbody {
-  z-index: 1;
 }
 
 /* width */
@@ -195,9 +177,47 @@ table#student-list tbody {
   background: #999;
 }
 
+/* #generate-group-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+} */
+
+/* #add-student-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+} */
 /******************
   STUDENT-AVG-GRAPH
 *******************/
+#graph-groups-container {
+  display: flex;
+  gap: 50px;
+}
+
+#student-avg-graph {
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 10px;
+  padding: 50px;
+  height: fit-content;
+  width: fit-content;
+}
+
+#groups-container {
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 10px;
+  padding: 50px;
+  width: 100%;
+}
+
+#groups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 div.select-all,
 div.select-one {
