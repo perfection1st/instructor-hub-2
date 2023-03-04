@@ -5,6 +5,7 @@ import { BsCalendarPlusFill } from "react-icons/bs";
 import { ModalList } from './ModalList';
 import swal from 'sweetalert';
 
+
 export const WeeklyModal = (props) => {
   //State of all users courses
   const { courses, setCourses, selectedStudents, setSelectedStudents } = props
@@ -153,7 +154,7 @@ export const WeeklyModal = (props) => {
             <ul id='weekly-selected-students'>
               {/* students displayed will be conditional based off students selected from previous modal */}
               {selectedStudents.map(student => <li key={student.student_id} value={student.student_id}>
-                {student.name}
+                <div id='containerForWeeklyUpdates'>{student.name}
                 {/* adds a space between the name and dropdown */}
                 <>  </>
                 <select
@@ -176,7 +177,9 @@ export const WeeklyModal = (props) => {
                   <option value="3">Team 3</option>
                   <option value="4">Team 4</option>
                 </select>
-              </li>)}
+                <>  </> 
+                <textarea cols="50" rows="4" className='freeTextBox' name="freeTextBox" placeholder='Enter Text Notes Here!'></textarea>  
+                </div> </li>)}
             </ul>
           </div>
         </Modal.Body>
