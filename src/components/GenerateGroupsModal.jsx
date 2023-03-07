@@ -53,14 +53,9 @@ export const GenerateGroupsModal = ({ students }) => {
         console.log(groups);
     }
 
-    // useEffect(() => {
-    // }, [groupArray])
-
     // calls splitIntoGroups function
     function loadGroups() {
         let studentsCopy = students.slice(0)
-        // console.log(studentsCopy)
-        // console.log(students)
         splitIntoGroups(studentsCopy, numOfGroupRef.current.value)
     }
 
