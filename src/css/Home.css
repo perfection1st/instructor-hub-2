@@ -272,6 +272,7 @@ h4.student-group-heading {
 #copy-tooltip {
   z-index: 999;
 }
+
 .tooltip {
   z-index: 1151 !important;
 }
@@ -283,4 +284,15 @@ button#copy-groups-btn {
 #student-name:hover {
   cursor: pointer;
   background-color: #fff;
+}
+/* Free Text Notes Box Add  */
+.freeTextBox {
+  height: 50px;
+  width: 3560px;
+}
+
+#containerForWeeklyUpdates{
+  display: flex;
+  align-items: start;
+  gap: 5px;
 }
