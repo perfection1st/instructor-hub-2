@@ -33,13 +33,14 @@ export const Home = (props) => {
 
   // Fetch the scores of all students within the cohort and set the average Learn, Teamwork, and Tech grades
   useEffect(() => {
+    let currentClass = '';
     if (sessionStorage.getItem("currentClass")) {
-      console.log("currentClass is here")
+      currentClass = sessionStorage.getItem("currentClass");
     } else {
-      console.log(sessionStorage.getItem("defaultCohort"))
+      currentClass = sessionStorage.getItem("defaultCohort");
     }
-    let currentClass = sessionStorage.getItem("currentClass");
-    fetch(`http://localhost:8000/api/students/${currentClass}`)
+    // let currentClass = sessionStorage.getItem("currentClass");
+    fetch(`${URL}/students/${currentClass}`)
       .then((result) => result.json())
       .then((data) => {
         setStudents(data);
