@@ -25,14 +25,19 @@ export const Home = (props) => {
   const [techAvg, setTechAvg] = useState(0);
 
   // Fetch the students
-  function fetchStudents() {
-    fetch(`${URL}/students`)
-      .then((result) => result.json())
-      .then((data) => setStudents(data));
-  }
+  // function fetchStudents() {
+  //   fetch(`/api/students/:cohort`)
+  //     .then((result) => result.json())
+  //     .then((data) => setStudents(data));
+  // }
 
   // Fetch the scores of all students within the cohort and set the average Learn, Teamwork, and Tech grades
   useEffect(() => {
+    if (sessionStorage.getItem("currentClass")) {
+      console.log("currentClass is here")
+    } else {
+      console.log(sessionStorage.getItem("defaultCohort"))
+    }
     let currentClass = sessionStorage.getItem("currentClass");
     fetch(`http://localhost:8000/api/students/${currentClass}`)
       .then((result) => result.json())
@@ -89,7 +94,7 @@ export const Home = (props) => {
   //Sends a fetch to get all of a users projects/classes from asana
   useEffect(() => {
     dbCohorts();
-    fetchStudents();
+    // fetchStudents();
     //Was used when connected to asana, no longer used
     //Sends a fetch to get all users info
     // fetch('https://app.asana.com/api/1.0/projects', {

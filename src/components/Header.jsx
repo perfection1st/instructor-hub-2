@@ -45,7 +45,6 @@ export const Header = (props) => {
             <DropdownButton
               align="end"
               title={selectedClass}
-              menuVariant="light"
               id="dropdown-menu-align-end"
               size="md"
               onSelect={(e) => {
