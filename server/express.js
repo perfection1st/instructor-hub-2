@@ -1,33 +1,28 @@
 import { Client } from 'asana'; //Asana Integration
-//Sets up requires that the server needs
 import express, { json as _json } from 'express';
 const app = express();
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 import pg from 'pg';
-//Sets up encryption hashing tools:
-import { hash as _hash, compare } from 'bcrypt';
+import { hash as _hash, compare } from 'bcrypt'; //Sets up encryption hashing tools:
 const saltRounds = 10;
-//Used to access jwt tools
-import jsonwebtoken from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken'; //Used to access jwt tools
 const {sign} = jsonwebtoken;
 import { json } from 'express';
-//Creates random strings for tokens
-import strings from '@supercharge/strings'; ///string.random
+import strings from '@supercharge/strings'; //Creates random strings for tokens
 import format from 'pg-format';
 
-//Sets up env and port
-const PORT = 8000;
+const PORT = 8000; //Sets up env and port
 
-//Sets up the pool for the server
-const pool = new pg.Pool({ connectionString: process.env.DB_name });
+const pool = new pg.Pool({ connectionString: process.env.DB_name }); //Sets up the pool for the server
 pool.connect();
 
 //Adding Asana Integration
+//let asanaPrivateToken = "1/1204033748668812:a2f332ccb5e2b3e415e1676d794b5563";
 const client = Client.create().useAccessToken(process.env.asanaPrivateToken);
-let asanaProjectId = 1203082294663367; //Project name: Galvanize Blue Ocean Test Board
-let asanaSectionId = 1204041854702376; //Section name: Students
+let asanaProjectId = "1203082294663367"; //Project name: Galvanize Blue Ocean Test Board
+let asanaSectionId = "1204041854702376"; //Section name: Students
 
 app.use(cors());
 app.use(_json());
@@ -234,26 +229,51 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
 })
 
 ////////////////////////////////////////ROUTES FOR ASSESSMENT MODAL////////////////////////////////////////
-
 //Route posts the learn_grades table with the assessment grades for a group of students
+//insert students grade in the database
+//do a select query to get taskId and assessment name
+//use the above to create a sub task in asana
 app.post(`/api/application-update/learn-grades-post`, (req, res) => {
-    const students = req.body.students
+    const students = req.body.students //[ { student_id: '1', assessment_id: 2, assessment_grade: 20 } ]
+    console.log("students body ",students); //[ { student_id: '1', assessment_id: 3, assessment_grade: 30 } ]
     let values = []
+    let i = 0;
     students.forEach((student) => {
         values.push([student.student_id, student.assessment_id, student.assessment_grade])
-        //console.log(values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
-        console.log(values[0][1], values[0][2]);
-
-        //Create a sub task
-        client.tasks.createSubtaskForTask(1204083444763917, {name: `${values[0][1]}: ${values[0][2]}`, pretty: true})
-        .then((result) => {
-            console.log("*************** Subtask created ***************")
-            //console.log(result);
-        })
     })
-    pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
-    .then(result => res.status(200).send(result.rows)) 
-    .catch(error => res.status(404).send(error))
+    console.log("values: ",values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
+  
+
+    Promise.all(students.map((student)=>{
+        //.catch(error => res.status(404).send(error))
+        console.log("values inside promise ",values);
+        pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
+        .then((result) => {
+            res.status(200).send(result.rows)
+            // console.log("result.rows after insert into query ",result)
+            // console.log("values after the insert query ", values);
+        })
+        .then(()=>{
+            return pool.query(`select students.asana_task_id as asana_task_id, learn_grades.student_id as student_id, learn_grades.assessment_id as assessment_id, learn.assessment_name as assessment_name, learn_grades.assessment_grade as assessment_grade
+            from learn_grades
+                join students on learn_grades.student_id = students.student_id
+                join learn on learn_grades.assessment_id = learn.assessment_id
+            where learn_grades.student_id = ${students[0].student_id}`)
+        })
+        .then((result)=>{
+            let lastElement = result.rows.length -1;
+            console.log("value of result is: ",result.rows);
+            // console.log("result.rows[0].asana_task_id is: ", result.rows[0].asana_task_id)
+            console.log("after select query: ",{...student, taskId: result.rows[lastElement].asana_task_id, assessment_name: result.rows[lastElement].assessment_name});
+            //return {...result.rows, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name}
+            //Create a sub task
+            client.tasks.createSubtaskForTask(result.rows[lastElement].asana_task_id, {name: `${result.rows[lastElement].assessment_name}: ${student.assessment_grade}`, pretty: true})
+            .then((result) => {
+                //console.log("Subtask Created: ",result);
+            })
+            return {...student, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name}
+        })  
+    })) 
 })
 
 //Route updates the learn_grades table with the assessment grades for a group of students
@@ -313,38 +333,25 @@ app.get(`/api/project-grades`, (req, res) => {
     .catch(error => res.status(404).send(error))
 })
 
-//Creates a route to insert multiple students into a course
-//Uses pg-format to do a mass insert with multiple values
-//The values are taken from the request body and pushed into an array as their own array
+//Creates a route to insert multiple students into a cohort
+//This also creates a task for those students in Asana board
 app.post('/api/create/students', (req, res) => {
-    const students = req.body.students
-    let values = []
-    students.forEach((student) => {
-        values.push([student.name, student.cohort_name, student.github])
-        //Create the student record in the asana board
-        client.tasks.createTask({projects: ["1203082294663367"], name: `${values[0][0]}`, pretty: true})
+    const students = req.body.students;
+    Promise.all(students.map((student) => {
+       return client.tasks.createTask({projects: [asanaProjectId], name: `${student.name}`, pretty: true}) //creates Task in Asana Project, asanaProjectId is a variable that stores project GID from Asana
         .then((result) => {
-            //console.log(result);
+            return {...student, taskId: result.gid} //returns each student object from body, and adds taskId to that student object
         })
-        .catch(function(err){
-            console.error(err);
-        });
-    })
-
-    //Create the student record in the database 
-    pool.query(format('INSERT INTO students (name, cohort_name, github) VALUES %L RETURNING *', values), [])
+        .catch((err) => console.error(err));
+    }))
+    .then((students)=> {
+        const values = students.map((student)=>{
+            return [student.name, student.cohort_name, student.github, student.taskId];
+        })
+        pool.query(format('INSERT INTO students (name, cohort_name, github, asana_task_id) VALUES %L RETURNING *', values), [])
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
-
- 
-    //get all taskid for those students
-        // client.tasks.getTasksForSection(1204041854702376, {param: "value", param: "value", opt_pretty: true})
-        // .then((result) => {
-        //     console.log(result);
-        // });
-
-    //post to update the database with those taskid
-
+    })
 })
 
 app.get('/api/student/scores/:id', (req, res) => {
