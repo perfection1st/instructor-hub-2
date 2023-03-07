@@ -106,6 +106,7 @@ export const CreateCohortModal = () => {
             onClick={() => {
               createCohort();
               handleCloseCreateCohortModal();
+              location.reload();
             }}
           >
             Submit
