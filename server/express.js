@@ -229,71 +229,52 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
 })
 
 ////////////////////////////////////////ROUTES FOR ASSESSMENT MODAL////////////////////////////////////////
-
 //Route posts the learn_grades table with the assessment grades for a group of students
+//insert students grade in the database
+//do a select query to get taskId and assessment name
+//use the above to create a sub task in asana
 app.post(`/api/application-update/learn-grades-post`, (req, res) => {
     const students = req.body.students //[ { student_id: '1', assessment_id: 2, assessment_grade: 20 } ]
-    console.log("students body ",students);
+    console.log("students body ",students); //[ { student_id: '1', assessment_id: 3, assessment_grade: 30 } ]
     let values = []
     let i = 0;
     students.forEach((student) => {
         values.push([student.student_id, student.assessment_id, student.assessment_grade])
-        //console.log(values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
-        Promise.all(students.map((student)=>{
+    })
+    console.log("values: ",values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
+  
+
+    Promise.all(students.map((student)=>{
+        //.catch(error => res.status(404).send(error))
+        console.log("values inside promise ",values);
+        pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
+        .then((result) => {
+            res.status(200).send(result.rows)
+            // console.log("result.rows after insert into query ",result)
+            // console.log("values after the insert query ", values);
+        })
+        .then(()=>{
             return pool.query(`select students.asana_task_id as asana_task_id, learn_grades.student_id as student_id, learn_grades.assessment_id as assessment_id, learn.assessment_name as assessment_name, learn_grades.assessment_grade as assessment_grade
-                from learn_grades
-                    join students on learn_grades.student_id = students.student_id
-                    join learn on learn_grades.assessment_id = learn.assessment_id
-                where learn_grades.student_id = ${students[i].student_id}`)
-            .then((result)=>{
-                console.log("value of result is: ",result);
-                console.log("result.rows[0].asana_task_id is: ", result.rows[0].asana_task_id)
-                console.log("after select query: ",{...student, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name});
-                return {...student, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name}
+            from learn_grades
+                join students on learn_grades.student_id = students.student_id
+                join learn on learn_grades.assessment_id = learn.assessment_id
+            where learn_grades.student_id = ${students[0].student_id}`)
+        })
+        .then((result)=>{
+            let lastElement = result.rows.length -1;
+            console.log("value of result is: ",result.rows);
+            // console.log("result.rows[0].asana_task_id is: ", result.rows[0].asana_task_id)
+            console.log("after select query: ",{...student, taskId: result.rows[lastElement].asana_task_id, assessment_name: result.rows[lastElement].assessment_name});
+            //return {...result.rows, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name}
+            //Create a sub task
+            client.tasks.createSubtaskForTask(result.rows[lastElement].asana_task_id, {name: `${result.rows[lastElement].assessment_name}: ${student.assessment_grade}`, pretty: true})
+            .then((result) => {
+                //console.log("Subtask Created: ",result);
             })
-            
-        }))
-        .then((students)=> {
-            const values = students.map((student)=>{
-                console.log("value of students after promise: ", students)
-                console.log("value of student after promise: ", student)
-                console.log("Required fields after first promise ",student.student_id, student.assessment_id, student.assessment_grade, student.taskId, student.assessment_name);
-                return [student.student_id, student.assessment_id, student.assessment_grade, student.taskId, student.assessment_name];
-            })
-    })
-    //Create a sub task
-    console.log("values: ", values)
-    console.log("student.assessment_name is ", values[0][4]);
-    client.tasks.createSubtaskForTask(1204083444763917, {name: `${student.assessment_name}: ${student.assessment_grade}`, pretty: true})
-    .then((result) => {
-        //console.log(result);
-    })
-    .catch((error)=> console.error(error))
-    })
-
-    pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
-    .then(result => res.status(200).send(result.rows)) 
-    .catch(error => res.status(404).send(error))
+            return {...student, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name}
+        })  
+    })) 
 })
-
-// app.post('/api/create/students', (req, res) => {
-//     const students = req.body.students;
-//     Promise.all(students.map((student) => {
-//        return client.tasks.createTask({projects: [asanaProjectId], name: `${student.name}`, pretty: true}) //creates Task in Asana Project, asanaProjectId is a variable that stores project GID from Asana
-//         .then((result) => {
-//             return {...student, taskId: result.gid} //returns each student object from body, and adds taskId to that student object
-//         })
-//         .catch((err) => console.error(err));
-//     }))
-//     .then((students)=> {
-//         const values = students.map((student)=>{
-//             return [student.name, student.cohort_name, student.github, student.taskId];
-//         })
-//         pool.query(format('INSERT INTO students (name, cohort_name, github, asana_task_id) VALUES %L RETURNING *', values), [])
-//         .then(result => res.send(result.rows))
-//         .catch(error => res.send(error))
-//     })
-// })
 
 //Route updates the learn_grades table with the assessment grades for a group of students
 app.post(`/api/application-update/learn-grades-update`, (req, res) => {
