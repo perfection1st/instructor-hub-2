@@ -90,7 +90,7 @@ export const StudentList = (props) => {
   return (
     <div id="dashboard-main">
       <div id="student-list-header">
-        <h2>{sessionStorage.currentClass} - Students</h2>
+        <h2>{sessionStorage.currentClass || sessionStorage.defaultCohort} - Students</h2>
         <div id="student-list-buttons-container">
           <AddStudentModal />
         </div>

@@ -39,7 +39,6 @@ export const Home = (props) => {
     } else {
       currentClass = sessionStorage.getItem("defaultCohort");
     }
-    // let currentClass = sessionStorage.getItem("currentClass");
     fetch(`${URL}/students/${currentClass}`)
       .then((result) => result.json())
       .then((data) => {
@@ -84,34 +83,9 @@ export const Home = (props) => {
 
   }, [])
 
-  // kickUser()
-
-  // function kickUser() {
-  //   swal('Not Authenticated')
-  //   sessionStorage.clear()
-  //   setIsLoggedIn(false)
-  // }
-
-  //Sends a fetch to get all of a users projects/classes from asana
+  //Sends a fetch to get all of the cohorts
   useEffect(() => {
     dbCohorts();
-    // fetchStudents();
-    //Was used when connected to asana, no longer used
-    //Sends a fetch to get all users info
-    // fetch('https://app.asana.com/api/1.0/projects', {
-    //     headers: {
-    //         Authorization: `Bearer ${sessionStorage.getItem('asanaToken')}`
-    //     }
-    // })
-    // .then(result => result.json())
-    // .then(data => {
-    //     //Gets all courses assigned to the user in asana and gets their gid to do individual fetches for data
-    //     data.data.map(courses => sessionStorage.setItem(courses.name, courses.gid))
-    //     //Sets the state to pass the data down for further use
-    //     setCourses(data.data)
-    //     setIsLoadingCourses(false);
-    //     dbCohorts()
-    // })
   }, []);
 
   function dbCohorts() {
