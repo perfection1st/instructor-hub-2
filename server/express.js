@@ -1,34 +1,36 @@
+import { Client } from 'asana'; //Asana Integration
 //Sets up requires that the server needs
-const express = require('express');
+import express, { json as _json } from 'express';
 const app = express();
-const cors = require('cors');
-require('dotenv').config();
-
-const { Pool } = require('pg');
-
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
+import pg from 'pg';
 //Sets up encryption hashing tools:
-const bcrypt = require('bcrypt');
+import { hash as _hash, compare } from 'bcrypt';
 const saltRounds = 10;
-
 //Used to access jwt tools
-const jwt = require('jsonwebtoken');
-const { json } = require('express');
-
+import jsonwebtoken from 'jsonwebtoken';
+const {sign} = jsonwebtoken;
+import { json } from 'express';
 //Creates random strings for tokens
-const Str = require('@supercharge/strings')
-
-const format = require('pg-format')
+import strings from '@supercharge/strings'; ///string.random
+import format from 'pg-format';
 
 //Sets up env and port
 const PORT = 8000;
 
 //Sets up the pool for the server
-const pool = new Pool({ database: 'blueocean'});
+const pool = new pg.Pool({ connectionString: process.env.DB_name });
 pool.connect();
 
-app.use(cors());
-app.use(express.json());
+//Adding Asana Integration
+const client = Client.create().useAccessToken(process.env.asanaPrivateToken);
+let asanaProjectId = 1203082294663367; //Project name: Galvanize Blue Ocean Test Board
+let asanaSectionId = 1204041854702376; //Section name: Students
 
+app.use(cors());
+app.use(_json());
 
 //Gets all the cohorts
 app.get('/api/cohorts', (req, res) => {
@@ -85,15 +87,15 @@ app.patch('/api/default-cohort', (req, res) => {
 //Route to create a new user
 app.post('/api/create/user', (req, res) => {
     //Creates a random string with 25 different characters
-    const random = Str.random(25)
+    const random = strings.random(25)
     const user = req.body
     //Creates an account specific json web token using username and a random string
-    const accountToken = jwt.sign({ id: user.username }, random)
+    const accountToken = sign({ id: user.username }, random)
     //Creates a random string to be updated each time user signs in
     //First created token is a place holder
-    const sessionToken = Str.random(30)
+    const sessionToken = strings.random(30)
     //hashes the input password to be stored securely
-    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+    _hash(user.password, saltRounds, (err, hash) => {
         //The password is hashed now and can be stored with the hash parameter
         pool.query('INSERT INTO users (username, password, token, session_token) VALUES ($1, $2, $3, $4) ON CONFLICT (username) DO NOTHING RETURNING *',
             [user.username, hash, accountToken, sessionToken])
@@ -120,7 +122,7 @@ app.post('/api/login', (req, res) => {
                 res.send([{ response: 'Incorrect Username' }])
             } else {
                 //If username matches it does a bcrypt compare to check if the password is correct
-                bcrypt.compare(password, data.rows[0].password, function (err, result) {
+                compare(password, data.rows[0].password, function (err, result) {
                     //If passowrd is correct it sends the users information
                     result == true ?
                         res.send([{ username: data.rows[0].username, cohort: data.rows[0].default_cohort, userToken: data.rows[0].token, sessionToken: data.rows[0].session_token, asanaToken: data.rows[0].asana_access_token }]) :
@@ -153,7 +155,7 @@ app.post('/api/authent', (req, res) => {
 app.patch('/api/token', (req, res) => {
     const user = req.body.username
     //Creates a random string for the session token
-    const sessionToken = Str.random(30)
+    const sessionToken = strings.random(30)
     //Updates the current session token with the new one and returns new token
     pool.query('UPDATE users SET session_token = $1 WHERE username = $2 RETURNING session_token', [sessionToken, user])
         .then(result => res.status(200).send(result.rows))
@@ -194,6 +196,15 @@ app.post(`/api/learn/grades-update`, (req, res) => {
     let assessment_grade = req.body.assessment_grade
     //updates the learn_grades table in the database
     pool.query(`INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ($1, $2, $3);`, [student_id, assessment_id, assessment_grade])
+        .then(result => {
+            console.log("Inside Asana **********************");
+            //const client = Client.create().useAccessToken(process.env.asanaPrivateToken);
+            //Create a sub task
+            client.tasks.createSubtaskForTask(1204083444763917, {name: "React Assessment 250%", pretty: true})
+                .then((result) => {
+                    console.log(result);
+                });
+        })    
         .then(result => res.status(200).send(result.rows))
         .catch(error => res.status(404).send(error))
 })
@@ -228,7 +239,18 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
 app.post(`/api/application-update/learn-grades-post`, (req, res) => {
     const students = req.body.students
     let values = []
-    students.forEach((student) => values.push([student.student_id, student.assessment_id, student.assessment_grade]))
+    students.forEach((student) => {
+        values.push([student.student_id, student.assessment_id, student.assessment_grade])
+        //console.log(values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
+        console.log(values[0][1], values[0][2]);
+
+        //Create a sub task
+        client.tasks.createSubtaskForTask(1204083444763917, {name: `${values[0][1]}: ${values[0][2]}`, pretty: true})
+        .then((result) => {
+            console.log("*************** Subtask created ***************")
+            //console.log(result);
+        })
+    })
     pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L', values), [])
     .then(result => res.status(200).send(result.rows)) 
     .catch(error => res.status(404).send(error))
@@ -297,10 +319,32 @@ app.get(`/api/project-grades`, (req, res) => {
 app.post('/api/create/students', (req, res) => {
     const students = req.body.students
     let values = []
-    students.forEach((student) => values.push([student.name, student.cohort_name, student.github]))
+    students.forEach((student) => {
+        values.push([student.name, student.cohort_name, student.github])
+        //Create the student record in the asana board
+        client.tasks.createTask({projects: ["1203082294663367"], name: `${values[0][0]}`, pretty: true})
+        .then((result) => {
+            //console.log(result);
+        })
+        .catch(function(err){
+            console.error(err);
+        });
+    })
+
+    //Create the student record in the database 
     pool.query(format('INSERT INTO students (name, cohort_name, github) VALUES %L RETURNING *', values), [])
         .then(result => res.send(result.rows))
         .catch(error => res.send(error))
+
+ 
+    //get all taskid for those students
+        // client.tasks.getTasksForSection(1204041854702376, {param: "value", param: "value", opt_pretty: true})
+        // .then((result) => {
+        //     console.log(result);
+        // });
+
+    //post to update the database with those taskid
+
 })
 
 app.get('/api/student/scores/:id', (req, res) => {

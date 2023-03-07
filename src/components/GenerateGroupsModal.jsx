@@ -2,14 +2,14 @@ import React, { useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import swal from 'sweetalert';
-import { BsGrid3X2Gap } from 'react-icons/bs';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 import { IoIosCopy } from "react-icons/io";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
 
-export const GenerateGroupsModal = (props) => {
-    const { students } = props
+export const GenerateGroupsModal = ({ students }) => {
+    // const { students } = props
     // ***** change to props instead of using fetch *** //
 
     // state for Generate Groups Modal displaying/not displaying
@@ -40,7 +40,7 @@ export const GenerateGroupsModal = (props) => {
         while (students.length > 0) {
             const student = students.splice(Math.floor(Math.random() * students.length), 1)[0];
             let groupIndex = 0;
-            let minSize = Number.MAX_VALUE;
+            let minSize = numGroups;
             for (let i = 0; i < groups.length; i++) {
                 if (groups[i].length < minSize) {
                     groupIndex = i;
@@ -50,15 +50,17 @@ export const GenerateGroupsModal = (props) => {
             groups[groupIndex].push(student);
         }
         setGroupArray(groups);
+        console.log(groups);
     }
-    useEffect(() => {
-    }, [groupArray])
+
+    // useEffect(() => {
+    // }, [groupArray])
 
     // calls splitIntoGroups function
     function loadGroups() {
         let studentsCopy = students.slice(0)
-        console.log(studentsCopy)
-        console.log(students)
+        // console.log(studentsCopy)
+        // console.log(students)
         splitIntoGroups(studentsCopy, numOfGroupRef.current.value)
     }
 
@@ -90,7 +92,7 @@ export const GenerateGroupsModal = (props) => {
 
     return (
         <>
-            <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><BsGrid3X2Gap /> Generate Groups</Button>
+            <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><HiOutlineUserGroup size={20} color="white"/> Generate Groups</Button>
             {/* Generate Groups Modal */}
             <Modal id="generate-group-modal" size="sm" centered show={showGenerateGroupsModal} onHide={handleCloseGenerateGroupsModal}>
                 <Modal.Header closeButton>
