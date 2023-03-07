@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useRef } from "react";
+// imported useContext to utilize context in children component
+import { useRef, useContext } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -9,8 +10,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import swal from "sweetalert";
 import Form from "react-bootstrap/Form";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
+// imported in cohort context from home component. 
+import { CohortContext } from "../routes/Home";
 
 export const CreateCohortModal = () => {
+  // extracted dbCohorts function from cohortContext, using useContext. 
+  const { dbCohorts } = useContext(CohortContext)
   // backend url
   const url = "http://localhost:8000";
 
@@ -56,7 +61,11 @@ export const CreateCohortModal = () => {
         setBeginDate(null);
         setEndDate(null);
       })
-      .then(swal(`Cohort was succesfully created`));
+      .then(swal(`Cohort was succesfully created`))
+      .then(() => {
+        dbCohorts();
+        // utilized function when data is posted and enter something into form field, call function again to make req to backend api and update states. when states get updated in react, they re-render the component. So cohort now applies in the webpage. 
+      });
   };
 
   return (
