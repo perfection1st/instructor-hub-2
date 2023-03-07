@@ -49,6 +49,7 @@ export const StudentList = (props) => {
       .then(result => result.json())
       .then(data => setStudents(data))
     console.log(students)
+    location.reload()
   }
 
   //Does a fetch to get all of the students scores from the current class

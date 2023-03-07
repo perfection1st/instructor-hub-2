@@ -115,7 +115,8 @@ export const AddStudentModal = () => {
                         Add Student
                     </Button>
                     <Button variant="primary" onClick={() =>  {
-                        submitStudents()
+                        submitStudents();
+                        location.reload();
                         }}>
                         Submit
                     </Button>
