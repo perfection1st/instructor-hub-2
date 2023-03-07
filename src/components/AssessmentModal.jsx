@@ -99,7 +99,7 @@ export const AssessmentModal = (props) => {
 
   // submit the data to the database
   const handleSubmitButton = () => {
-
+    location.reload()
     //filters all of the values that are already in the database
     let filteredStudentsWhoAlreadyHaveGrades = selectedStudents.filter(student => {
       for(let i = 0; i < currentLearnGrades.length; i++){

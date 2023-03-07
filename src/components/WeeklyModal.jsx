@@ -67,7 +67,7 @@ export const WeeklyModal = (props) => {
 
   // submit the data to the database
   const handleSubmitButton = () => {
-
+    location.reload();
     //sends a fetch call to update tech skills for all selected students
     fetch(`http://localhost:8000/api/weekly-update/tech-skills`, {
       method: 'POST',
