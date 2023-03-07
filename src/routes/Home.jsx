@@ -63,22 +63,27 @@ export const Home = (props) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: sessionStorage.getItem("username"),
-        userToken: sessionStorage.getItem("userToken"),
-        sessionToken: sessionStorage.getItem("sessionToken"),
-      }),
+        username: sessionStorage.getItem('username'),
+        userToken: sessionStorage.getItem('userToken'),
+        sessionToken: sessionStorage.getItem('sessionToken')
+      })
     })
-      .then((result) => result.json())
-      .then((data) => {
-        data[0]?.response == "true" ? setIsLoggedIn(true) : kickUser();
-      });
-  }, []);
+      .then(result => result.json())
+      .then(data => {
+        data[0]?.response == 'true' ? 
+        setIsLoggedIn(true) : 
+        setIsLoggedIn(false)
+      })
 
-  function kickUser() {
-    swal("Not Authenticated");
-    sessionStorage.clear();
-    setIsLoggedIn(false);
-  }
+  }, [])
+
+  // kickUser()
+
+  // function kickUser() {
+  //   swal('Not Authenticated')
+  //   sessionStorage.clear()
+  //   setIsLoggedIn(false)
+  // }
 
   //Sends a fetch to get all of a users projects/classes from asana
   useEffect(() => {
