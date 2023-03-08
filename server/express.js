@@ -112,6 +112,28 @@ app.post("/api/post-groups", async (req, res) => {
   // .catch((err) => res.send(err));
 });
 
+// Route to fetch the groups from assigned_coding_groups
+app.get("/api/assigned-student-groupings", (req, res) => {
+  pool
+    .query("SELECT * FROM assigned_student_groupings")
+    .then((result) => res.send(result.rows))
+    .catch((error) => res.send(error));
+});
+
+app.get("/api/get-group-ids", async (req, res) => {
+  const { currentCohort } = req.body;
+  const groupIdArr = [];
+  const fetchGroupIds = `SELECT group_id FROM coding_groups WHERE cohort_name = '${currentCohort}'`;
+  await pool
+    .query(fetchGroupIds)
+    .then((result) => {
+      result.rows.forEach((el) => {
+        groupIdArr.push(el["group_id"]);
+      });
+    })
+    .then((result) => res.send(result.rows));
+});
+
 //Call to get users default cohort data
 //Pseudo code:
 //SELECT * FROM variable cohort name RIGHT OUTER JOIN students where cohorit_id = cohort_id
