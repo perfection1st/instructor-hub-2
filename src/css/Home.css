@@ -296,3 +296,7 @@ button#copy-groups-btn {
   align-items: start;
   gap: 5px;
 }
+
+#groups-modal-title {
+  display: flex;
+}
