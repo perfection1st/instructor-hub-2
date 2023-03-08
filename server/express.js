@@ -77,6 +77,7 @@ app.patch("/api/default-cohort", (req, res) => {
 app.post("/api/post-groups", async (req, res) => {
   const { groups, currentCohort } = req.body;
   const cohortArr = [];
+  const groupIdArr = [];
   // this creates an array with length = the number of groups created - each element in the array is the current cohort
   // this allows us to add the correct number of group (rows) to the table
   for (let i = 0; i < groups.length; i++) {
@@ -89,10 +90,26 @@ app.post("/api/post-groups", async (req, res) => {
   const insertGroups = `INSERT INTO coding_groups (cohort_name) VALUES ('${cohortArr.join(
     "'), ('"
   )}') RETURNING *`;
-  await pool
-    .query(insertGroups)
-    .then((result) => res.send(result.rows))
-    .catch((err) => res.send(err));
+  await pool.query(insertGroups);
+
+  const fetchGroupIds = `SELECT group_id FROM coding_groups WHERE cohort_name = '${currentCohort}'`;
+  await pool.query(fetchGroupIds).then((result) => {
+    result.rows.forEach((el) => {
+      groupIdArr.push(el["group_id"]);
+    });
+    console.log(groupIdArr);
+    console.log(groups);
+  });
+
+  const insertStudents = `INSERT INTO assigned_student_groupings (student_id, group_id) VALUES ($1, $2) RETURNING *`;
+
+  for (let i = 0; i < groups.length; i++) {
+    for (let j = 0; j < groups[i].length; j++) {
+      pool.query(insertStudents, [groups[i][j]["student_id"], groupIdArr[i]]);
+    }
+  }
+  // .then((result) => res.send(result.rows))
+  // .catch((err) => res.send(err));
 });
 
 //Call to get users default cohort data
