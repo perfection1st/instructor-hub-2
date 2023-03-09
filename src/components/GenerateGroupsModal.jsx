@@ -51,6 +51,7 @@ export const GenerateGroupsModal = ({ students }) => {
         }
         setGroupArray(groups);
         console.log(groups);
+        console.log(groups);
     }
 
     // useEffect(() => {
@@ -72,19 +73,19 @@ export const GenerateGroupsModal = ({ students }) => {
     }
 
     // Adds ability to copy groups to clipboard
-        const studentGroupsRef = useRef(null);
-      
-        const copyToClipboard = () => {
-          const text = studentGroupsRef.current.innerText;
-          navigator.clipboard.writeText(text).then(
-            function() {
-              swal("Copied to clipboard");
+    const studentGroupsRef = useRef(null);
+
+    const copyToClipboard = () => {
+        const text = studentGroupsRef.current.innerText;
+        navigator.clipboard.writeText(text).then(
+            function () {
+                swal("Copied to clipboard");
             },
-            function(err) {
-              console.error("Failed to copy text: ", err);
+            function (err) {
+                console.error("Failed to copy text: ", err);
             }
-          );
-        };
+        );
+    };
 
     // Copy groups tooltip
     const [showCopyTooltip, setShowCopyTooltip] = useState(false);
@@ -92,7 +93,7 @@ export const GenerateGroupsModal = ({ students }) => {
 
     return (
         <>
-            <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><HiOutlineUserGroup size={20} color="white"/> Generate Groups</Button>
+            <Button id="generate-group-btn" onClick={() => students.length < 1 ? swal('No cohort selected') : handleShowGenerateGroupsModal()}><HiOutlineUserGroup size={20} color="white" /> Generate Groups</Button>
             {/* Generate Groups Modal */}
             <Modal id="generate-group-modal" size="sm" centered show={showGenerateGroupsModal} onHide={handleCloseGenerateGroupsModal}>
                 <Modal.Header closeButton>
@@ -113,18 +114,18 @@ export const GenerateGroupsModal = ({ students }) => {
             <Modal scrollable={true} id="show-groups-modal" size="lg" centered show={showShowGroupsModal} onHide={handleCloseShowGroupsModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Groups
-        <OverlayTrigger
-          key="right"
-          placement="right"
-          overlay={
-            <Tooltip id="copy-tooltip">
-              Copy to Clipboard
-            </Tooltip>
-          }
-        >
-          <Button id="copy-groups-btn" className="btn-lg"><IoIosCopy id="copy-groups" onClick={copyToClipboard} /></Button>
-        </OverlayTrigger>
-                </Modal.Title>
+                        <OverlayTrigger
+                            key="right"
+                            placement="right"
+                            overlay={
+                                <Tooltip id="copy-tooltip">
+                                    Copy to Clipboard
+                                </Tooltip>
+                            }
+                        >
+                            <Button id="copy-groups-btn" className="btn-lg"><IoIosCopy id="copy-groups" onClick={copyToClipboard} /></Button>
+                        </OverlayTrigger>
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body id="groups-modal-body" ref={studentGroupsRef}>
                     {groupArray.map((group, index) =>

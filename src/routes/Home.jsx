@@ -5,10 +5,12 @@ import { Navigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Nav } from "../components/Nav";
 import { StudentList } from "../components/StudentList";
+// to use context API, i first had to imort it in line 9
 import { useEffect, useState, createContext } from "react";
 import swal from "sweetalert";
 import { StudentAverages } from "../components/StudentAverages";
 import Groups from "../components/Groups";
+// then to use context api, i had to initialize and export it so it could be used in children components. 
 export const CohortContext = createContext();
 
 export const Home = (props) => {
@@ -103,6 +105,7 @@ export const Home = (props) => {
     // })
   }, []);
 
+  // i made this function global using context API. 
   function dbCohorts() {
     fetch(`${URL}/cohorts`)
       .then((result) => result.json())
@@ -118,6 +121,7 @@ export const Home = (props) => {
   }
 
   return (
+    // we used Provider property of the context api, which passed down dbCohorts function to it's children. 
     <CohortContext.Provider value={{ dbCohorts }}>
       <div id="page-container">
         <div id="header-container">
