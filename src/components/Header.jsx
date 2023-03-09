@@ -18,11 +18,11 @@ export const Header = (props) => {
   const [students, setStudents] = useState([]);
 
   // Sort the cohorts in the Cohorts dropdown menu in ascending order
-  courses.sort((a, b) => {
-    const aCohortNum = Number(a.cohort_name.match(/([0-9])/g).join(""));
-    const bCohortNum = Number(b.cohort_name.match(/([0-9])/g).join(""));
-    return aCohortNum - bCohortNum;
-  });
+  // courses.sort((a, b) => {
+  //   const aCohortNum = Number(a.cohort_name.match(/([0-9])/g).join(""));
+  //   const bCohortNum = Number(b.cohort_name.match(/([0-9])/g).join(""));
+  //   return aCohortNum - bCohortNum;
+  // });
 
   function loadStudents(e) {
     fetch(`${URL}/students/${e}`)
