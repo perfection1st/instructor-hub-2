@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { GenerateGroupsModal } from "./GenerateGroupsModal";
-import Table from "react-bootstrap/Table";
 
 const Groups = ({ students }) => {
   const URL = "http://localhost:8000/api";
@@ -18,13 +17,7 @@ const Groups = ({ students }) => {
   };
 
   const getGroupIds = () => {
-    let currentClass = '';
-    if (sessionStorage.getItem("currentClass")) {
-      currentClass = sessionStorage.getItem("currentClass");
-    } else {
-      currentClass = sessionStorage.getItem("defaultCohort");
-    }
-    fetch(`${URL}/get-group-ids/${currentClass}`)
+    fetch(`${URL}/get-group-ids`)
       .then((result) => result.json())
       .then((data) => {
         console.log(data);
@@ -35,8 +28,6 @@ const Groups = ({ students }) => {
     fetchGroups();
     getGroupIds();
   }, []);
-
-  console.log(groups);
 
   return (
     <div id="groups-container">
@@ -53,7 +44,6 @@ const Groups = ({ students }) => {
             {groups.map((el) => (
               <tr key={el.student_id}>
                 <td>{students.find((student) => student.student_id === el.student_id).name}</td>
-                <td>Group {el.group_id}</td>
               </tr>
             ))}
           </tbody>
