@@ -13,7 +13,7 @@ INSERT INTO users (
 VALUES (
     'testuser',
     crypt('12345', gen_salt('bf')),
-    'MCSP13',
+    'MCSP-13',
     'here_goes_an_token'
   );
 
@@ -55,8 +55,8 @@ VALUES (
     '100',
     'MCSP-13',
     '12/31/2022',
-    'bronzedog'
-), ('Lucas Tousignant',
+    'bronzedog'), 
+    ('Lucas Tousignant',
     'pass',
     'pass',
     '90',
@@ -71,16 +71,16 @@ VALUES (
     '95',
     'MCSP-13',
     '12/31/2022',
-    'a_is_for_aakash')
-    , ('Matt Brooks',
+    'a_is_for_aakash'),
+    ('Matt Brooks',
     'pass',
     'pass',
     '90',
     '90',
     'MCSP-15',
     '12/31/2022',
-    'matty_ice')
-    , ('Jose Larrahondo',
+    'matty_ice'),
+    ('Jose Larrahondo',
     'pass',
     'pass',
     '96',

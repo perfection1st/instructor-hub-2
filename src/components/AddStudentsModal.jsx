@@ -58,6 +58,7 @@ export const AddStudentModal = () => {
           swal("Students added!");
           setStudents([]);
           closeModal();
+          location.reload();
         });
     }
   }
@@ -145,7 +146,7 @@ export const AddStudentModal = () => {
             variant="primary"
             onClick={() => {
               submitStudents();
-              location.reload();
+              // location.reload();
             }}
           >
             Submit
