@@ -29,7 +29,7 @@ export const GenerateGroupsModal = ({ students }) => {
   // useRef for number of groups
   const numOfGroupRef = useRef();
 
-  const url = "http://localhost:8000";
+  const URL = "http://localhost:8000/api";
 
   // splits students into the given amount of groups and assigns them to the groups useState
   const groups = [];
@@ -51,6 +51,26 @@ export const GenerateGroupsModal = ({ students }) => {
     }
     setGroupArray(groups);
     // console.log(groups);
+  }
+
+  // Posts the randomly generated groups
+  function postGroups() {
+    const currentCohort = sessionStorage.currentClass || sessionStorage.defaultCohort;
+    fetch(`${URL}/post-groups`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        groups,
+        currentCohort,
+      }),
+    })
+      .then((result) => result.json())
+      .then((data) => {
+        console.log("data", data);
+      });
   }
 
   // calls splitIntoGroups function
@@ -119,6 +139,7 @@ export const GenerateGroupsModal = ({ students }) => {
               loadGroups();
               handleCloseGenerateGroupsModal();
               handleShowShowGroupsModal();
+              postGroups();
               console.log(groups);
             }}
           >
@@ -167,6 +188,7 @@ export const GenerateGroupsModal = ({ students }) => {
             variant="primary"
             onClick={() => {
               handleCloseShowGroupsModal();
+              location.reload();
             }}
           >
             Close

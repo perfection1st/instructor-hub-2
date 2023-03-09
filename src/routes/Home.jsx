@@ -17,6 +17,7 @@ export const Home = (props) => {
 
   const [courses, setCourses] = useState([]);
   const [isLoadingCourses, setIsLoadingCourses] = useState(true);
+  const [currentCohort, setCurrentCohort] = useState("");
 
   // State needed for the Graph Component
   const [students, setStudents] = useState([]);
@@ -35,8 +36,10 @@ export const Home = (props) => {
   useEffect(() => {
     let currentClass = '';
     if (sessionStorage.getItem("currentClass")) {
+      setCurrentCohort(sessionStorage.getItem("currentClass"));
       currentClass = sessionStorage.getItem("currentClass");
     } else {
+      setCurrentCohort(sessionStorage.getItem("defaultCohort"));
       currentClass = sessionStorage.getItem("defaultCohort");
     }
     fetch(`${URL}/students/${currentClass}`)
@@ -129,7 +132,7 @@ export const Home = (props) => {
               teamworkAvg={teamworkAvg}
               techAvg={techAvg}
             />
-            <Groups students={students} />
+            <Groups students={students} currentCohort={currentCohort}/>
           </div>
         </div>
       </div>
