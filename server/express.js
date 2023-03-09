@@ -301,14 +301,22 @@ app.post(`/api/weekly-update/tech-skills`, (req, res) => {
 })
 
 //Route that updates the notes table with the weekly notes for a group of students
-// // needs student_id, notes, name
+
+// needs student_id, notes, name from body
+//http://localhost:8000/api/weekly-update/notes
 // app.post(`/api/weekly-update/notes`, (req, res) => {
-//     const students = req.body.students
-//     let record_date = new Date().toISOString()
+//     const students = req.body
+//     // let record_date = new Date().toISOString()
+//     console.log("students body ",students)
 //     let values = []
-//     students.forEach((student) => values.push([student.student_id, student.score, record_date]))
-//     pool.query(format('INSERT INTO student_tech_skills (student_id, score, record_date) VALUES %L', values), [])
-//     .then(result => res.status(200).send(result.rows))
+//     values.push([students.student_id, students.notes, students.record_date])
+//     //students.forEach((student) => values.push([student.student_id, student.notes, student.record_date]))
+//     pool.query(format('INSERT INTO notes(student_id, notes, note_date) VALUES %L', values), [])
+//     .then((result) => {
+//         console.log(result);
+//         console.log(values);
+//         res.status(200).send(result.rows)
+//     })
 //     .catch(error => res.status(404).send(error))
 // })
 
