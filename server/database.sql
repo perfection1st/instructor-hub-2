@@ -82,6 +82,7 @@ CREATE TABLE students (
   cohort_name TEXT,
   ETS_date DATE,
   github TEXT,
+  asana_task_id BIGINT,
   FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
   );
 
@@ -96,8 +97,10 @@ CREATE TABLE assigned_student_groupings (
   group_assignment_id SERIAL PRIMARY KEY,
   student_id INT,
   group_id INT,
+  cohort_name TEXT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE
+  FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE,
+  FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
 );
 
 CREATE TABLE notes (
@@ -181,6 +184,7 @@ CREATE TABLE learn_grades (
   student_id INT,
   assessment_id INT,
   assessment_grade INT,
+  asanaSubTaskId BIGINT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT
   --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
@@ -344,5 +348,5 @@ VALUES('100', 'Exceeds standard');
 -- The closer R^2 is to 1, the stronger the predictive power
 -- SELECT regr_r2(learn_avg, tech_skills) as r2_learn_tech FROM students
 
-alter table students add asana_token_id bigint;
-alter table learn_grades add column asanaSubTaskId bigint;
+-- alter table students add asana_task_id bigint;
+-- alter table learn_grades add column asanaSubTaskId bigint;
