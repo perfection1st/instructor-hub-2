@@ -131,20 +131,8 @@ app.get("/api/get-group-ids", async (req, res) => {
         groupIdArr.push(el["group_id"]);
       });
     })
-    .then((result) => res.send(result.rows));
+    .then((result) => res.send(result));
 });
-
-//Call to get users default cohort data
-//Pseudo code:
-//SELECT * FROM variable cohort name RIGHT OUTER JOIN students where cohorit_id = cohort_id
-
-// app.update('/api/students/update', (req, res) => {
-//     studentIds = req.body.studentIds
-//     techApt = req.body.te
-//     pool.query(`SELECT * FROM students WHERE cohort_id = $1`, [cohortId])
-//     .then(result => res.send(result.rows))
-//     .catch(error => res.send(error))
-// })
 
 //Route to create a new user
 app.post("/api/create/user", (req, res) => {

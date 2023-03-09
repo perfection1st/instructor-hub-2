@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { GenerateGroupsModal } from "./GenerateGroupsModal";
+import Table from "react-bootstrap/Table";
 
 const Groups = ({ students }) => {
   const URL = "http://localhost:8000/api";
