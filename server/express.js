@@ -18,11 +18,13 @@ const PORT = 8000; //Sets up env and port
 const pool = new pg.Pool({ connectionString: process.env.DB_name }); //Sets up the pool for the server
 pool.connect();
 
-//Adding Asana Integration
-//let asanaPrivateToken = "1/1204033748668812:a2f332ccb5e2b3e415e1676d794b5563";
-const client = Client.create().useAccessToken(process.env.asanaPrivateToken);
+//Adding Asana api Integration
+const client = Client.create({
+    defaultHeaders: {
+      'Asana-Enable': 'new_user_task_lists,new_memberships' 
+    }
+  }).useAccessToken(process.env.asanaPrivateToken);
 let asanaProjectId = "1203082294663367"; //Project name: Galvanize Blue Ocean Test Board
-let asanaSectionId = "1204041854702376"; //Section name: Students
 
 app.use(cors());
 app.use(_json());
@@ -285,22 +287,30 @@ app.post(`/api/learn/grades-update`, (req, res) => {
     .catch((error) => res.status(404).send(error));
 });
 
-////////////////////////////////////////ROUTES FOR WEEKLY UPDATE MODAL////////////////////////////////////////
+/****************************** ROUTES FOR WEEKLY UPDATE MODAL ******************************/
 
 //Route that updates the student_teamwork_skills table with the tech scores for a group of students
 app.post(`/api/weekly-update/tech-skills`, (req, res) => {
-  const students = req.body.students;
-  let record_date = new Date().toISOString();
-  let values = [];
-  students.forEach((student) => values.push([student.student_id, student.score, record_date]));
-  pool
-    .query(
-      format("INSERT INTO student_tech_skills (student_id, score, record_date) VALUES %L", values),
-      []
-    )
-    .then((result) => res.status(200).send(result.rows))
-    .catch((error) => res.status(404).send(error));
-});
+    const students = req.body.students
+    let record_date = new Date().toISOString()
+    let values = []
+    students.forEach((student) => values.push([student.student_id, student.score, record_date]))
+    pool.query(format('INSERT INTO student_tech_skills (student_id, score, record_date) VALUES %L', values), [])
+    .then(result => res.status(200).send(result.rows))
+    .catch(error => res.status(404).send(error))
+})
+
+//Route that updates the notes table with the weekly notes for a group of students
+// // needs student_id, notes, name
+// app.post(`/api/weekly-update/notes`, (req, res) => {
+//     const students = req.body.students
+//     let record_date = new Date().toISOString()
+//     let values = []
+//     students.forEach((student) => values.push([student.student_id, student.score, record_date]))
+//     pool.query(format('INSERT INTO student_tech_skills (student_id, score, record_date) VALUES %L', values), [])
+//     .then(result => res.status(200).send(result.rows))
+//     .catch(error => res.status(404).send(error))
+// })
 
 //Route updates the student_teamwork_skills table with the team scores for a group of students
 app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
@@ -322,92 +332,66 @@ app.post(`/api/weekly-update/teamwork-skills`, (req, res) => {
 
 ////////////////////////////////////////ROUTES FOR ASSESSMENT MODAL////////////////////////////////////////
 //Route posts the learn_grades table with the assessment grades for a group of students
-//insert students grade in the database
-//do a select query to get taskId and assessment name
-//use the above to create a sub task in asana
 app.post(`/api/application-update/learn-grades-post`, (req, res) => {
-  const students = req.body.students; //[ { student_id: '1', assessment_id: 2, assessment_grade: 20 } ]
-  console.log("students body ", students); //[ { student_id: '1', assessment_id: 3, assessment_grade: 30 } ]
-  let values = [];
-  let i = 0;
-  students.forEach((student) => {
-    values.push([student.student_id, student.assessment_id, student.assessment_grade]);
-  });
-  console.log("values: ", values); // [ [ '1', 8, 80 ], [ '2', 2, 30 ] ]
-
-  Promise.all(
-    students.map((student) => {
-      //.catch(error => res.status(404).send(error))
-      console.log("values inside promise ", values);
-      pool
-        .query(
-          format(
-            "INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L",
-            values
-          ),
-          []
-        )
-        .then((result) => {
-          res.status(200).send(result.rows);
-          // console.log("result.rows after insert into query ",result)
-          // console.log("values after the insert query ", values);
-        })
-        .then(() => {
-          return pool.query(`select students.asana_task_id as asana_task_id, learn_grades.student_id as student_id, learn_grades.assessment_id as assessment_id, learn.assessment_name as assessment_name, learn_grades.assessment_grade as assessment_grade
+    const students = req.body.students //[ { student_id: '1', assessment_id: 2, assessment_grade: 20 } ]
+    let values = []
+    students.forEach((student) => {
+        values.push([student.student_id, student.assessment_id, student.assessment_grade]) //pushes request body to values array for each student
+    })
+    Promise.all(students.map((student)=>{
+        pool.query(format('INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES %L ON CONFLICT (student_id, assessment_id) DO UPDATE SET assessment_grade = excluded.assessment_grade', values ), [])
+        .then((result) => { res.status(200).send(result.rows) })
+        .catch((err) => console.error(err))
+        .then(()=>{
+            //after new record is inserted in the db, we need asana task id and assessment name to create a sub task
+            return pool.query(`select students.asana_task_id as asana_task_id,learn_grades.student_id as student_id, learn_grades.assessment_id as assessment_id, learn.assessment_name as assessment_name, learn_grades.assessment_grade as assessment_grade
             from learn_grades
                 join students on learn_grades.student_id = students.student_id
                 join learn on learn_grades.assessment_id = learn.assessment_id
-            where learn_grades.student_id = ${students[0].student_id}`);
+            where learn_grades.student_id = $1`, [student.student_id]);
         })
+        .catch((err) => console.error(err))
         .then((result) => {
-          let lastElement = result.rows.length - 1;
-          console.log("value of result is: ", result.rows);
-          // console.log("result.rows[0].asana_task_id is: ", result.rows[0].asana_task_id)
-          console.log("after select query: ", {
-            ...student,
-            taskId: result.rows[lastElement].asana_task_id,
-            assessment_name: result.rows[lastElement].assessment_name,
-          });
-          //return {...result.rows, taskId: result.rows[0].asana_task_id, assessment_name: result.rows[0].assessment_name}
-          //Create a sub task
-          client.tasks
-            .createSubtaskForTask(result.rows[lastElement].asana_task_id, {
-              name: `${result.rows[lastElement].assessment_name}: ${student.assessment_grade}`,
-              pretty: true,
-            })
-            .then((result) => {
-              //console.log("Subtask Created: ",result);
-            });
-          return {
-            ...student,
-            taskId: result.rows[0].asana_task_id,
-            assessment_name: result.rows[0].assessment_name,
-          };
-        });
-    })
-  );
-});
+            let lastElement = result.rows.length - 1;
+            //Create a sub task in Asana in this format: Assessment Name: Assessment Grade
+            return client.tasks.createSubtaskForTask(result.rows[lastElement].asana_task_id, {name: `${result.rows[lastElement].assessment_name}: ${student.assessment_grade}`, pretty: true})
+        })
+        .catch((err) => console.error(err))
+        .then((result) => {
+            let asanaSubTaskId = result.gid; //this stores the sub task id after it is created above
+            pool.query(format(`UPDATE learn_grades set asanasubtaskid = ${asanaSubTaskId} where assessment_id = ${student.assessment_id} AND assessment_grade = ${student.assessment_grade}`))
+            return {...student, subTaskId: result.gid} //returns each student object from body, and adds taskId to that student object
+        })
+    })) 
+})
 
 //Route updates the learn_grades table with the assessment grades for a group of students
 app.post(`/api/application-update/learn-grades-update`, (req, res) => {
-  const students = req.body.students;
-  const promises = students.map((student) => {
-    const studentId = student.student_id;
-    const assessmentId = student.assessment_id;
-    const assessmentGrade = student.assessment_grade;
-    return pool.query(
-      format(
-        `UPDATE learn_grades SET assessment_grade = %s WHERE student_id = %s AND assessment_id = %s;`,
-        assessmentGrade,
-        studentId,
-        assessmentId
-      )
-    );
-  });
-  Promise.all(promises)
-    .then((result) => res.status(200).send(result))
-    .catch((error) => res.status(404).send(error));
-});
+    const students = req.body.students
+    let values = []
+    students.forEach((student) => {
+        values.push([student.student_id, student.assessment_id, student.assessment_grade]) //pushes request body to values array for each student
+    })
+    Promise.all(students.map((student) => {
+        pool.query(format(`UPDATE learn_grades SET assessment_grade = %s WHERE student_id = %s AND assessment_id = %s;`, student.assessment_grade, student.student_id, student.assessment_id))
+        .then((result)=>{
+            return pool.query(`select learn_grades.asanasubtaskid as subtask_id, learn_grades.assessment_id as assessment_id, learn.assessment_name as assessment_name, learn_grades.assessment_grade as assessment_grade
+                from learn_grades
+                    join learn on learn_grades.assessment_id = learn.assessment_id
+                where
+                    learn_grades.assessment_id = ${student.assessment_id} AND learn_grades.assessment_grade = ${student.assessment_grade} AND learn_grades.student_id = ${student.student_id}`);
+        })
+        .then((result)=>{ //this result will display the result of above select query. It will display subtask_id, assessment_id, assessment_name, assessment_grade which we need to update sub task in asana
+            let subtask_id = result.rows[0].subtask_id;
+            let assessment_name = result.rows[0].assessment_name;
+            let assessment_grade = result.rows[0].assessment_grade;
+            //after the assessment grade is updated in the db, we need asana_subtask_id, assessment_name, assessment_grade to update the sub task 
+            client.tasks.updateTask(subtask_id, {name: `${assessment_name}: ${assessment_grade}`, pretty: true})
+            .then(() => {});
+        })
+        .catch((err) => console.error(err))
+    }))
+})
 
 //Route selects all from learn_grades table
 app.get(`/api/learn-grades`, (req, res) => {
