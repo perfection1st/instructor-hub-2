@@ -1,9 +1,8 @@
-# Instructor Hub
-This project uses the Asana API and requires an auth token to migrate data and information between the UI and Asana application.
+# Instructor Hub:
 
+This project uses the Asana API and requires an auth token to migrate data and information between the UI and Asana application. This project allows users to manage and assign grades/notes/technical skills points for students in a selected cohort. The Instructor Hub application allows instructors and Asana users to view current progress of each student and the cohort as a whole. The information collected can be put to use in terms of improving/updating the syllabus for future cohorts, tracking student progress, helping instructor add notes for student connectability, and more.
 
 ## Installation:
-
 
 1. To start Instructor Hub in a development environment first run `npm install` into the following:
     - root file
@@ -47,7 +46,7 @@ password: `12345`
 - When changing/adding a grade onto a student both UI and Asana will update the change
 - Creating "notes" on a student will show on UI and Asana
 
-#### UI functionalities
+#### UI Functionalities
 
     Creating cohorts
 
@@ -64,11 +63,14 @@ password: `12345`
 - Add scores in students technical (technical interviews, softskills, etc.)
 - Create "notes" on each student 
 
+    Grouping Students
+ 
+- Group students to help assign a certain amount of students per project for group projects
+
     Viewing Reports of Student
 
 - Click a student on the UI will display a summary of grades, notes, and scores assigned to that student
 
-    Graph Progress
+    Graph Of Progress
 
-- Graph shows current progress of cohort as a whole, tallies the averages of each student in assesments, projects, and technical skills and shows how well the current cohort is doing
-
+- Graph shows current progress of cohort as a whole, tallies the averages of each student in assesments, projects, and technical skills and shows how well the current cohort is doing and what they may need to improve in.

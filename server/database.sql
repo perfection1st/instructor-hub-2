@@ -343,3 +343,6 @@ VALUES('100', 'Exceeds standard');
 -- Linear Regression to see if learn scores are predictive of tech skills for a cohort.
 -- The closer R^2 is to 1, the stronger the predictive power
 -- SELECT regr_r2(learn_avg, tech_skills) as r2_learn_tech FROM students
+
+alter table students add asana_token_id bigint;
+alter table learn_grades add column asanaSubTaskId bigint;
