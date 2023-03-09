@@ -188,6 +188,7 @@ export const GenerateGroupsModal = ({ students }) => {
             variant="primary"
             onClick={() => {
               handleCloseShowGroupsModal();
+              location.reload();
             }}
           >
             Close
