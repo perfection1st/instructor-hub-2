@@ -119,7 +119,7 @@ app.post("/api/post-groups", async (req, res) => {
 app.get("/api/assigned-student-groupings/:cohort", (req, res) => {
   const { cohort } = req.params;
     pool
-    .query(`SELECT * FROM assigned_student_groupings WHERE cohort_name = '${cohort}'`)
+    .query(`SELECT * FROM assigned_student_groupings WHERE cohort_name = '${cohort}' ORDER BY group_id ASC`)
     .then((result) => res.send(result.rows))
     .catch((error) => res.send(error));
 });
