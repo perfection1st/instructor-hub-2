@@ -17,32 +17,6 @@ VALUES (
     'here_goes_an_token'
   );
 
-  INSERT INTO users (
-    username,
-    password,
-    default_cohort,
-    token
-  )
-VALUES (
-    'Mr. Egg',
-    crypt('password', gen_salt('bf')),
-    'MCSP15',
-    'heres_another_token'
-  );
-
-  INSERT INTO users (
-    username,
-    password,
-    default_cohort,
-    token
-  )
-VALUES (
-    'a',
-    crypt('a', gen_salt('bf')),
-    'MCSP13',
-    'heres_yet another_token'
-  );
-
 -- Fake Data
 INSERT INTO cohorts (
     cohort_name,
@@ -51,11 +25,17 @@ INSERT INTO cohorts (
     instructor
   )
 VALUES (
-    'MCSP13',
+    'MCSP-13',
     '01/01/2022',
     '04/04/2022',
     'testuser'
+  ), (
+    'MCSP-15',
+    '01/01/2022',
+    '04/04/2022',
+    'Danny'
   );
+
 -- Fake Data
 INSERT INTO students (
     name,
@@ -71,9 +51,40 @@ VALUES (
     'John Testor',
     'pass',
     'pass',
-    '3',
-    '2',
-    'MCSP13',
+    '100',
+    '100',
+    'MCSP-13',
     '12/31/2022',
     'bronzedog'
-  );
+), ('Lucas Tousignant',
+    'pass',
+    'pass',
+    '90',
+    '90',
+    'MCSP-13',
+    '12/31/2022',
+    'lucas_tucas'), 
+    ('Aakash Begosh',
+    'pass',
+    'pass',
+    '95',
+    '95',
+    'MCSP-13',
+    '12/31/2022',
+    'a_is_for_aakash')
+    , ('Matt Brooks',
+    'pass',
+    'pass',
+    '90',
+    '90',
+    'MCSP-15',
+    '12/31/2022',
+    'matty_ice')
+    , ('Jose Larrahondo',
+    'pass',
+    'pass',
+    '96',
+    '96',
+    'MCSP-15',
+    '12/31/2022',
+    'big_papi')

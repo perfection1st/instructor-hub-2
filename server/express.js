@@ -104,19 +104,20 @@ app.post("/api/post-groups", async (req, res) => {
     console.log(groups);
   });
 
-  const insertStudents = `INSERT INTO assigned_student_groupings (student_id, group_id) VALUES ($1, $2) RETURNING *`;
+  const insertStudents = `INSERT INTO assigned_student_groupings (student_id, group_id, cohort_name) VALUES ($1, $2, $3) RETURNING *`;
 
   for (let i = 0; i < groups.length; i++) {
     for (let j = 0; j < groups[i].length; j++) {
-      pool.query(insertStudents, [groups[i][j]["student_id"], groupIdArr[i]]);
+      pool.query(insertStudents, [groups[i][j]["student_id"], groupIdArr[i], currentCohort]);
     }
   }
 });
 
 // Route to get the student ids and group ids from assigned_coding_groups
-app.get("/api/assigned-student-groupings", (req, res) => {
-  pool
-    .query("SELECT * FROM assigned_student_groupings")
+app.get("/api/assigned-student-groupings/:cohort", (req, res) => {
+  const { cohort } = req.params;
+    pool
+    .query(`SELECT * FROM assigned_student_groupings WHERE cohort_name = '${cohort}'`)
     .then((result) => res.send(result.rows))
     .catch((error) => res.send(error));
 });

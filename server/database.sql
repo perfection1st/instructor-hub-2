@@ -96,8 +96,10 @@ CREATE TABLE assigned_student_groupings (
   group_assignment_id SERIAL PRIMARY KEY,
   student_id INT,
   group_id INT,
+  cohort_name TEXT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE
+  FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE,
+  FOREIGN KEY (cohort_name) REFERENCES cohorts(cohort_name) ON DELETE CASCADE
 );
 
 CREATE TABLE notes (

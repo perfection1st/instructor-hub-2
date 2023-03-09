@@ -9,13 +9,14 @@ const Groups = ({ students, currentCohort }) => {
 
   // console.log(students);
   // console.log(currentCohort);
-  console.log(groupIds);
+  // console.log(groups);
 
   const fetchGroups = () => {
-    fetch(`${URL}/assigned-student-groupings`)
+    const cohort =
+      sessionStorage.getItem("currentClass") || sessionStorage.getItem("defaultCohort");
+    fetch(`${URL}/assigned-student-groupings/${cohort}`)
       .then((result) => result.json())
       .then((data) => {
-        // console.log(data);
         setGroups(data);
       });
   };
@@ -29,7 +30,13 @@ const Groups = ({ students, currentCohort }) => {
   };
 
   useEffect(() => {
-    fetchGroups();
+    // async function fetchGroups(cohort) {
+    //   const response = await fetch(`${URL}/assigned-student-groupings/cohort`);
+    //   const result = await response.json();
+    //   setGroups(result);
+    // }
+
+    fetchGroups(currentCohort);
     getGroupIds(currentCohort);
   }, []);
 
@@ -58,7 +65,7 @@ const Groups = ({ students, currentCohort }) => {
                 ))
               ) : (
                 <tr>
-                  <td>"No groups yet"</td>
+                  <td>No groups yet</td>
                 </tr>
               )}
             </tbody>
