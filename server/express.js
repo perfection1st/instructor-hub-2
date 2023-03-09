@@ -220,6 +220,7 @@ app.post(`/api/weekly-update/tech-skills`, (req, res) => {
 })
 
 //Route that updates the notes table with the weekly notes for a group of students
+
 // needs student_id, notes, name from body
 //http://localhost:8000/api/weekly-update/notes
 // app.post(`/api/weekly-update/notes`, (req, res) => {
