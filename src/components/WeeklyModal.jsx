@@ -111,6 +111,27 @@ export const WeeklyModal = (props) => {
         console.log(error)
       })
 
+    //sends a fetch call to update weekly notes for all selected students
+    fetch(`http://localhost:8000/api/weekly-update/notes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        students: selectedStudents.map(student => ({
+          student_id: student.student_id,
+          notes: student.noteAptitude
+        }))
+      })
+    })
+      .then(result => result.json())
+      .then(data => {
+        swal("Notes posted successfully")
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
     handleCloseWeeklyGradingModal()
   }
 
@@ -155,31 +176,37 @@ export const WeeklyModal = (props) => {
               {/* students displayed will be conditional based off students selected from previous modal */}
               {selectedStudents.map(student => <li key={student.student_id} value={student.student_id}>
                 <div id='containerForWeeklyUpdates'>{student.name}
-                {/* adds a space between the name and dropdown */}
-                <>  </>
-                <select
-                  className='tech-aptitude'
-                  value={student.techAptitude}
-                  onChange={e => handleDropdownChange(student.student_id, 'techAptitude', e.target.value)}
-                >
-                  <option value="1">Tech 1</option>
-                  <option value="2">Tech 2</option>
-                  <option value="3">Tech 3</option>
-                  <option value="4">Tech 4</option>
-                </select>
-                <select
-                  className='team-aptitude'
-                  value={student.teamAptitude}
-                  onChange={e => handleDropdownChange(student.student_id, 'teamAptitude', e.target.value)}
-                >
-                  <option value="1">Team 1</option>
-                  <option value="2">Team 2</option>
-                  <option value="3">Team 3</option>
-                  <option value="4">Team 4</option>
-                </select>
-                <>  </> 
-                <textarea cols="50" rows="4" className='freeTextBox' name="freeTextBox" placeholder='Enter Text Notes Here!'></textarea>  
-                </div> </li>)}
+                  {/* adds a space between the name and dropdown */}
+                  <>  </>
+                  <select
+                    className='tech-aptitude'
+                    value={student.techAptitude}
+                    onChange={e => handleDropdownChange(student.student_id, 'techAptitude', e.target.value)}
+                  >
+                    <option value="1">Tech 1</option>
+                    <option value="2">Tech 2</option>
+                    <option value="3">Tech 3</option>
+                    <option value="4">Tech 4</option>
+                  </select>
+                  <select
+                    className='team-aptitude'
+                    value={student.teamAptitude}
+                    onChange={e => handleDropdownChange(student.student_id, 'teamAptitude', e.target.value)}
+                  >
+                    <option value="1">Team 1</option>
+                    <option value="2">Team 2</option>
+                    <option value="3">Team 3</option>
+                    <option value="4">Team 4</option>
+                  </select>
+                  <>  </>
+
+                  <textarea
+                    className='freeTextBox'
+                    value={student.noteAptitude}
+                    onSubmit={e => handleSubmitButton(student.student_id, 'noteAptitude', e.target.value)}
+                    cols="50" rows="4" name="freeTextBox" placeholder='Enter Text Notes Here!'></textarea>
+                </div> </li>)
+              }
             </ul>
           </div>
         </Modal.Body>
