@@ -73,6 +73,9 @@ app.patch("/api/default-cohort", (req, res) => {
     .catch((error) => res.send(error));
 });
 
+//==================================================================//
+//                   ROUTES FOR THE GROUPS COMPONENT                //
+//==================================================================//
 // Route to post randomly generated groups
 app.post("/api/post-groups", async (req, res) => {
   const { groups, currentCohort } = req.body;
@@ -108,11 +111,9 @@ app.post("/api/post-groups", async (req, res) => {
       pool.query(insertStudents, [groups[i][j]["student_id"], groupIdArr[i]]);
     }
   }
-  // .then((result) => res.send(result.rows))
-  // .catch((err) => res.send(err));
 });
 
-// Route to fetch the groups from assigned_coding_groups
+// Route to get the student ids and group ids from assigned_coding_groups
 app.get("/api/assigned-student-groupings", (req, res) => {
   pool
     .query("SELECT * FROM assigned_student_groupings")
@@ -120,19 +121,16 @@ app.get("/api/assigned-student-groupings", (req, res) => {
     .catch((error) => res.send(error));
 });
 
-app.get("/api/get-group-ids", async (req, res) => {
-  const { currentCohort } = req.body;
-  const groupIdArr = [];
-  const fetchGroupIds = `SELECT group_id FROM coding_groups WHERE cohort_name = '${currentCohort}'`;
+// Route to get the groups ids from the current cohort
+app.get("/api/get-group-ids/:cohort", async (req, res) => {
+  const { cohort } = req.params;
+  const fetchGroupIds = `SELECT group_id FROM coding_groups WHERE cohort_name = '${cohort}'`;
   await pool
     .query(fetchGroupIds)
-    .then((result) => {
-      result.rows.forEach((el) => {
-        groupIdArr.push(el["group_id"]);
-      });
-    })
-    .then((result) => res.send(result));
+    .then((result) => res.send(result.rows))
+    .catch((error) => res.send(error));
 });
+//==================================================================//
 
 //Route to create a new user
 app.post("/api/create/user", (req, res) => {
@@ -259,7 +257,7 @@ app.get(`/api/projects/project-names`, (req, res) => {
     .catch((error) => res.status(404).send(error));
 });
 
-// route to post the learn grates for selected users
+// route to post the learn grades for selected users
 app.post(`/api/learn/grades-update`, (req, res) => {
   //gets information from the body
   console.log(req.body);

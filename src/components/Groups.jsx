@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { GenerateGroupsModal } from "./GenerateGroupsModal";
 import Table from "react-bootstrap/Table";
 
-const Groups = ({ students }) => {
+const Groups = ({ students, currentCohort }) => {
   const URL = "http://localhost:8000/api";
   const [groups, setGroups] = useState([]);
+  const [groupIds, setGroupIds] = useState([]);
 
   // console.log(students);
+  // console.log(currentCohort);
+  console.log(groupIds);
 
   const fetchGroups = () => {
     fetch(`${URL}/assigned-student-groupings`)
@@ -17,17 +20,17 @@ const Groups = ({ students }) => {
       });
   };
 
-  const getGroupIds = () => {
-    fetch(`${URL}/get-group-ids`)
+  const getGroupIds = (cohort) => {
+    fetch(`${URL}/get-group-ids/cohort`)
       .then((result) => result.json())
       .then((data) => {
-        console.log(data);
+        setGroupIds(data);
       });
   };
 
   useEffect(() => {
     fetchGroups();
-    getGroupIds();
+    getGroupIds(currentCohort);
   }, []);
 
   return (
@@ -37,18 +40,30 @@ const Groups = ({ students }) => {
         <GenerateGroupsModal students={students} />
       </div>
       <div>
-        <Table id="groups-table" striped bordered hover>
-          <tbody>
-            <tr>
-              <td>Group 1</td>
-            </tr>
-            {groups.map((el) => (
-              <tr key={el.student_id}>
-                <td>{students.find((student) => student.student_id === el.student_id).name}</td>
+        <div id="groups-table-container">
+          <Table id="groups-table" striped bordered hover>
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <th>Group No.</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+              {groups.length > 0 ? (
+                groups.map((el) => (
+                  <tr key={el.student_id}>
+                    <td>
+                      {students.find((student) => student.student_id === el.student_id)?.name}
+                    </td>
+                    <td>{el.group_id}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td>"No groups yet"</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </div>
   );
