@@ -296,3 +296,16 @@ button#copy-groups-btn {
   align-items: start;
   gap: 5px;
 }
+
+#groups-modal-title {
+  display: flex;
+}
+
+#groups-table-container {
+  border: 1px solid black;
+  margin: 10px 0 0 0;
+}
+
+#groups-table th {
+  background-color: #d2d2d2;
+}

@@ -19,6 +19,7 @@ export const Home = (props) => {
 
   const [courses, setCourses] = useState([]);
   const [isLoadingCourses, setIsLoadingCourses] = useState(true);
+  const [currentCohort, setCurrentCohort] = useState("");
 
   // State needed for the Graph Component
   const [students, setStudents] = useState([]);
@@ -27,16 +28,23 @@ export const Home = (props) => {
   const [techAvg, setTechAvg] = useState(0);
 
   // Fetch the students
-  function fetchStudents() {
-    fetch(`${URL}/students`)
-      .then((result) => result.json())
-      .then((data) => setStudents(data));
-  }
+  // function fetchStudents() {
+  //   fetch(`/api/students/:cohort`)
+  //     .then((result) => result.json())
+  //     .then((data) => setStudents(data));
+  // }
 
   // Fetch the scores of all students within the cohort and set the average Learn, Teamwork, and Tech grades
   useEffect(() => {
-    let currentClass = sessionStorage.getItem("currentClass");
-    fetch(`http://localhost:8000/api/students/${currentClass}`)
+    let currentClass = '';
+    if (sessionStorage.getItem("currentClass")) {
+      setCurrentCohort(sessionStorage.getItem("currentClass"));
+      currentClass = sessionStorage.getItem("currentClass");
+    } else {
+      setCurrentCohort(sessionStorage.getItem("defaultCohort"));
+      currentClass = sessionStorage.getItem("defaultCohort");
+    }
+    fetch(`${URL}/students/${currentClass}`)
       .then((result) => result.json())
       .then((data) => {
         setStudents(data);
@@ -66,43 +74,23 @@ export const Home = (props) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: sessionStorage.getItem("username"),
-        userToken: sessionStorage.getItem("userToken"),
-        sessionToken: sessionStorage.getItem("sessionToken"),
-      }),
+        username: sessionStorage.getItem('username'),
+        userToken: sessionStorage.getItem('userToken'),
+        sessionToken: sessionStorage.getItem('sessionToken')
+      })
     })
-      .then((result) => result.json())
-      .then((data) => {
-        data[0]?.response == "true" ? setIsLoggedIn(true) : kickUser();
-      });
-  }, []);
+      .then(result => result.json())
+      .then(data => {
+        data[0]?.response == 'true' ? 
+        setIsLoggedIn(true) : 
+        setIsLoggedIn(false)
+      })
 
-  function kickUser() {
-    swal("Not Authenticated");
-    sessionStorage.clear();
-    setIsLoggedIn(false);
-  }
+  }, [])
 
-  //Sends a fetch to get all of a users projects/classes from asana
+  //Sends a fetch to get all of the cohorts
   useEffect(() => {
     dbCohorts();
-    fetchStudents();
-    //Was used when connected to asana, no longer used
-    //Sends a fetch to get all users info
-    // fetch('https://app.asana.com/api/1.0/projects', {
-    //     headers: {
-    //         Authorization: `Bearer ${sessionStorage.getItem('asanaToken')}`
-    //     }
-    // })
-    // .then(result => result.json())
-    // .then(data => {
-    //     //Gets all courses assigned to the user in asana and gets their gid to do individual fetches for data
-    //     data.data.map(courses => sessionStorage.setItem(courses.name, courses.gid))
-    //     //Sets the state to pass the data down for further use
-    //     setCourses(data.data)
-    //     setIsLoadingCourses(false);
-    //     dbCohorts()
-    // })
   }, []);
 
   // i made this function global using context API. 
@@ -148,7 +136,7 @@ export const Home = (props) => {
               teamworkAvg={teamworkAvg}
               techAvg={techAvg}
             />
-            <Groups students={students} />
+            <Groups students={students} currentCohort={currentCohort}/>
           </div>
         </div>
       </div>

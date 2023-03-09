@@ -26,7 +26,7 @@ export const AddStudentModal = () => {
   //Takes place when the submit button is hit
   function submitStudents() {
     //Gets all of the information to send in the fetch
-    let cohort = sessionStorage.getItem("currentClass");
+    let cohort = sessionStorage.getItem("currentClass") || sessionStorage.getItem("defaultCohort");
     let firstName = firstNameRef.current.value;
     let lastName = lastNameRef.current.value;
     let githubUser = githubUserRef.current.value;
@@ -58,6 +58,7 @@ export const AddStudentModal = () => {
           swal("Students added!");
           setStudents([]);
           closeModal();
+          location.reload();
         });
     }
   }
@@ -97,7 +98,8 @@ export const AddStudentModal = () => {
   return (
     <>
       <Button id="add-student-btn" onClick={() => openModal()}>
-        <AiOutlineUserAdd size={20}/>Add Students
+        <AiOutlineUserAdd size={20} />
+        Add Students
       </Button>
 
       <Modal id="add-student-modal" size="md" centered show={showModal} onHide={closeModal}>
@@ -143,8 +145,8 @@ export const AddStudentModal = () => {
           <Button
             variant="primary"
             onClick={() => {
-              submitStudents()
-              location.reload();
+              submitStudents();
+              // location.reload();
             }}
           >
             Submit
