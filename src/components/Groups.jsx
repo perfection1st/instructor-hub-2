@@ -30,12 +30,6 @@ const Groups = ({ students, currentCohort }) => {
   };
 
   useEffect(() => {
-    // async function fetchGroups(cohort) {
-    //   const response = await fetch(`${URL}/assigned-student-groupings/cohort`);
-    //   const result = await response.json();
-    //   setGroups(result);
-    // }
-
     fetchGroups(currentCohort);
     getGroupIds(currentCohort);
   }, []);
