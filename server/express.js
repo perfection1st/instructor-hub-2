@@ -120,18 +120,18 @@ app.get("/api/assigned-student-groupings", (req, res) => {
     .catch((error) => res.send(error));
 });
 
-app.get("/api/get-group-ids", async (req, res) => {
-  const { currentCohort } = req.body;
+app.get("/api/get-group-ids/:cohort", async (req, res) => {
   const groupIdArr = [];
-  const fetchGroupIds = `SELECT group_id FROM coding_groups WHERE cohort_name = '${currentCohort}'`;
+  const { cohort } = req.params;
+  const fetchGroupIds = `SELECT group_id FROM coding_groups WHERE cohort_name = $1`;
   await pool
-    .query(fetchGroupIds)
+    .query(fetchGroupIds, [cohort])
     .then((result) => {
       result.rows.forEach((el) => {
         groupIdArr.push(el["group_id"]);
       });
     })
-    .then((result) => res.send(result.rows));
+    .then((result) => res.send(result));
 });
 
 //Call to get users default cohort data

@@ -18,7 +18,13 @@ const Groups = ({ students }) => {
   };
 
   const getGroupIds = () => {
-    fetch(`${URL}/get-group-ids`)
+    let currentClass = '';
+    if (sessionStorage.getItem("currentClass")) {
+      currentClass = sessionStorage.getItem("currentClass");
+    } else {
+      currentClass = sessionStorage.getItem("defaultCohort");
+    }
+    fetch(`${URL}/get-group-ids/${currentClass}`)
       .then((result) => result.json())
       .then((data) => {
         console.log(data);
@@ -29,6 +35,8 @@ const Groups = ({ students }) => {
     fetchGroups();
     getGroupIds();
   }, []);
+
+  console.log(groups);
 
   return (
     <div id="groups-container">
@@ -45,6 +53,7 @@ const Groups = ({ students }) => {
             {groups.map((el) => (
               <tr key={el.student_id}>
                 <td>{students.find((student) => student.student_id === el.student_id).name}</td>
+                <td>Group {el.group_id}</td>
               </tr>
             ))}
           </tbody>
