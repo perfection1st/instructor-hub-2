@@ -33,7 +33,7 @@ export const Header = (props) => {
 
   return (
     <Navbar bg="dark" variant="dark">
-      <Container fluid>
+      <div id="navbar-container">
         <div id="navbar-left-container">
           <Navbar.Brand href="/" className="navbar-title">
             Galvanize Instructor Hub
@@ -73,7 +73,7 @@ export const Header = (props) => {
             className="admin-menu"
           />
         </div>
-      </Container>
+      </div>
     </Navbar>
   );
 };
