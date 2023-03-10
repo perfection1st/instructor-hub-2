@@ -197,7 +197,6 @@ const Projects = (props) => {
           .then(res => res.json())
           .then(data => {
             setCurrentProjectGrades(data)
-            console.log(data)
           });
         setShowProjectGradingModal(true);
 
@@ -283,7 +282,16 @@ function clickStudent(e) {
   }
 }
 
-
+// function to get individual student grade
+const studentProjectGrade = (studentID, selectedProj) => {
+  if (selectedProj) {
+      for(let grade of currentProjectGrades) {
+        if (grade.student_id === studentID && selectedProj.project_id === grade.project_id) {    
+       return grade.project_passed ? "Pass" : "Fail"
+      }
+    }
+  }
+}
 
 useEffect(() => {
   dbCohorts()
@@ -320,6 +328,7 @@ useEffect(() => {
             setSelectedClass(evt)
             sessionStorage.setItem('currentClass', evt)
             loadStudents(evt)
+            console.log(currentProjectGrades)
           }}
         >
           {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
@@ -372,7 +381,8 @@ useEffect(() => {
                    </td>
                   <td>{currentSelectedProjectName}</td>
                   <td className="student-average" width={'15%'}>
-                    {student.student_id && selectedProject && selectedProject.project_passed ? "Pass" : "Fail"}
+                    {/* {selectedProject && currentProjectGrades.project_passed ? "Pass" : "Fail"} */}
+                    {studentProjectGrade(student.student_id, selectedProject)}
                   </td>
                   </tr>)}
             </tbody>
