@@ -25,12 +25,25 @@ p {
   align-items: center;
   width: 100vw;
 }
+.navbar {
+  display: flex;
+  justify-content: center;
+}
 
 #header-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100vw;
+}
+
+#navbar-container {
+  display: flex;
+  width: 100%;
+  max-width: 1800px;
+  padding: 0 20px 0 20px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 header {
@@ -46,11 +59,12 @@ header {
   flex-direction: column;
   justify-content: center;
   width: 80%;
+  max-width: 1200px;
 }
 
 #navbar-left-container {
   display: flex;
-  margin: 0 0 0 30px;
+  /* margin: 0 0 0 30px; */
   align-items: center;
 }
 
