@@ -10,6 +10,7 @@
     "concurrently": "^7.6.0"
   },
   "scripts": {
+    "start": "node app.jsx" ,
     "dev": "concurrently \"npm:dev:*\"",
     "dev:src": "npm run dev --workspace=src",
     "dev:server": "npm run dev --workspace=server",
