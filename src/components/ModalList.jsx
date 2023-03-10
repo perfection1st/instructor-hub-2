@@ -28,7 +28,7 @@ export const ModalList = (props) => {
         } else {
             //Checks to see if there is already anything in the state
             //If not it only puts the obj in without spread operator
-            if (selectedStudents === []) {
+            if (selectedStudents == []) {
                 let obj = {
                     student_id: e.target.id,
                     name: e.target.value,

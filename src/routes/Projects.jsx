@@ -37,6 +37,9 @@ const Projects = (props) => {
   const [selectedStudents, setSelectedStudents] = useState([])
   const [gradePro, setGradePro] = useState([])
 
+
+
+
   const [selectedClass, setSelectedClass] = useState('Cohorts')
   // const { projectCourses, projectSetCourses, isLoadingCourses, setIsLoadingCourses } = props
 
@@ -194,7 +197,6 @@ const Projects = (props) => {
           .then(res => res.json())
           .then(data => {
             setCurrentProjectGrades(data)
-            console.log(data)
           });
         setShowProjectGradingModal(true);
 
@@ -227,26 +229,76 @@ const proGrade = () => {
   .then(res => res.json())
   .then(data => {
     setCurrentProjectGrades(data)
-    console.log(data)
-    console.log(currentSelectedProjectID)
+    // console.log(data)
+    // console.log(currentSelectedProjectID)
   });
 }
 
  //Does a fetch to get the students
  function loadStudents(evt) {
+
   fetch(`${URL}/students/${evt}`)
     .then(result => result.json())
     .then(data => setStudents(data))
+
 }
 
 
+// function for clicking checkbox on students
+function clickStudent(e) {
+  //Checks to see if box was unclicked
+  //Removes student from state used to add changes if so
+  if (!e.target.checked) {
+      let findKey = e.target.id
+      //Filters the selected students to remove the unchecked student
+      let deleteObj = selectedStudents.filter(obj => {
+          return obj.student_id !== findKey
+      })
+      setSelectedStudents(deleteObj)
+  } else {
+      //Checks to see if there is already anything in the state
+      //If not it only puts the obj in without spread operator
+      if (selectedStudents == []) {
+          let obj = {
+              student_id: e.target.id,
+              name: e.target.value,
+              techAptitude: 4,
+              teamAptitude: 4,
+              learnGrade: 100,
+              projectGrade: "Pass"
+          }
+          setSelectedStudents(obj)
+      } else {
+          let obj = {
+              student_id: e.target.id,
+              name: e.target.value,
+              techAptitude: 4,
+              teamAptitude: 4,
+              learnGrade: 100,
+              projectGrade: "Pass"
+          }
+          setSelectedStudents([...selectedStudents, obj])
+      }
+  }
+}
+
+// function to get individual student grade
+const studentProjectGrade = (studentID, selectedProj) => {
+  if (selectedProj) {
+      for(let grade of currentProjectGrades) {
+        if (grade.student_id === studentID && selectedProj.project_id === grade.project_id) {    
+       return grade.project_passed ? "Pass" : "Fail"
+      }
+    }
+  }
+}
 
 useEffect(() => {
   dbCohorts()
   getProjects()
   loadStudents()
   proGrade()
-},[])
+  },[])
 
   function dbCohorts() {
     fetch(`${URL}/cohorts`)
@@ -272,9 +324,11 @@ useEffect(() => {
           id="dropdown-menu-align-end"
           size="md"
           onSelect={function (evt) {
+            <ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
             setSelectedClass(evt)
             sessionStorage.setItem('currentClass', evt)
             loadStudents(evt)
+            console.log(currentProjectGrades)
           }}
         >
           {isLoadingCourses ? <LoadingDropdown /> : courses.map(course => <Dropdown.Item key={course.cohort_id} eventKey={course.cohort_name}>{course.cohort_name}</Dropdown.Item>)}
@@ -313,27 +367,24 @@ useEffect(() => {
             <tbody>
               {students.map(student =>
                 <tr key={student.student_id} >
-                  <td id="student-name" value={student.student_id} onClick={(e) => {
-                   }}><ModalList courses={courses} setShowProjectModal={setShowProjectModal} checked={checked} setChecked={setChecked} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />
+                  <td id="student-name" value={students.student_id} onClick={(e) => {
+                  }}>
+                  <li key={student.student_id}>
+                                <input
+                                    type="checkbox"
+                                    value={student.name}
+                                    onChange={(e) => clickStudent(e)}
+                                    id={student.student_id}
+                                />
+                                {student.name}
+                            </li>
                    </td>
                   <td>{currentSelectedProjectName}</td>
                   <td className="student-average" width={'15%'}>
-                    {selectedProject && selectedProject.project_passed ? "Pass" : "Fail"}
-                  {/* {<select
-                  className='team-aptitude'
-                  value={gradePro}
-                  onChange={e => 
-                    {
-                      handleSelectProjectGrade(e, student.student_id)
-                      proGrade()
-                    }
-                  }
-                >
-                  <option value="Pass">Pass</option>
-                  <option value="Fail">Fail</option>
-                </select>} */}
+                    {/* {selectedProject && currentProjectGrades.project_passed ? "Pass" : "Fail"} */}
+                    {studentProjectGrade(student.student_id, selectedProject)}
                   </td>
-                </tr>)}
+                  </tr>)}
             </tbody>
           </Table>
           <div>
@@ -342,17 +393,6 @@ useEffect(() => {
               {/* student names displayed based off students selected from previous modal */}
               {selectedStudents.map(student => <li key={student.student_id} value={student.student_id}>
                 {student.name}
-                {/* adds a space between the name and dropdown */}
-                <> </>
-                {/* <select
-                  className='team-aptitude'
-                  value={student.projectGrade}
-                  onChange={e => handleSelectProjectGrade(e, student.student_id)}
-                >
-                  <option value="Pass">Pass</option>
-                  <option value="Fail">Fail</option>
-                </select> */}
-                {/* <input type="number" max="100" min="0" defaultValue={student.learnGrade} onChange={(e) => handleSelectProjectGrade(e, student.student_id)} /> */}
               </li>)}
             </ul>
           </div>
@@ -399,6 +439,7 @@ useEffect(() => {
           <Button variant="primary" onClick={handleSubmitButton}>Submit ✓</Button>
         </Modal.Footer>
       </Modal>
+      
         </div>
         
     </div>

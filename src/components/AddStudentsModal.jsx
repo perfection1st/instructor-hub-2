@@ -26,6 +26,12 @@ export const AddStudentModal = () => {
   //Takes place when the submit button is hit
   function submitStudents() {
     //Gets all of the information to send in the fetch
+    // let cohort = "";
+    // if (sessionStorage.getItem("currentClass")) {
+    //   cohort = sessionStorage.getItem("currentClass");
+    // } else {
+    //   cohort = sessionStorage.getItem("defaultCohort");
+    // }
     let cohort = sessionStorage.getItem("currentClass") || sessionStorage.getItem("defaultCohort");
     let firstName = firstNameRef.current.value;
     let lastName = lastNameRef.current.value;
