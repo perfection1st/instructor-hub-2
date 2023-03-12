@@ -1,0 +1,311 @@
+@import url("https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap");
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  justify-items: center;
+  font-family: "Assistant", sans-serif;
+  background-color: white;
+}
+
+p {
+  font-size: 18px;
+}
+
+#page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+#header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  width: 90%;
+}
+
+#home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+}
+
+#navbar-left-container {
+  display: flex;
+  margin: 0 0 0 30px;
+  align-items: center;
+}
+
+#navbar-right-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.navbar-title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  width: 350px;
+  font-size: 20px;
+  margin: 0 0 0 10px;
+}
+
+/******************
+  NAVIGATION
+*******************/
+.nav-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 100vw;
+  gap: 20px;
+  background-color: rgb(52, 52, 52);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+ 
+/******************
+  STUDENT-LIST
+*******************/
+#dashboard-main {
+  border: 1px solid black;
+  box-shadow: 10px 10px;
+  border-radius: 20px;
+  margin: 20px 0 20px 0;
+  padding: 50px;
+}
+
+#student-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#student-list-buttons-container {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+#student-list-container {
+  display: flex;
+  border: 1px solid black;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#student-table {
+  /* width: 100%; */
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+#student-table-container {
+  width: 100%;
+}
+
+/* #student-table-header {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(5, 1fr);
+} */
+
+#student-table thead {
+  position: sticky;
+  background-color: #d2d2d2;
+  z-index: 2;
+}
+
+#student-table tbody {
+  z-index: 1;
+}
+
+td.student-average button {
+  background-color: #f3f3f3;
+  border: 1px solid #e9e7e7;
+}
+
+td.student-average button:hover {
+  background-color: #dadada;
+  border: 1px solid #d4d4d4;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* #generate-group-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+} */
+
+/* #add-student-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+} */
+/******************
+  STUDENT-AVG-GRAPH
+*******************/
+#graph-groups-container {
+  display: flex;
+  gap: 50px;
+}
+
+#student-avg-graph {
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 10px;
+  padding: 50px;
+  height: fit-content;
+  width: fit-content;
+}
+
+#groups-container {
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 10px;
+  padding: 50px;
+  width: 100%;
+}
+
+#groups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+div.select-all,
+div.select-one {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+/******************
+  Modal Lists
+*******************/
+
+ul#weekly-student-list,
+ul#project-student-list {
+  list-style: none;
+  padding: 0;
+}
+ul#weekly-student-list li,
+ul#project-student-list li,
+ul.student-group li {
+  padding: 5px 0 5px 0;
+}
+ul#weekly-student-list li:nth-child(odd),
+ul#project-student-list li:nth-child(odd),
+ul.student-group li:nth-child(odd) {
+  background-color: #fafafa;
+}
+ul#weekly-student-list li input,
+ul#project-student-list li input {
+  margin-right: 5px;
+}
+ul#assessment-student-list {
+  list-style: none;
+  padding: 0;
+}
+ul#project-student-list {
+  list-style: none;
+  padding: 0;
+}
+select#project-selector,
+select#assessment-selector {
+  margin-bottom: 20px;
+}
+ul.student-group {
+  margin: 10px 0 0 0;
+  padding: 0 0 0 10px;
+  list-style-type: none;
+}
+h4.student-group-heading {
+  font-size: 20px;
+  margin-top: 15px;
+}
+#copy-tooltip {
+  z-index: 999;
+}
+
+.tooltip {
+  z-index: 1151 !important;
+}
+button#copy-groups-btn {
+  background-color: #fff;
+  color: #000;
+  border: 0;
+}
+#student-name:hover {
+  cursor: pointer;
+  background-color: #fff;
+}
+/* Free Text Notes Box Add  */
+.freeTextBox {
+  height: 50px;
+  width: 3560px;
+}
+
+#containerForWeeklyUpdates{
+  display: flex;
+  align-items: start;
+  gap: 5px;
+}
+
+#groups-modal-title {
+  display: flex;
+}
+
+#groups-table-container {
+  border: 1px solid black;
+  margin: 10px 0 0 0;
+}
+
+#groups-table th {
+  background-color: #d2d2d2;
+}
